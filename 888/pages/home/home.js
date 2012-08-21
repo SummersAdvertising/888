@@ -8,6 +8,7 @@
 
             Data.initLanguage();
             Data.createDB();
+            Data.updateUI();
 
             isAddMsg();
 

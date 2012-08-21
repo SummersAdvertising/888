@@ -9,6 +9,7 @@
         ready: function (element, options) {
             // TODO: 在此初始化頁面。
             Data.initLanguage();
+            Data.updateUI();
 
             var listView = element.querySelector("#listView").winControl;
             listView.addEventListener("iteminvoked", itemInvokedHandler);
@@ -36,8 +37,6 @@
             if (like)
                 $("#noEntries").remove();
         };
-
-
     }
 
 })();

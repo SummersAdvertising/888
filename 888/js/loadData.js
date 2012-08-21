@@ -28,25 +28,25 @@
         var subjectStore = Data.db.createObjectStore("subjects", { keyPath: "id", autoIncrement: false });
         var statusStore = Data.db.createObjectStore("likes", { keyPath: "id", autoIncrement: true });
 
+        var resourceStore = Data.db.createObjectStore("resource", { keyPath: "id", autoIncrement: false });
+
         loadData(evt);
     }
 
     //declare WinJS.Binding.List(for search)
     var list = new WinJS.Binding.List();
 
-
-    //declare bindinglist(for article)
+    //declare bindinglist(for home with region filter)
     var articlelist = new WinJS.Binding.List();
     var subjectArray = new Array();//groups in list
     var articleArray = new Array();//groupitems in list
 
     function loadData(evt) {
-        var foldername = "data";
-        var filename = Data.language + ".xml";
-        subjectArray = new Array();
-
         Data.db = evt.target.result;
 
+        //load db: resource
+        var foldername = "data";
+        var filename = "resource.xml";
         Windows.ApplicationModel.Package.current.installedLocation.getFolderAsync(foldername).done(function (folder) {
             folder.getFileAsync(filename).done(function (file) {
                 var loadSettings = new Windows.Data.Xml.Dom.XmlLoadSettings;
@@ -54,84 +54,106 @@
                 loadSettings.resolveExternals = false;
 
                 Windows.Data.Xml.Dom.XmlDocument.loadFromFileAsync(file, loadSettings).done(function (xmlDoc) {
-                    //load subject nodes
-                    var nodes = xmlDoc.getElementsByTagName('subject');
-                    var counter = 1;
+                    var nodes = xmlDoc.getElementsByTagName(Data.language);
+
                     for (var i = 0; i < nodes.length; i++) {
                         objarticle = new Object();
                         objAddProperty("id", i + 1);
-                        for (var j = 0; j < nodes[i].attributes.length; j++) {
-                            objAddProperty(nodes[i].attributes[j].nodeName, nodes[i].attributes[j].nodeValue);
-                        }
-                        var txn = Data.db.transaction(["subjects"], "readwrite");
-                        var subjectsStore = txn.objectStore("subjects");
+                        objAddProperty("language", Data.language);
 
-                        subjectsStore.put(objarticle);
-                        subjectArray.push(objarticle);
-                    }
+                        var txn = Data.db.transaction(["resource"], "readwrite");
+                        var resourceStore = txn.objectStore("resource");
 
-                    //load article nodes
-                    nodes = xmlDoc.getElementsByTagName('article');
-                    for (var i = 0; i < nodes.length; i++) {
-                        objarticle = new Object();
-                        objAddProperty("id", i + 1);
                         for (var j = 0; j < nodes[i].childNodes.length; j++) {
                             if (nodes[i].childNodes[j].nodeType == 1) {
-                                if (nodes[i].childNodes[j].nodeName == "subjectid") {
-                                    var group = parseInt(nodes[i].childNodes[j].innerText) - 1;
-                                    objAddProperty("group", subjectArray[group]);
-
-                                    //switch (nodes[i].childNodes[j].innerText) {
-                                    //    case "1":
-                                    //        objAddProperty("group", subjectArray[0]);
-                                    //        break;
-                                    //    case "2":
-                                    //        objAddProperty("group", subjectArray[1]);
-                                    //        break;
-                                    //    case "3":
-                                    //        objAddProperty("group", subjectArray[2]);
-                                    //        break;
-                                    //    case "4":
-                                    //        objAddProperty("group", subjectArray[3]);
-                                    //        break;
-                                    //    case "5":
-                                    //        objAddProperty("group", subjectArray[4]);
-                                    //        break;
-                                    //    case "6":
-                                    //        objAddProperty("group", subjectArray[5]);
-                                    //        break;
-                                    //}
-                                }
-                                //save content without html tag
-                                if (nodes[i].childNodes[j].nodeName == "content") {
-                                    //regex:html tag /<\s*(\S+)(\s[^>]*)?>[\s\S]*<\s*\/\1\s*>/ 
-                                    //htmltag open /<\s*\w.*?>/g
-                                    //htmltag close /<\s*\/\s*\w\s*.*?>|<\s*br\s*>/g
-                                    var content = nodes[i].childNodes[j].innerText.replace(/<\s*\w.*?>/g, "").replace(/<\s*\/\s*\w\s*.*?>|<\s*br\s*>/g, "");
-                                    objAddProperty("contentnotag", content);
-                                }
                                 objAddProperty(nodes[i].childNodes[j].nodeName, nodes[i].childNodes[j].innerText);
                             }
                         }
-                        var txn = Data.db.transaction(["articles"], "readwrite");
-                        var articlesStore = txn.objectStore("articles");
-                        articlesStore.add(objarticle);
-                        //article.push(objarticle);
+
+                        resourceStore.add(objarticle);
 
                         var isdone = false;
                         txn.oncomplete = function () {
-                            //update data in page
+                            //update language in UI
                             if (!isdone) {
-                                loadArray("0");
+                                //updateUI();
+                                updateUI();
 
-                                switch (WinJS.Navigation.location) {
-                                    case "/pages/article/article.html":
-                                        showData("article");
-                                        break;
-                                    case "/pages/favorite/favorite.html":
-                                        //showData("favorite");
-                                        break;
-                                }
+                                //load db: article, subject
+                                filename = Data.language + ".xml";
+
+                                subjectArray = new Array();
+                                Windows.ApplicationModel.Package.current.installedLocation.getFolderAsync(foldername).done(function (folder) {
+                                    folder.getFileAsync(filename).done(function (file) {
+                                        var loadSettings = new Windows.Data.Xml.Dom.XmlLoadSettings;
+                                        loadSettings.prohibitDtd = false;
+                                        loadSettings.resolveExternals = false;
+
+                                        Windows.Data.Xml.Dom.XmlDocument.loadFromFileAsync(file, loadSettings).done(function (xmlDoc) {
+                                            //load subject nodes
+                                            var nodes = xmlDoc.getElementsByTagName('subject');
+                                            var counter = 1;
+                                            for (var i = 0; i < nodes.length; i++) {
+                                                objarticle = new Object();
+                                                objAddProperty("id", i + 1);
+                                                for (var j = 0; j < nodes[i].attributes.length; j++) {
+                                                    objAddProperty(nodes[i].attributes[j].nodeName, nodes[i].attributes[j].nodeValue);
+                                                }
+                                                var txn = Data.db.transaction(["subjects"], "readwrite");
+                                                var subjectsStore = txn.objectStore("subjects");
+
+                                                subjectsStore.put(objarticle);
+                                                subjectArray.push(objarticle);
+                                            }
+
+                                            //load article nodes
+                                            nodes = xmlDoc.getElementsByTagName('article');
+                                            for (var i = 0; i < nodes.length; i++) {
+                                                objarticle = new Object();
+                                                objAddProperty("id", i + 1);
+                                                for (var j = 0; j < nodes[i].childNodes.length; j++) {
+                                                    if (nodes[i].childNodes[j].nodeType == 1) {
+                                                        if (nodes[i].childNodes[j].nodeName == "subjectid") {
+                                                            var group = parseInt(nodes[i].childNodes[j].innerText) - 1;
+                                                            objAddProperty("group", subjectArray[group]);
+                                                        }
+                                                        //save content without html tag
+                                                        if (nodes[i].childNodes[j].nodeName == "content") {
+                                                            //regex:html tag /<\s*(\S+)(\s[^>]*)?>[\s\S]*<\s*\/\1\s*>/ 
+                                                            //htmltag open /<\s*\w.*?>/g
+                                                            //htmltag close /<\s*\/\s*\w\s*.*?>|<\s*br\s*>/g
+                                                            var content = nodes[i].childNodes[j].innerText.replace(/<\s*\w.*?>/g, "").replace(/<\s*\/\s*\w\s*.*?>|<\s*br\s*>/g, "");
+                                                            objAddProperty("contentnotag", content);
+                                                        }
+                                                        objAddProperty(nodes[i].childNodes[j].nodeName, nodes[i].childNodes[j].innerText);
+                                                    }
+                                                }
+                                                var txn = Data.db.transaction(["articles"], "readwrite");
+                                                var articlesStore = txn.objectStore("articles");
+                                                articlesStore.add(objarticle);
+                                                //article.push(objarticle);
+
+                                                var isdone = false;
+                                                txn.oncomplete = function () {
+                                                    //update data in page
+                                                    if (!isdone) {
+                                                        loadArray("0");
+
+                                                        switch (WinJS.Navigation.location) {
+                                                            case "/pages/article/article.html":
+                                                                showData("article");
+                                                                break;
+                                                            case "/pages/favorite/favorite.html":
+                                                                //showData("favorite");
+                                                                break;
+                                                        }
+                                                    }
+                                                    isdone = true;
+                                                };
+                                            }
+                                        });
+                                    });
+                                });
                             }
                             isdone = true;
                         };
@@ -140,6 +162,7 @@
             });
         });
     }
+
     function loadArray(region) {
         articleArray = new Array();
 
@@ -279,31 +302,45 @@
         //get current language
         var applicationLanguages = Windows.Globalization.ApplicationLanguages.languages;
         if (!Data.language) {
+            //no language config, check user's setting
             if (applicationLanguages[0])
                 Data.language = applicationLanguages[0].indexOf("zh") == 0 ? "zh-Hant-TW" : applicationLanguages[0];
+                //can't support user's setting, set default language
             else
                 Data.language = "en-US";
         }
 
-        //language source
-        var resourceNS = Windows.ApplicationModel.Resources.Core;
-        var resourceMap = resourceNS.ResourceManager.current.mainResourceMap.getSubtree('Resources');
+    }
+    var resourceArray = new Array();
+    function updateUI() {
+        resourceArray = new Array();
+        var dbRequest = window.indexedDB.open("ArticleDB", 1);
+        dbRequest.onsuccess = function (evt) {
+            var txn = Data.db.transaction(["resource"], "readonly");
+            var store = txn.objectStore("resource");
+            var request = store.openCursor();
+            request.onsuccess = function (e) {
+                var resource = e.target.result;
+                if (resource) {
+                    for (var item in resource.value) {
+                        resourceArray.push(resource.value[item]);
+                    }
+                }
 
-        var context = new resourceNS.ResourceContext();
-        var languagesVector = new Array(Data.language);
-        context.languages = languagesVector;
-
-        //chang UI language
-        var changeContentArray = ["homeTitle", "homeFavlist", "addFav", "delFav", "favTitle"];
-        for (var i in changeContentArray) {
-            var element = changeContentArray[i];
-            if (document.getElementById(element)) {
-                if (element == "addFav" || element == "delFav")
-                    document.getElementById(element).winControl._labelSpan.innerText = resourceMap.getValue(element, context).valueAsString;
-                else
-                    document.getElementById(element).textContent = resourceMap.getValue(element, context).valueAsString;
-            }
-        }
+                var changeContentArray = ["homeTitle", "homeFavlist", "addFav", "delFav", "favTitle"];
+                var item = 2;
+                for (var i in changeContentArray) {
+                    var element = changeContentArray[i];
+                    if (document.getElementById(element)) {
+                        if (element == "addFav" || element == "delFav")
+                            document.getElementById(element).winControl._labelSpan.innerText = resourceArray[item];
+                        else
+                            document.getElementById(element).textContent = resourceArray[item];
+                    }
+                    item++;
+                }
+            };
+        };
     }
     function updateLanguage() {
         initLanguage();
@@ -320,6 +357,10 @@
 
             txn = Data.db.transaction(["subjects"], "readwrite");
             store = txn.objectStore("subjects");
+            store.clear();
+
+            txn = Data.db.transaction(["resource"], "readwrite");
+            store = txn.objectStore("resource");
             store.clear();
 
             loadData(evt);
@@ -370,6 +411,7 @@
 
         initLanguage: initLanguage,
         updateLanguage: updateLanguage,
+        updateUI: updateUI,
 
         regionChange: loadArray,
 

@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8" ?> 
+<resource>
+  <en-US>
+    <homeTitle>Test ker ker(en)</homeTitle>
+    <homeFavlist>Favlist(en)</homeFavlist>
+    <addFav>add to Favlist(en)</addFav>
+    <delFav>del from Favlist(en)</delFav>
+    <favTitle>favorite(en)</favTitle>
+  </en-US>
+  <ja>
+    <homeTitle>Test ker ker(ja)</homeTitle>
+    <homeFavlist>Favlist(ja)</homeFavlist>
+    <addFav>add to Favlist(ja)</addFav>
+    <delFav>del from Favlist(ja)</delFav>
+    <favTitle>favorite(ja)</favTitle>
+  </ja>
+  <zh-Hant-TW>
+    <homeTitle>Test ker ker(zh)</homeTitle>
+    <homeFavlist>Favlist(zh)</homeFavlist>
+    <addFav>add to Favlist(zh)</addFav>
+    <delFav>del from Favlist(zh)</delFav>
+    <favTitle>favorite(zh)</favTitle>
+  </zh-Hant-TW>
+  </resource>

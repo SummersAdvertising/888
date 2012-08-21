@@ -8,8 +8,9 @@
         // 會將應用程式的資料填入頁面項目。
         ready: function (element, options) {
             // TODO: 在此初始化頁面。
+            //Data.initLanguage();
+            getInitLan();
 
-            languageSelect(Data.language);
             document.getElementById("languageList").addEventListener("change", function () {
                 languageSelect(this.value);
                 Data.createDB();
@@ -26,6 +27,27 @@
             // TODO: 回應 viewState 中的變更。
         }
     });
+    function getInitLan() {
+        var dbRequest = window.indexedDB.open("ArticleDB", 1);
+        dbRequest.onsuccess = function (evt) {
+            Data.db = evt.target.result;
+            var txn = Data.db.transaction(["resource"], "readonly");
+            var store = txn.objectStore("resource");
+            var request = store.openCursor();
+            request.onsuccess = function (e) {
+                var resource = e.target.result;
+                if (resource) {
+                    if (resource.value.language) {
+                        languageSelect(resource.value.language);
+                    }
+                    else
+                        languageSelect(Data.language);
+                }
+                else
+                    languageSelect(Data.language);
+            }
+        };
+    }
 
     function languageSelect(language) {
         if (language) {
@@ -39,6 +61,10 @@
                     break;
                 case "ja":
                     languageChild = 2;
+                    break;
+                default:
+                    Data.initLanguage();
+                    languageSelect(Data.language);
                     break;
 
             }

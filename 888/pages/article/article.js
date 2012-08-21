@@ -9,6 +9,7 @@
         ready: function (element, options) {
             // TODO: 在此初始化頁面。
             Data.initLanguage();
+            Data.updateUI();
             Data.showData("article");
 
             checkLike("del");
@@ -93,16 +94,18 @@
         var request = e.request;
 
         // Title is required
-        var dataPackageTitle =$("#articletitle").html();
+        var dataPackageTitle = $("#articleTitle").html();
         if ((typeof dataPackageTitle === "string") && (dataPackageTitle !== "")) {
-            var dataPackageLink = $("#articlecontentnotag").html();
+            var dataPackageLink = "the sharelink uri input";
             if ((typeof dataPackageLink === "string") && (dataPackageLink !== "")) {
                 request.data.properties.title = dataPackageTitle;
 
                 try {
-                    request.data.setUri(new Windows.Foundation.Uri(document.getElementById("linkInputBox").value));
+                    request.data.setText($("#articlecontentnotag").html());
+                    request.data.setUri(new Windows.Foundation.Uri("http://blogs.msdn.com/b/b8/"));                    
                 } catch (ex) {
                     //show error message
+                    request.failWithDisplayText("Enter the text you would like to share and try again.");
                 }
             } else {
                 request.failWithDisplayText("Enter the text you would like to share and try again.");

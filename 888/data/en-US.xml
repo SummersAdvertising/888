@@ -14,7 +14,7 @@
       <date>year/month/day</date>
       <content><![CDATA[content]]></content>
       <subjectid>4</subjectid>
-      <region>0</region>
+      <region>6</region>
       <address>address</address>
     </article>
     <article>
@@ -22,7 +22,7 @@
       <date>year/month/day</date>
       <content><![CDATA[content]]></content>
       <subjectid>2</subjectid>
-      <region>0</region>
+      <region>6</region>
       <address>address</address>
     </article>
     <article>
@@ -58,4 +58,12 @@
     <subject key="group5" name="subject5" />
     <subject key="group6" name="subject6" />
   </subjects>
+  <regions>
+    <a_region>North</a_region>
+    <a_region>East</a_region>
+    <a_region>West</a_region>
+    <a_region>South</a_region> 
+    <a_region>Islands</a_region>
+    <a_region>Top</a_region>
+  </regions>
 </data>

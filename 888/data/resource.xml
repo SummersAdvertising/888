@@ -1,24 +1,30 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?> 
 <resource>
   <en-US>
-    <homeTitle>Test ker ker(en)</homeTitle>
+    <homeTitle>Young Taiwan</homeTitle>
     <homeFavlist>Favlist(en)</homeFavlist>
     <addFav>add to Favlist(en)</addFav>
     <delFav>del from Favlist(en)</delFav>
     <favTitle>favorite(en)</favTitle>
+    <navHome>Top</navHome>
+    <navFav>Love</navFav>
   </en-US>
   <ja>
-    <homeTitle>Test ker ker(ja)</homeTitle>
+    <homeTitle>日文的青春台灣食玩誌</homeTitle>
     <homeFavlist>Favlist(ja)</homeFavlist>
     <addFav>add to Favlist(ja)</addFav>
     <delFav>del from Favlist(ja)</delFav>
     <favTitle>favorite(ja)</favTitle>
+    <navHome>日文的首頁</navHome>
+    <navFav>日文的我的最愛</navFav>
   </ja>
   <zh-Hant-TW>
-    <homeTitle>Test ker ker(zh)</homeTitle>
+    <homeTitle>青春台灣食玩誌</homeTitle>
     <homeFavlist>Favlist(zh)</homeFavlist>
     <addFav>add to Favlist(zh)</addFav>
     <delFav>del from Favlist(zh)</delFav>
     <favTitle>favorite(zh)</favTitle>
+    <navHome>首頁</navHome>
+    <navFav>我的最愛</navFav>
   </zh-Hant-TW>
   </resource>

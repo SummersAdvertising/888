@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Package xmlns="http://schemas.microsoft.com/appx/2010/manifest">
   <Identity Name="64b74713-a806-4306-9bb8-e98e52cfc1e2" Version="1.0.0.0" Publisher="CN=Yuzhe" />
   <Properties>
@@ -15,9 +15,9 @@
   </Resources>
   <Applications>
     <Application Id="App" StartPage="default.html">
-      <VisualElements DisplayName="888" Logo="images\logo.png" SmallLogo="images\smalllogo.png" Description="888" ForegroundText="light" BackgroundColor="#464646">
+      <VisualElements DisplayName="888" Logo="images\logo.png" SmallLogo="images\smalllogo.png" Description="888" ForegroundText="light" BackgroundColor="#0072c6">
         <DefaultTile ShowName="allLogos" />
-        <SplashScreen Image="images\splashscreen.png" />
+        <SplashScreen Image="images\splashscreen.png" BackgroundColor="#0072c6" />
       </VisualElements>
       <Extensions>
         <Extension Category="windows.search" />

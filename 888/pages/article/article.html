@@ -12,26 +12,89 @@
     <script src="/js/jquery-1.7.2.min.js"></script>
 
     <link href="/pages/article/article.css" rel="stylesheet" />
+    <link href="content.css" rel="stylesheet" />
     <script src="/pages/article/article.js"></script>
 
 </head>
 <body>
+    <!-- nav bar -->
+        <div class="main-navigation" id="customLayoutAppBar" data-win-control="WinJS.UI.AppBar" data-win-options="{layout:'custom',placement:'top'}">
+            <!--nav bar: 首頁/我的最愛 靠左-->
+            <div id="region6" class="main-Narea region" onclick="Home.regionChange(this.id); WinJS.Navigation.back(WinJS.Navigation.history.backStack.length); document.getElementById('customLayoutAppBar').winControl.hide();">
+                <a href="#" id="bestlink">
+                    <div class="main-Nhome">
+                        <div class="main-Nword" id="navHome" data-win-res="{textContent:'navHome'}">首頁</div>
+                    </div>
+                </a>
+            </div>
+            <div class="main-Narea">
+                <a href="#" id="favinfolink">
+                    <div class="main-Nfavorite" id="navtoFav">
+                        <div class="main-Nword" id="navFav" data-win-res="{textContent:'navFav'}">我的最愛</div>
+                    </div>
+                </a>
+            </div>
+        </div>
+
+    <div class="content-title">
+        <h2>
+            <div class="content-Bback" onclick="WinJS.Navigation.back();"></div>
+            超值的青春
+        </h2>
+        <p>
+            花小錢就能享受無敵美景與<br />
+            吮指美味！<br />
+            台灣便宜省錢（或不要錢）<br />
+            的景點和美食
+        </p>
+
+    </div>
+    <div class="content-all">
+
+        <div class="content-photo-economy" _height="auto"></div>
+        <div class="content-body">
+            <div class="contentBox">
+                <div class="articleArea">
+                    <h6>達人：PEPE(author)</h6>
+                    <h2><span id="articleTitle">article</span>
+                        <span id="articleId" style="display: none;"></span></h2>
+                    <h3>這裡的咖啡可以品嚐到義式、手沖或虹吸式 價錢約為100元上下，
+            想要自己嚐試煮咖啡當然也是可以</h3>
+                    <img src="../../images/article/economy/01/economy_bigpic.jpg" width="630" />
+                    <p id="articlemsg"></p>
+                    <div id="article"></div>
+
+                </div>
+
+                <div class="placeArea">
+                    <div class="placeBG">
+                        <span class="position-name">斗侍咖啡</span>
+                        <table border="0" cellspacing="0" cellpadding="0">
+                            <tr>
+                                <td class="item">地　　址：
+            
+                                </td>
+                                <td>地址不方便公開，因斗侍空間不大，須電訪詢問地址。</td>
+                            </tr>
+                            <tr>
+                                <td>電　　話：</td>
+                                <td>0988-162-298 （星期二休）</td>
+                            </tr>
+                            <tr>
+                                <td>交通方式：</td>
+                                <td>坐火車到台南車站，步行前往約15-20分鐘，
+                  或搭計程車5分鐘。</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="placeBox">&nbsp;</div>
+                </div>
+            </div>
+        </div>
+    </div>
     <div id="createAppBar" data-win-control="WinJS.UI.AppBar">
         <button data-win-control="WinJS.UI.AppBarCommand" data-win-options="{id:'addFav',label:'articleFavlist',icon:'add'}"></button>
         <button data-win-control="WinJS.UI.AppBarCommand" data-win-options="{id:'delFav',label:'delete from fav',icon:'remove'}"></button>
-    </div>
-    <div class="article fragment">
-        <header aria-label="Header content" role="banner">
-            <button class="win-backbutton" aria-label="Back" disabled type="button"></button>
-            <h1 class="titlearea win-type-ellipsis">
-                <span id="articleTitle">article</span>
-                <span id="articleId" style="display:none;"></span>
-            </h1>
-        </header>
-        <section aria-label="Main content" role="main">
-            <p id="articlemsg"></p>
-            <div id="article"></div>
-        </section>
     </div>
 </body>
 </html>

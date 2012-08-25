@@ -26,6 +26,7 @@
 
         var articleStore = Data.db.createObjectStore("articles", { keyPath: "id", autoIncrement: false });
         var subjectStore = Data.db.createObjectStore("subjects", { keyPath: "id", autoIncrement: false });
+        var subjectStore = Data.db.createObjectStore("regions", { keyPath: "id", autoIncrement: false });
         var statusStore = Data.db.createObjectStore("likes", { keyPath: "id", autoIncrement: true });
 
         var resourceStore = Data.db.createObjectStore("resource", { keyPath: "id", autoIncrement: false });
@@ -36,7 +37,7 @@
     //declare WinJS.Binding.List(for search)
     var list = new WinJS.Binding.List();
 
-    //declare bindinglist(for home with region filter)
+    //declare bindinglist(for home.html with region filter)
     var articlelist = new WinJS.Binding.List();
     var subjectArray = new Array();//groups in list
     var articleArray = new Array();//groupitems in list
@@ -101,7 +102,6 @@
                                         Windows.Data.Xml.Dom.XmlDocument.loadFromFileAsync(file, loadSettings).done(function (xmlDoc) {
                                             //load subject nodes
                                             var nodes = xmlDoc.getElementsByTagName('subject');
-                                            var counter = 1;
                                             for (var i = 0; i < nodes.length; i++) {
                                                 objarticle = new Object();
                                                 objAddProperty("id", i + 1);
@@ -113,6 +113,18 @@
 
                                                 subjectsStore.put(objarticle);
                                                 subjectArray.push(objarticle);
+                                            }
+
+                                            //load region nodes
+                                            var nodes = xmlDoc.getElementsByTagName('a_region');
+                                            for (var i = 0; i < nodes.length; i++) {
+                                                objarticle = new Object();
+                                                objAddProperty("id", i + 1);
+                                                objAddProperty(nodes[i].nodeName, nodes[i].innerText);
+
+                                                var txn = Data.db.transaction(["regions"], "readwrite");
+                                                var regionStore = txn.objectStore("regions");
+                                                regionStore.add(objarticle);
                                             }
 
                                             //load article nodes
@@ -140,7 +152,6 @@
                                                 var txn = Data.db.transaction(["articles"], "readwrite");
                                                 var articlesStore = txn.objectStore("articles");
                                                 articlesStore.add(objarticle);
-                                                //article.push(objarticle);
 
                                                 var isdone = false;
                                                 txn.oncomplete = function () {
@@ -154,6 +165,9 @@
                                                                 break;
                                                             case "/pages/favorite/favorite.html":
                                                                 //showData("favorite");
+                                                                break;
+                                                            case "/pages/home/home.html":
+                                                                Data.changeRegionLan();
                                                                 break;
                                                         }
                                                     }
@@ -215,7 +229,7 @@
         });
     }
 
-    //data for listview
+    //data for listview(home.html)
     var myGroupedList = articlelist.createGrouped(getGroupKey, getGroupData, compareGroups);
     var favlist = new WinJS.Binding.List();
 
@@ -269,7 +283,7 @@
                     }
                 }
 
-                break;            
+                break;
         }
     }
 
@@ -291,6 +305,7 @@
         resourceArray = new Array();
         var dbRequest = window.indexedDB.open("ArticleDB", 1);
         dbRequest.onsuccess = function (evt) {
+            Data.db = evt.target.result;
             var txn = Data.db.transaction(["resource"], "readonly");
             var store = txn.objectStore("resource");
             var request = store.openCursor();
@@ -302,7 +317,7 @@
                     }
                 }
 
-                var changeContentArray = ["homeTitle", "homeFavlist", "addFav", "delFav", "favTitle"];
+                var changeContentArray = ["homeTitle", "homeFavlist", "addFav", "delFav", "favTitle","navHome","navFav"];
                 var item = 2;
                 for (var i in changeContentArray) {
                     var element = changeContentArray[i];
@@ -319,7 +334,7 @@
     }
     function updateLanguage() {
         initLanguage();
-
+        
         //load new language data to db
         var dbRequest = window.indexedDB.open("ArticleDB", 1);
         dbRequest.onsuccess = function (evt) {
@@ -338,9 +353,28 @@
             store = txn.objectStore("resource");
             store.clear();
 
+            txn = Data.db.transaction(["regions"], "readwrite");
+            store = txn.objectStore("regions");
+            store.clear();
+
             loadData(evt);
         };
     }
+    function changeRegionLan() {
+        var dbRequest = window.indexedDB.open("ArticleDB", 1);
+        dbRequest.onsuccess = function (evt) {
+            Data.db = evt.target.result;
+            var txn = Data.db.transaction(["regions"], "readwrite");
+            var regionStore = txn.objectStore("regions");
+            var request = regionStore.get(parseInt(Data.currentRegion));
+            request.onsuccess = function (e) {
+                var region = e.target.result;
+                if (region)
+                $("#regionTitle").html(region.a_region);
+            };
+        };
+    }
+
 
     var groupedItems = list.createGrouped(
                     function groupKeySelector(item) { return item.group.key; },
@@ -383,7 +417,7 @@
     }
 
     var db, articleid, favAddMsg, language = null;
-    
+
     WinJS.Namespace.define("Data", {
         items: groupedItems,
         groups: groupedItems.groups,
@@ -393,13 +427,14 @@
         initLanguage: initLanguage,
         updateLanguage: updateLanguage,
         updateUI: updateUI,
+        changeRegionLan: changeRegionLan,
 
         regionChange: loadArray,
 
         db: db,
         articleid: articleid,
         favAddMsg: favAddMsg,
-        currentRegion: "0",
+        currentRegion: "6",
         language: language,
 
         myGroupedList: myGroupedList,

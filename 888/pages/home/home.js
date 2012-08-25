@@ -11,19 +11,13 @@
             Data.initLanguage();
             Data.createDB();
             Data.updateUI();
+            Data.changeRegionLan();
 
-            isAddMsg();
             listView = element.querySelector("#listView").winControl;
             listView.addEventListener("iteminvoked", itemInvokedHandler);
 
-            listView.forceLayout();
             $(".region").bind("click", function () {
-                var region = this.id.slice(6, this.id.length);
-
-                $(this).siblings().removeClass("region_c");
-                $(this).addClass("region_c");
-                Data.currentRegion = region;
-                Data.regionChange(region);
+                regionChange(this.id);
             });
 
             $("#navtoFav").bind("click", function () { navigatetoFav(); });
@@ -52,18 +46,22 @@
         });
     }
 
-    function isAddMsg() {
-        if (Data.favAddMsg) {
-            $("#favAddMsg").html(Data.favAddMsg);
-            Data.favAddMsg = null;
-        }
-    }
-
     function navigatetoFav() {
         document.getElementById('customLayoutAppBar').winControl.hide();
         WinJS.Navigation.navigate('/pages/favorite/favorite.html');
     }
 
+    function regionChange(id) {
+        var region = id.slice(6, id.length);
+
+        Data.currentRegion = region;
+        Data.regionChange(region);
+        Data.changeRegionLan();
+    }
+
+    WinJS.Namespace.define("Home",{
+        regionChange: regionChange
+    });
 
 })();
 

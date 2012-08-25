@@ -89,6 +89,7 @@
         checkLike("del");
     }
 
+    //data requested for link sharing
     function dataRequested(e) {
         var request = e.request;
 

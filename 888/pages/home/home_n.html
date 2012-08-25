@@ -1,0 +1,116 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
+    <title>homePage</title>
+
+    <!-- WinJS 參考 -->
+    <!--<link href="//Microsoft.WinJS.1.0/css/ui-light.css" rel="stylesheet" />-->
+    <script src="//Microsoft.WinJS.1.0/js/base.js"></script>
+    <script src="//Microsoft.WinJS.1.0/js/ui.js"></script>
+    <script src="/js/jquery-1.7.2.min.js"></script>
+    <script src="/js/default.js"></script>
+    <script src="auto-full-height.min.js"></script>
+
+
+    <!--<link href="/css/default.css" rel="stylesheet" />-->
+    <!--<link href="/pages/home/home.css" rel="stylesheet" />-->
+    <link href="main.css" rel="stylesheet" />
+    <script src="/pages/home/home.js"></script>
+</head>
+
+<body>
+    <div class="main-all">
+        <!-- nav bar -->
+        <div class="main-navigation" id="customLayoutAppBar" data-win-control="WinJS.UI.AppBar" data-win-options="{layout:'custom',placement:'top'}">
+            <!--nav bar: 首頁/我的最愛 靠左-->
+            <div id="region6" class="main-Narea region" onclick="WinJS.Navigation.back(WinJS.Navigation.history.backStack.length); document.getElementById('customLayoutAppBar').winControl.hide();">
+                <a href="#" id="bestlink">
+                    <div class="main-Nhome">
+                        <div class="main-Nword" id="navHome" data-win-res="{textContent:'navHome'}">首頁</div>
+                    </div>
+                </a>
+            </div>
+            <div class="main-Narea">
+                <a href="#" id="favinfolink">
+                    <div class="main-Nfavorite" id="navtoFav">
+                        <div class="main-Nword" id="navFav" data-win-res="{textContent:'navFav'}">我的最愛</div>
+                    </div>
+                </a>
+            </div>
+        </div>
+        
+        <div class="main-photo" _height="auto">
+            <div class="main-photo-left"></div>
+            <div class="main-photo-rightT"></div>
+            <div class="main-photo-rightB"></div>
+        </div>
+
+
+        <div class="main-right">
+            <div class="main-title">
+                <h1><span id="homeTitle" data-win-res="{textContent:'homeTitle'}">青春台灣食玩誌</span><span id="regionTitle" class="regionTitle">精選文章</span></h1>
+            </div>
+            <!-- map -->
+            <div class="main-map" _height="auto">
+                <img src="../../images/main-map.png" width="440" height="600" usemap="#Map" border="0" id="Img1" />
+                <map name="Map" id="Map1">
+                    <!--North-->
+                    <area class="region" shape="poly" coords="225,113,283,171,378,197,395,182,395,162,407,151,411,133,403,125,403,115,400,106,404,90,415,79,421,71,436,67,432,63,423,63,418,53,415,47,400,46,376,37,362,21,343,19,328,34,309,44,300,39,308,31,297,23,285,26,267,46,269,57,253,67,236,94,225,113" href="#" id="region1" />
+                    <!--East-->
+                    <area class="region" shape="poly" coords="368,207,288,181,290,219,175,370,278,440,282,429,300,410,308,389,318,383,322,373,321,364,338,329,353,326,366,316,368,297,360,286,346,281,363,232,358,224" href="#" id="region2" />
+                    <!--West-->
+                    <area class="region" shape="poly" coords="81,366,166,365,212,298,252,245,282,213,280,177,221,119,210,121,200,129,188,150,171,171,166,177,157,192,153,202,145,208,140,216,131,229,114,259,100,278,90,294,96,338" href="#" id="region3" />
+                    <!--South-->
+                    <area class="region" shape="poly" coords="272,446,168,372,79,376,80,391,94,401,113,458,134,482,178,512,195,548,193,570,220,579,229,554,226,514,242,473,271,446" href="#" id="region4" />
+                    <!--Islands-->
+                    <area class="region" shape="poly" coords="32,186,47,165,61,160,74,168,70,176,75,186,94,189,108,203,104,223,91,233,74,232,64,259,16,320,12,257,38,224,34,202" href="#" id="region5" />
+                </map>
+
+
+
+            </div>
+
+
+            <div class="main-box">
+                <!-- listview header template -->
+
+                <div class="headertemplate" id="headertemplate" data-win-control="WinJS.Binding.Template">
+                    <div class="main-gloup">
+                        <h2 class="item-title" data-win-bind="textContent: title"></h2>
+                    </div>
+                </div>
+
+                <!-- listview item template -->
+                <div class="main-gloup" id="itemtemplate" data-win-control="WinJS.Binding.Template">
+                    <div class="area-list" style="background-image: url(/images/example/ex-pic.jpg);">
+                        <div class="area-listbar">
+                            <div class="area-title">
+                                <p class="item-title" data-win-bind="textContent: title"></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="main-best" id="listView"
+                    data-win-control="WinJS.UI.ListView"
+                    data-win-options="{ 
+                    itemDataSource: Data.myGroupedList.dataSource, 
+                    itemTemplate: select('#itemtemplate'), 
+                    groupDataSource: Data.myGroupedList.groups.dataSource,
+                    groupHeaderTemplate: select('#headertemplate'), 
+                    selectionMode: 'none', 
+                    tapBehavior: 'invokeOnly', 
+                    swipeBehavior: 'none',
+                    oniteminvoked :itemInvokedHandler
+                }">
+                </div>
+
+
+        </div>
+
+        </div>
+    </div>
+</body>
+</html>

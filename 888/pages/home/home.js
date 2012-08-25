@@ -10,14 +10,16 @@
 
             Data.initLanguage();
             Data.createDB();
-            Data.updateUI();
+
             Data.changeRegionLan();
+            Data.updateUI(Data.regionChange);
 
             listView = element.querySelector("#listView").winControl;
             listView.addEventListener("iteminvoked", itemInvokedHandler);
 
             $(".region").bind("click", function () {
                 regionChange(this.id);
+                updateView();
             });
 
             $("#navtoFav").bind("click", function () { navigatetoFav(); });
@@ -66,48 +68,47 @@
 })();
 
 
-function updateView() {
-    var myViewState = Windows.UI.ViewManagement.ApplicationView.value;
-    var viewStates = Windows.UI.ViewManagement.ApplicationViewState;
-    var statusText;
-    $('#listViewSnap').children().remove();
+function buildUpGroupContainer(groupKey) {
+    var groups = Data.groups._groupItems;
 
-    switch (myViewState) {
-        case viewStates.snapped:
+    var groupBox = $('#snapGroupTemplate').clone();
+    groupBox.children('.groupTitle').html(groups[groupKey].data.name);
+    groupBox.hide();
+    $('#listViewSnap').prepend(groupBox);
+    groups[groupKey]['container'] = groupBox;
+}
 
-            if (Data.myGroupedList._groupsProjection == undefined) {
-                return;
-            }
+function snapRegionList() {
+    var groups = Data.groups._groupItems;
+    
+    for (var groupKey in groups) {
 
-            var groups = Data.myGroupedList._groupsProjection._groupItems;
-            var items = Data.myGroupedList._groupedItems;
+        if (groups[groupKey]['container'] != undefined) {
+            groups[groupKey]['container'].children('.itemsContainer').children().remove();
+            groups[groupKey]['container'].remove();
+        }
 
-            if (WinJS.Navigation.location == '/pages/article/article.html') {
-                Data.regionChange(Data.currentRegion);
-                WinJS.Navigation.navigate('/pages/home/home.html');
-                return;
-            }
+        var groupBox = $('#snapGroupTemplate').clone();
+        groupBox.children('.groupTitle').html(groups[groupKey].data.name);
+        
+        groupBox.hide();
+        groups[groupKey]['container'] = groupBox;
+        $('#listViewSnap').prepend(groups[groupKey]['container']);
+    }
 
+    var txn = Data.db.transaction(["articles"], "readonly");
+    var store = txn.objectStore("articles");
+    var request = store.openCursor();
+    request.onsuccess = function (e) {
+        
+        if (e.target.result) {
+            var article = e.target.result.value;
 
-            for (var groupKey in groups) {
-
-                if (groups[groupKey]['container'] != undefined) {
-                    groups[groupKey]['container'].children('.itemsContainer').children().remove();
-                    groups[groupKey]['container'].remove();
-                }
-
-                var groupBox = $('#snapGroupTemplate').clone();
-                groupBox.children('.groupTitle').html(groups[groupKey].data.title);
-                $('#listViewSnap').prepend(groupBox);
-
-                groups[groupKey]['container'] = groupBox;
-            }
-
-            for (var i in items) {
+            if (Data.currentRegion == article.region) {
                 var itemBox = $('#snapItemTemplate').clone();
                 itemContent = itemBox.children('.articleArea');
-                itemContent.children('h4').children('.itemTitle').html(items[i].data.title);
-                itemBox.data('article-id', items[i].data.id);
+                itemContent.children('h4').children('.itemTitle').html(article.title);
+                itemBox.data('article-id', article.id);
                 itemBox.click(function () {
 
                     Data.articleid = $(this).data('article-id');
@@ -116,7 +117,106 @@ function updateView() {
                     Windows.UI.ViewManagement.ApplicationView.tryUnsnap();
                 });
 
-                groups[items[i].groupKey]['container'].children('.itemsContainer').prepend(itemBox);
+                if (groups[article.group.key]['container'] == undefined) {
+                    buildUpGroupContainer(article.group.key);
+                }
+
+                groups[article.group.key]['container'].children('.itemsContainer').prepend(itemBox);
+                groups[article.group.key]['container'].show();
+            }
+
+            e.target.result.continue();
+        }
+
+    };
+
+   
+    // 地區篩選完畢，重新掃瞄有item的group
+
+    for (var groupKey in groups) {
+
+        if (groups[groupKey]['container'].children('.itemsContainer').children().length <= 0) {
+            continue;
+        }
+        $('#listViewSnap').prepend(groups[groupKey]['container']);
+    }
+}
+
+function snapFavList() {
+
+
+    var txn = Data.db.transaction(["likes"], "readonly");
+    var statusStore = txn.objectStore("likes");
+    var request = statusStore.openCursor();
+
+    var groups = Data.groups._groupItems;
+
+    for (var groupKey in groups) {
+
+        if (groups[groupKey]['container'] != undefined) {
+            groups[groupKey]['container'].children('.itemsContainer').children().remove();
+            groups[groupKey]['container'].remove();
+        }
+
+        buildUpGroupContainer(groupKey);
+
+    }
+
+    request.onsuccess = function (e) {
+        var like = e.target.result;
+        if (like) {
+            var txn = Data.db.transaction(["articles"], "readonly");
+            var store = txn.objectStore("articles");
+            var request = store.get(parseInt(like.value["articleid"]));
+            var likeid = like.value.id;
+
+
+            request.onsuccess = function (e) {
+                var article = e.target.result;
+
+                var itemBox = $('#snapItemTemplate').clone();
+                itemContent = itemBox.children('.articleArea');
+                itemContent.children('h4').children('.itemTitle').html(article.title);
+                itemBox.data('article-id', article.id);
+                itemBox.click(function () {
+
+                    Data.articleid = $(this).data('article-id');
+                    WinJS.Navigation.navigate("/pages/article/article.html");
+
+                    Windows.UI.ViewManagement.ApplicationView.tryUnsnap();
+                });
+
+                if (groups[article.group.key]['container'] == undefined) {
+                    buildUpGroupContainer(article.group.key);
+                }
+
+                groups[article.group.key]['container'].children('.itemsContainer').prepend(itemBox);
+                groups[article.group.key]['container'].show();
+            }
+
+            like.continue();
+        }
+    };
+}
+
+function updateView() {
+    var myViewState = Windows.UI.ViewManagement.ApplicationView.value;
+    var viewStates = Windows.UI.ViewManagement.ApplicationViewState;
+    var statusText;
+    $('#listViewSnap').children().remove();
+    
+    switch (myViewState) {
+        case viewStates.snapped:            
+
+            if (WinJS.Navigation.location == '/pages/article/article.html') {
+                WinJS.Navigation.back();
+                return;
+            }
+
+            if (Data.currentRegion != 'f') {
+                snapRegionList();
+            } else {
+                snapFavList();
             }
 
             // 標籤
@@ -126,6 +226,9 @@ function updateView() {
             break;
         default:
 
+            if (Data.db != undefined) {
+                Data.regionChange();
+            }
 
             break;
     }

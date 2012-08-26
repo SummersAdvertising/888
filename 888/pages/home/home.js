@@ -20,8 +20,12 @@
 
             // 地區控制
             $(".region").unbind("click");
+            $(".region-option").unbind("click");
             $(".region").bind("click", function () {
                 regionChange(this.id);
+            });
+            $(".region-option").bind("click", function () {
+                regionChange(this.id, true);
                 updateView();
             });
 
@@ -35,7 +39,6 @@
             });
 
             window.addEventListener("resize", onResize);
-            updateView();
 
             
             if (!animated) {
@@ -68,19 +71,18 @@
 
     function navigatetoFav() {
         document.getElementById('homeNavBar').winControl.hide();
-        Data.favlistLoad();
-        $("#regionTitle").html("我的最愛");
-        //document.getElementById('homeNavBar').winControl.hide();
-        //WinJS.Navigation.navigate('/pages/favorite/favorite.html');
+        regionChange('regionf');
     }
 
-    function regionChange(id) {
+    function regionChange(id, snap) {
         var region = id.slice(6, id.length);
 
         $('#taiwanMap').attr('src', "../../images/map-" + region + ".png");
         Data.currentRegion = region;
-        Data.regionChange(region);
         Data.changeRegionLan();
+        if (!snap) {
+            Data.regionChange(region);
+        }
     }
 
     WinJS.Namespace.define("Home",{
@@ -159,7 +161,7 @@ function snapRegionList() {
 
     for (var groupKey in Data.snapGroups) {
 
-        if (Data.snapGroups[groupKey]['container'].children('.itemsContainer').children().length <= 0) {
+        if (Data.snapGroups[groupKey]['container'] != undefined || Data.snapGroups[groupKey]['container'].children('.itemsContainer').children().length <= 0) {
             continue;
         }
         $('#listViewSnap').prepend(Data.snapGroups[groupKey]['container']);
@@ -168,24 +170,28 @@ function snapRegionList() {
 
 function snapFavList() {
 
-    var txn = Data.db.transaction(["likes"], "readonly");
-    var statusStore = txn.objectStore("likes");
-    var request = statusStore.openCursor();
-    
     for (var groupKey in Data.snapGroups) {
         if (Data.snapGroups[groupKey]['container'] != undefined) {
             Data.snapGroups[groupKey]['container'].children('.itemsContainer').children().remove();
         }
     }
 
-    // 檢查是否為空
     $('#snapped-favinfo').hide();
-    statusStore.count().onsuccess = function (e) {
+
+    var txn = Data.db.transaction(["likes"], "readonly");
+    var likeStore = txn.objectStore("likes");
+
+    var counter = 0;
+
+    // 檢查是否為空
+    likeStore.count().onsuccess = function (e) {
         if (e.target.result == 0) {
             $('#snapped-favinfo').show();
         }
+        counter = e.target.result;
     }
 
+    var request = likeStore.openCursor();
     request.onsuccess = function (e) {
         var like = e.target.result;
         if (like) {
@@ -209,7 +215,7 @@ function snapFavList() {
                     Windows.UI.ViewManagement.ApplicationView.tryUnsnap();
                 });
 
-                regroupList(article.group.key);
+                regroupList(article.group);
 
                 Data.snapGroups[article.group.key]['container'].children('.itemsContainer').prepend(itemBox);
                 Data.snapGroups[article.group.key]['container'].show();

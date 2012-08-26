@@ -10,13 +10,18 @@
             // TODO: 在此初始化頁面。
             Data.initLanguage();
             Data.updateUI();
-
+            $('.main-all').css('left', 0);
             var listView = element.querySelector("#listView").winControl;
             listView.addEventListener("iteminvoked", itemInvokedHandler);
 
             checkFav();
 
-            Data.favlistLoad();
+            Data.favlistLoad("0");
+
+            $(".region").bind("click", function () {
+                var region = (this.id).slice(6, (this.id).length);
+                Data.favlistLoad(region);
+            });
         }
     });
 

@@ -22,6 +22,7 @@
             $(".region").unbind("click");
             $(".region-option").unbind("click");
             $(".region").bind("click", function () {
+                $("#favinfo").hide();
                 regionChange(this.id);
             });
             $(".region-option").bind("click", function () {
@@ -72,6 +73,20 @@
     function navigatetoFav() {
         document.getElementById('homeNavBar').winControl.hide();
         regionChange('regionf');
+        checkFav();
+    }
+
+    function checkFav() {
+        var txn = Data.db.transaction(["likes"], "readwrite");
+        var statusStore = txn.objectStore("likes");
+        var request = statusStore.openCursor();
+        request.onsuccess = function (e) {
+            var like = e.target.result;
+            if (like)
+                $("#favinfo").hide();
+            else
+                $("#favinfo").show();
+        };
     }
 
     function regionChange(id, snap) {

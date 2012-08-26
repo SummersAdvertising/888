@@ -1,7 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?> 
 <resource>
   <en-US>
-    <homeFavlist>Favlist(en)</homeFavlist>
     <homeTitle>Young Taiwan</homeTitle>
     <homeIndex>Home</homeIndex>
     <addFav>add to Favlist(en)</addFav>
@@ -12,7 +11,6 @@
   </en-US>
   <ja>
     <homeTitle>日文的青春台灣食玩誌</homeTitle>
-    <homeFavlist>Favlist(ja)</homeFavlist>
     <homeIndex>Home(ja)</homeIndex>
     <addFav>add to Favlist(ja)</addFav>
     <delFav>del from Favlist(ja)</delFav>
@@ -22,7 +20,6 @@
   </ja>
   <zh-Hant-TW>
     <homeTitle>青春台灣食玩誌</homeTitle>
-    <homeFavlist>Favlist(zh)</homeFavlist>
     <homeIndex>首頁</homeIndex>
     <addFav>add to Favlist(zh)</addFav>
     <delFav>del from Favlist(zh)</delFav>

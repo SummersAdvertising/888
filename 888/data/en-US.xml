@@ -66,6 +66,7 @@
     <a_region>West</a_region>
     <a_region>South</a_region> 
     <a_region>Islands</a_region>
-    <a_region>Top</a_region>
+    <a_region>Selected</a_region>
+    <a_region>Favorite</a_region>
   </regions>
 </data>

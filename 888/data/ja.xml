@@ -66,6 +66,7 @@
     <a_region>West(ja)</a_region> 
     <a_region>South(ja)</a_region>
     <a_region>Islands(ja)</a_region>
-    <a_region>Top(ja)</a_region>
+    <a_region>Selected(ja)</a_region>
+    <a_region>Favorite(ja)</a_region>
   </regions>
 </data>

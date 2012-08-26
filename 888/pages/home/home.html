@@ -22,7 +22,7 @@
 
 <body>
     <div class="main-all">
-        
+
         <!-- nav bar -->
         <div class="main-navigation" id="homeNavBar" data-win-control="WinJS.UI.AppBar" data-win-options="{layout:'custom',placement:'top'}">
             <!--nav bar: 首頁/我的最愛 靠左-->
@@ -42,7 +42,7 @@
             </div>
         </div>
 
-        
+
         <div id="mainImg" class="main-photo" style="height: 100%;">
             <div class="main-photo-left"></div>
             <div class="main-photo-rightT"></div>
@@ -82,35 +82,55 @@
                     <div class="articleArea">
                         <img src="../../images/example/s-pic.jpg" width="50" height="50" align="left" />
                         <h4><a href="#" class="itemTitle">標題</a></h4>
-          	            <p class="itemDesc">說明文字</p>
+                        <p class="itemDesc">說明文字</p>
                     </div>
                 </div>
             </div>
-            <div id="snapBody">                
+            <div id="snapBody">
                 <div class="snapped-title">
-	                <h1>青春台灣食玩誌</h1>
+                    <h1>青春台灣食玩誌</h1>
                 </div>
                 <div class="snapped-selectArea">
                     <div class="snapped-select">
-                        <div class="snap-best region_c region region-option" id="regionb"><div><span>首頁</span></div></div>
-                        <div id="region1" class="snap-list region-option"><div><span>北台灣</span></div></div>
-                        <div id="region2" class="snap-list region-option"><div><span>東台灣</span></div></div>
-                        <div id="region3" class="snap-list region-option"><div><span>中台灣</span></div></div>
-                        <div id="region4" class="snap-list region-option"><div><span>南台灣</span></div></div>
-                        <div id="region5" class="snap-list region-option"><div><span>離島</span></div></div>
-                        <div id="regionf" class="snap-favorite region-option"><div><span>我的最愛</span></div></div>
+                        <div class="snap-best region_c region region-option" id="regionb">
+                            <div><span>首頁</span></div>
+                        </div>
+                        <div id="region1" class="snap-list region-option">
+                            <div><span>北台灣</span></div>
+                        </div>
+                        <div id="region2" class="snap-list region-option">
+                            <div><span>東台灣</span></div>
+                        </div>
+                        <div id="region3" class="snap-list region-option">
+                            <div><span>中台灣</span></div>
+                        </div>
+                        <div id="region4" class="snap-list region-option">
+                            <div><span>南台灣</span></div>
+                        </div>
+                        <div id="region5" class="snap-list region-option">
+                            <div><span>離島</span></div>
+                        </div>
+                        <div id="regionf" class="snap-favorite region-option">
+                            <div><span>我的最愛</span></div>
+                        </div>
                     </div>
                 </div>
 
                 <div class="snapped-body">
-                    <div class="snapped-best" id="snapped-best">                    
-   	                    <h2 id="snap-fav-title" class="snap-list-title">我的最愛</h2>
-   	                    <h2 id="snap-best-title" class="snap-list-title">精選文章</h2>
+                    <div class="snapped-best" id="snapped-best">
+                        <h2 id="snap-fav-title" class="snap-list-title">我的最愛</h2>
+                        <h2 id="snap-best-title" class="snap-list-title">精選文章</h2>
 
-                        <div class="snapped-favinfo" id="snapped-favinfo" style="display:none">
-    	                    <h3>您尚未建立我的最愛</h3>
-        
-                            <div class="go-full"><ul><a href="#"><li>建立我的最愛</li></a></ul></div>
+                        <div class="snapped-favinfo" id="snapped-favinfo" style="display: none">
+                            <h3>您尚未建立我的最愛</h3>
+
+                            <div class="go-full">
+                                <ul>
+                                    <a href="#">
+                                        <li>建立我的最愛</li>
+                                    </a>
+                                </ul>
+                            </div>
                         </div>
 
                         <div id="listViewSnap"></div>
@@ -120,7 +140,21 @@
             </div>
 
             <div class="mainbox">
+                <div class="main-favinfo" id="favinfo" style="display: none;">
+                    <h2>您尚未建立我的最愛，請參考圖示步驟</h2>
+                    <div class="infobox">
+                        <p>
+                            1. 在文章頁以觸控由下往上滑出應用程式列或<br />
+                            滑鼠按右鍵叫出應用程式列
+                        </p>
+                        <img src="../../images/favinfo-pic1.png" width="428" height="330" />
+                    </div>
 
+                    <div class="infobox">
+                        <p>2. 點選『加入我的最愛』</p>
+                        <img src="../../images/favinfo-pic1.png" width="428" height="330" />
+                    </div>
+                </div>
 
                 <!-- listview header template -->
 
@@ -154,7 +188,7 @@
                     oniteminvoked :itemInvokedHandler
                 }">
                 </div>
-                
+
                 <div id="homeAppBar" data-win-control="WinJS.UI.AppBar">
                     <button onclick="toFullscreen();" data-win-control="WinJS.UI.AppBarCommand" data-win-options="{id:'backToIndex',label:'homeIndex',icon:'home'}"></button>
                 </div>

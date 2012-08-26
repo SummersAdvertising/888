@@ -290,7 +290,7 @@ function updateUI(callBack) {
                 }
             }
 
-            var changeContentArray = ["homeTitle", "homeFavlist", "addFav", "delFav", "favTitle", "navHome", "navFav"];
+            var changeContentArray = ["homeTitle", "homeIndex", "addFav", "delFav", "favTitle", "navHome", "navFav"];
             var item = 2;
             for (var i in changeContentArray) {
                 var element = changeContentArray[i];
@@ -368,10 +368,19 @@ function changeRegionLan() {
         var regionStore = txn.objectStore("regions");
 
         if (!parseInt(Data.currentRegion)) {
-            return;
+            switch (Data.currentRegion) {
+                case 'f':
+                    region = 7;
+                    break;
+                case 'b':
+                    region = 6;
+                    break;
+            }
         }
-
-        var request = regionStore.get(parseInt(Data.currentRegion));
+        else {
+            var region = parseInt(Data.currentRegion);
+        }
+        var request = regionStore.get(region);
         request.onsuccess = function (e) {
             var region = e.target.result;
             if (region)
@@ -396,6 +405,8 @@ function loadArray(region) {
         favlistLoad();
         return;
     }
+
+    // Data.homeList.itemDataSource = articlelist.dataSource;
 
     var txn = Data.db.transaction(["articles"], "readonly");
     var store = txn.objectStore("articles");

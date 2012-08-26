@@ -66,5 +66,7 @@
     <a_region>中部</a_region>
     <a_region>南部</a_region>    
     <a_region>離島</a_region>
+    <a_region>精選文章</a_region>
+    <a_region>我的最愛</a_region>
   </regions>
 </data>

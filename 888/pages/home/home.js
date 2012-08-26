@@ -15,13 +15,15 @@
             Data.changeRegionLan();
             Data.updateUI(Data.regionChange);
 
-             var listView = element.querySelector("#listView").winControl;
+            var listView = element.querySelector("#listView").winControl;
             listView.addEventListener("iteminvoked", itemInvokedHandler);
+
 
             // 地區控制
             $(".region").unbind("click");
             $(".region-option").unbind("click");
             $(".region").bind("click", function () {
+                $("#favinfo").hide();
                 regionChange(this.id);
             });
             $(".region-option").bind("click", function () {
@@ -72,6 +74,20 @@
     function navigatetoFav() {
         document.getElementById('homeNavBar').winControl.hide();
         regionChange('regionf');
+        checkFav();
+    }
+
+    function checkFav() {
+        var txn = Data.db.transaction(["likes"], "readwrite");
+        var statusStore = txn.objectStore("likes");
+        var request = statusStore.openCursor();
+        request.onsuccess = function (e) {
+            var like = e.target.result;
+            if (like)
+                $("#favinfo").hide();
+            else
+                $("#favinfo").show();
+        };
     }
 
     function regionChange(id, snap) {
@@ -229,8 +245,8 @@ function snapFavList() {
 function updateView() {
     var myViewState = Windows.UI.ViewManagement.ApplicationView.value;
     var viewStates = Windows.UI.ViewManagement.ApplicationViewState;
-    var statusText;
     $('#listViewSnap').children().remove();
+
     
     switch (myViewState) {
         case viewStates.snapped:            
@@ -267,10 +283,17 @@ function updateView() {
             break;
         default:
 
+            if (this.lastState != undefined && this.lastState == viewStates.snapped) {
+                this.lastState = myViewState;
+                WinJS.Navigation.navigate('/pages/home/home.html');
+            }
+
             if (Data.db != undefined) {
                 Data.regionChange();
             }
 
             break;
     }
+
+    this.lastState = myViewState;
 }

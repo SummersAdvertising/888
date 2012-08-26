@@ -68,7 +68,10 @@
 
     function navigatetoFav() {
         document.getElementById('homeNavBar').winControl.hide();
-        WinJS.Navigation.navigate('/pages/favorite/favorite.html');
+        Data.favlistLoad();
+        $("#regionTitle").html("我的最愛");
+        //document.getElementById('homeNavBar').winControl.hide();
+        //WinJS.Navigation.navigate('/pages/favorite/favorite.html');
     }
 
     function regionChange(id) {

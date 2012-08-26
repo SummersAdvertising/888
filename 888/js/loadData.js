@@ -336,10 +336,7 @@ var groupedItems = list.createGrouped(
 
 
 function favlistLoad(region) {
-    var length = Data.favlist.length;
-    for (var i = 0; i < length; i++) {
-        Data.favlist.pop();
-    }
+    cleanList(articlelist);
 
     var txn = Data.db.transaction(["likes"], "readonly");
     var statusStore = txn.objectStore("likes");
@@ -357,14 +354,7 @@ function favlistLoad(region) {
                 var article = e.target.result;
 
                 if (article) {
-                    if (region == "0") {
-                        Data.favlist.push(article);
-                    }
-                    else {
-                        if(article.region==region)
-                            Data.favlist.push(article);
-                    }
-                    
+                    articlelist.push(article);
                 }
             }
             like.continue();
@@ -437,14 +427,14 @@ function loadArray(region) {
 }
 
 function loadListforSearch() {
-    cleanList(list);
+    cleanList(articlelist);
     var txn = Data.db.transaction(["articles"], "readonly");
     var store = txn.objectStore("articles");
     var request = store.openCursor();
     request.onsuccess = function (e) {
         var article = e.target.result;
         if (article) {
-            list.push(article.value);
+            articlelist.push(article.value);
             article.continue();
         }
     };

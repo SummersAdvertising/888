@@ -110,6 +110,8 @@ a {
     }
 
 .main-all {
+    position: absolute;
+    left:1300px;
     height: 100%;
     width: 2500px;
 }
@@ -124,7 +126,8 @@ a {
     background-position: top center;
     background-repeat: no-repeat;
     float: left;
-    position: relative;
+    position: absolute;
+    left:-1300px;
 }
 
 .main-photo-word {

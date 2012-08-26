@@ -21,6 +21,7 @@
                         //"": { title: "隱私權聲明", href: "http://www.microsoft.com/privacystatement/zh-tw/core/default.aspx" }
                     };
                     WinJS.UI.SettingsFlyout.populateSettings(e);
+
                 };
             } else {
                 // TODO: 這個應用程式已經從擱置重新啟用。
@@ -55,3 +56,5 @@
 
 
 })();
+
+var animated = false;

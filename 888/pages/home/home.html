@@ -6,7 +6,6 @@
     <title>homePage</title>
 
     <!-- WinJS 參考 -->
-    <link href="//Microsoft.WinJS.1.0/css/ui-light.css" rel="stylesheet" />
     <script src="//Microsoft.WinJS.1.0/js/base.js"></script>
     <script src="//Microsoft.WinJS.1.0/js/ui.js"></script>
     <script src="/js/jquery-1.7.2.min.js"></script>
@@ -18,10 +17,12 @@
     <script src="/pages/home/home.js"></script>
     <script src="auto-full-height.min.js"></script>
     <script src="main-changelist.js"></script>
+
 </head>
 
 <body>
     <div class="main-all">
+        
         <!-- nav bar -->
         <div class="main-navigation" id="customLayoutAppBar" data-win-control="WinJS.UI.AppBar" data-win-options="{layout:'custom',placement:'top'}">
             <!--nav bar: 首頁/我的最愛 靠左-->
@@ -41,12 +42,12 @@
             </div>
         </div>
 
-        <div class="main-photo" style="display: none;">
+        
+        <div id="mainImg" class="main-photo" style="height: 100%;">
             <div class="main-photo-left"></div>
             <div class="main-photo-rightT"></div>
             <div class="main-photo-rightB"></div>
         </div>
-
 
         <div class="main-right">
             <div class="main-title">
@@ -106,19 +107,15 @@
    	                    <h2 id="snap-fav-title" class="snap-list-title">我的最愛</h2>
    	                    <h2 id="snap-best-title" class="snap-list-title">精選文章</h2>
 
+                        <div class="snapped-favinfo" id="snapped-favinfo" style="display:none">
+    	                    <h3>您尚未建立我的最愛</h3>
+        
+                            <div class="go-full"><ul><a href="#"><li>建立我的最愛</li></a></ul></div>
+                        </div>
+
                         <div id="listViewSnap"></div>
                     </div>
-    
-                    <div class="snapped-list" id="snapped-list" style="display:none">
-                        <h3>超值的青春</h3>
-                    
-                    </div>  
-    
-                    <div class="snapped-favinfo" id="snapped-favinfo" style="display:none">
-    	                <h3>您尚未建立我的最愛</h3>
-        
-                        <div class="go-full"><ul><a href="#"><li>建立我的最愛</li></a></ul></div>
-                    </div>
+
                 </div>
             </div>
 

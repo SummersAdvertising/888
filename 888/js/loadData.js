@@ -389,12 +389,6 @@ function changeRegionLan() {
 }
 
 
-var groupedItems = list.createGrouped(
-                function groupKeySelector(item) { return item.group.key; },
-                function groupDataSelector(item) { return item.group; }
-            );
-
-
 function loadArray(region) {
     articleArray = new Array();
     cleanList(articlelist);

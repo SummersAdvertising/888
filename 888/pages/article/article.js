@@ -19,6 +19,11 @@
             //share
             var dataTransferManager = Windows.ApplicationModel.DataTransfer.DataTransferManager.getForCurrentView();
             dataTransferManager.addEventListener("datarequested", dataRequested);
+
+            // 重設長度
+            $('[class^="content-photo"]').css('height', $(window).height());
+            $('.content-body').css('height', $(window).height());
+            
         }
     });
 

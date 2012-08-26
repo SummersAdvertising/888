@@ -126,7 +126,7 @@ li {
 	    bottom:10px;
 	    font-size:9pt; 
     }
-    #region6 div{
+    #regionb div{
 	    position:relative; 
 	    width: 80px;
 	    height: 80px;
@@ -136,7 +136,7 @@ li {
 	    background-position:center 20px;
 	    color: rgba(255,255,255,1);
     }
-    #region6 .region-selected, .s-best{
+    #regionb .region-selected, .s-best{
 	    background-image:url(/images/buttons/snapped-home-select.png);
 	    background-color: rgba(255,255,255,1);
 	    color: rgba(0,188,242,1);

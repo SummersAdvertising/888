@@ -406,6 +406,8 @@ function loadArray(region) {
         return;
     }
 
+    // Data.homeList.itemDataSource = articlelist.dataSource;
+
     var txn = Data.db.transaction(["articles"], "readonly");
     var store = txn.objectStore("articles");
     var request = store.openCursor();

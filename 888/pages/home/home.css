@@ -11,11 +11,15 @@ li {
     padding: 0px 5px;
 }
 
+#homeAppBar {
+    display: none;
+}
+
 @media screen and (-ms-view-state: snapped) {
-    #listViewSnap,#snapBody {
+    #listViewSnap,#snapBody,#homeAppBar {
         display: inherit;
     }
-
+    
     #snapBody {
         width: 320px;
         position:absolute;
@@ -23,7 +27,7 @@ li {
         top: 0;
     }
 
-    #listView,#mainList {
+    #listView,#mainList,#homeNavBar {
         display:none;
     }
 

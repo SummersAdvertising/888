@@ -350,8 +350,8 @@ function favlistLoad() {
             articleArray = [];
 
             request.onsuccess = function (e) {
-                    var article = e.target.result;                
-                    articlelist.push(article);   
+                var article = e.target.result;
+                articlelist.push(article);
             }
             like.continue();
         }
@@ -433,14 +433,14 @@ function loadArray(region) {
 }
 
 function loadListforSearch() {
-    cleanList(articlelist);
+    cleanList(list);
     var txn = Data.db.transaction(["articles"], "readonly");
     var store = txn.objectStore("articles");
     var request = store.openCursor();
     request.onsuccess = function (e) {
         var article = e.target.result;
         if (article) {
-            articlelist.push(article.value);
+            list.push(article.value);
             article.continue();
         }
     };

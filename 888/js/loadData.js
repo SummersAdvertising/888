@@ -1,5 +1,4 @@
-﻿
-function createDB() {
+﻿function createDB() {
     var dbRequest = window.indexedDB.open("ArticleDB", 1);
     dbRequest.onsuccess = function (evt) { dbSuccess(evt); };
     dbRequest.onupgradeneeded = function (evt) { dbVersionUpgrade(evt); };
@@ -16,6 +15,7 @@ function dbSuccess(evt) {
     }
     else {
         loadArray(Data.currentRegion);
+        loadListforSearch();
     }
 }
 function dbVersionUpgrade(evt) {
@@ -42,163 +42,161 @@ var articlelist = new WinJS.Binding.List();
 var subjectArray = new Array();//groups in list
 var articleArray = new Array();//groupitems in list
 
-function loadData(evt) {
-    Data.db = evt.target.result;
-
-    //load db: resource
+//get nodedata from XML
+function getNodeData(XMLfileName, nodeName, storeName) {
     var foldername = "data";
-    var filename = "resource.xml";
+
     Windows.ApplicationModel.Package.current.installedLocation.getFolderAsync(foldername).done(function (folder) {
-        folder.getFileAsync(filename).done(function (file) {
+        folder.getFileAsync(XMLfileName).done(function (file) {
             var loadSettings = new Windows.Data.Xml.Dom.XmlLoadSettings;
             loadSettings.prohibitDtd = false;
             loadSettings.resolveExternals = false;
 
             Windows.Data.Xml.Dom.XmlDocument.loadFromFileAsync(file, loadSettings).done(function (xmlDoc) {
-                var nodes = xmlDoc.getElementsByTagName(Data.language);
+                var nodes = xmlDoc.getElementsByTagName(nodeName);
 
-                for (var i = 0; i < nodes.length; i++) {
-                    objarticle = new Object();
-                    objAddProperty("id", i + 1);
-                    objAddProperty("language", Data.language);
-
-                    var txn = Data.db.transaction(["resource"], "readwrite");
-                    var resourceStore = txn.objectStore("resource");
-
-                    for (var j = 0; j < nodes[i].childNodes.length; j++) {
-                        if (nodes[i].childNodes[j].nodeType == 1) {
-                            if (nodes[i].childNodes[j].nodeName == "subjectid") {
-                                var group = parseInt(nodes[i].childNodes[j].innerText) - 1;
-                                objAddProperty("group", subjectArray[group]);
-                            }
-                            //save content without html tag
-                            if (nodes[i].childNodes[j].nodeName == "content") {
-                                var content = nodes[i].childNodes[j].innerText.replace(/<\s*\w.*?>/g, "").replace(/<\s*\/\s*\w\s*.*?>|<\s*br\s*>/g, "");
-                                objAddProperty("contentnotag", content);
-                            }
-                            objAddProperty(nodes[i].childNodes[j].nodeName, nodes[i].childNodes[j].innerText);
-                        }
-                    }
-
-                    resourceStore.add(objarticle);
-
-                    var isdone = false;
-                    txn.oncomplete = function () {
-                        //update language in UI
-                        if (!isdone) {
-                            //updateUI();
-                            updateUI();
-
-                            //load db: article, subject
-                            filename = Data.language + ".xml";
-
-                            subjectArray = new Array();
-                            Windows.ApplicationModel.Package.current.installedLocation.getFolderAsync(foldername).done(function (folder) {
-                                folder.getFileAsync(filename).done(function (file) {
-                                    var loadSettings = new Windows.Data.Xml.Dom.XmlLoadSettings;
-                                    loadSettings.prohibitDtd = false;
-                                    loadSettings.resolveExternals = false;
-
-                                    Windows.Data.Xml.Dom.XmlDocument.loadFromFileAsync(file, loadSettings).done(function (xmlDoc) {
-                                        //load subject nodes
-                                        var nodes = xmlDoc.getElementsByTagName('subject');
-                                        for (var i = 0; i < nodes.length; i++) {
-                                            objarticle = new Object();
-                                            objAddProperty("id", i + 1);
-                                            for (var j = 0; j < nodes[i].attributes.length; j++) {
-                                                objAddProperty(nodes[i].attributes[j].nodeName, nodes[i].attributes[j].nodeValue);
-                                            }
-                                            var txn = Data.db.transaction(["subjects"], "readwrite");
-                                            var subjectsStore = txn.objectStore("subjects");
-
-                                            subjectsStore.put(objarticle);
-                                            subjectArray.push(objarticle);
-                                        }
-
-                                        //load region nodes
-                                        var nodes = xmlDoc.getElementsByTagName('a_region');
-                                        for (var i = 0; i < nodes.length; i++) {
-                                            objarticle = new Object();
-                                            objAddProperty("id", i + 1);
-                                            objAddProperty(nodes[i].nodeName, nodes[i].innerText);
-
-                                            var txn = Data.db.transaction(["regions"], "readwrite");
-                                            var regionStore = txn.objectStore("regions");
-                                            regionStore.add(objarticle);
-                                        }
-
-                                        //load article nodes
-                                        nodes = xmlDoc.getElementsByTagName('article');
-                                        for (var i = 0; i < nodes.length; i++) {
-                                            objarticle = new Object();
-                                            objAddProperty("id", i + 1);
-                                            for (var j = 0; j < nodes[i].childNodes.length; j++) {
-                                                if (nodes[i].childNodes[j].nodeType == 1) {
-                                                    if (nodes[i].childNodes[j].nodeName == "subjectid") {
-                                                        var group = parseInt(nodes[i].childNodes[j].innerText) - 1;
-                                                        objAddProperty("group", subjectArray[group]);
-                                                    }
-                                                    //save content without html tag
-                                                    if (nodes[i].childNodes[j].nodeName == "content") {
-                                                        //regex:html tag /<\s*(\S+)(\s[^>]*)?>[\s\S]*<\s*\/\1\s*>/ 
-                                                        //htmltag open /<\s*\w.*?>/g
-                                                        //htmltag close /<\s*\/\s*\w\s*.*?>|<\s*br\s*>/g
-                                                        var content = nodes[i].childNodes[j].innerText.replace(/<\s*\w.*?>/g, "").replace(/<\s*\/\s*\w\s*.*?>|<\s*br\s*>/g, "");
-                                                        objAddProperty("contentnotag", content);
-                                                    }
-                                                    objAddProperty(nodes[i].childNodes[j].nodeName, nodes[i].childNodes[j].innerText);
-                                                }
-                                            }
-                                            var txn = Data.db.transaction(["articles"], "readwrite");
-                                            var articlesStore = txn.objectStore("articles");
-                                            articlesStore.add(objarticle);
-
-                                            var isdone = false;
-                                            txn.oncomplete = function () {
-                                                //update data in page
-                                                if (!isdone) {
-                                                    loadArray(Data.currentRegion);
-
-                                                    switch (WinJS.Navigation.location) {
-                                                        case "/pages/article/article.html":
-                                                            showData("article");
-                                                            break;
-                                                        case "/pages/favorite/favorite.html":
-                                                            //showData("favorite");
-                                                            break;
-                                                        case "/pages/home/home.html":
-                                                            Data.changeRegionLan();
-                                                            break;
-                                                    }
-                                                }
-                                                isdone = true;
-                                            };
-                                        }
-                                    });
-                                });
-                            });
-                        }
-                        isdone = true;
-                    };
-                }
+                //save node data to indexedDB
+                addObjectStore(storeName, nodes);
             });
         });
     });
 }
 
+function addObjectStore(storeName, nodes) {
+    switch (storeName) {
+        case "resource":
+            for (var i = 0; i < nodes.length; i++) {
+                objarticle = new Object();
+                objAddProperty("id", i + 1);
+                objAddProperty("language", Data.language);
 
+                for (var j = 0; j < nodes[i].childNodes.length; j++) {
+                    if (nodes[i].childNodes[j].nodeType == 1) {
+                        objAddProperty(nodes[i].childNodes[j].nodeName, nodes[i].childNodes[j].innerText);
+                    }
+                }
 
-function listAdd() {
-    //remove old data
-    var length = articlelist.length;
-    for (var i = 0; i < length; i++) {
-        articlelist.pop();
+                var txn = Data.db.transaction(["resource"], "readwrite");
+                var resourceStore = txn.objectStore("resource");
+                resourceStore.add(objarticle);
+            }
+            break;
+
+        case "subjects":
+            subjectArray = new Array();
+            for (var i = 0; i < nodes.length; i++) {
+                objarticle = new Object();
+                objAddProperty("id", i + 1);
+                for (var j = 0; j < nodes[i].attributes.length; j++) {
+                    objAddProperty(nodes[i].attributes[j].nodeName, nodes[i].attributes[j].nodeValue);
+                }
+                var txn = Data.db.transaction(["subjects"], "readwrite");
+                var subjectsStore = txn.objectStore("subjects");
+
+                subjectsStore.put(objarticle);
+                subjectArray.push(objarticle);
+
+                var isdone = false;
+
+                txn.oncomplete = function () {
+                    if (!isdone) {
+                        //when subject stored, call function to store article data
+                        var articleNodes = getNodeData(Data.language + ".xml", "article", "articles");
+                    }
+                    isdone = true;
+                };
+            }
+            break;
+
+        case "regions":
+            for (var i = 0; i < nodes.length; i++) {
+                objarticle = new Object();
+                objAddProperty("id", i + 1);
+                objAddProperty(nodes[i].nodeName, nodes[i].innerText);
+
+                var txn = Data.db.transaction(["regions"], "readwrite");
+                var regionStore = txn.objectStore("regions");
+                regionStore.add(objarticle);
+            }
+            break;
+
+        case "articles":
+            var addToList = false;
+            for (var i = 0; i < nodes.length; i++) {
+                objarticle = new Object();
+                objAddProperty("id", i + 1);
+                for (var j = 0; j < nodes[i].childNodes.length; j++) {
+                    if (nodes[i].childNodes[j].nodeType == 1) {
+                        if (nodes[i].childNodes[j].nodeName == "subjectid") {
+                            var group = parseInt(nodes[i].childNodes[j].innerText) - 1;
+                            objAddProperty("group", subjectArray[group]);
+                        }
+                        //save content without html tag
+                        if (nodes[i].childNodes[j].nodeName == "content") {
+                            //regex:html tag /<\s*(\S+)(\s[^>]*)?>[\s\S]*<\s*\/\1\s*>/ 
+                            //htmltag open /<\s*\w.*?>/g
+                            //htmltag close /<\s*\/\s*\w\s*.*?>|<\s*br\s*>/g
+                            var content = nodes[i].childNodes[j].innerText.replace(/<\s*\w.*?>/g, "").replace(/<\s*\/\s*\w\s*.*?>|<\s*br\s*>/g, "");
+                            objAddProperty("contentnotag", content);
+                        }
+                        if (nodes[i].childNodes[j].nodeName == "region") {
+                            addToList = nodes[i].childNodes[j].innerText == Data.currentRegion ? true : false;
+                        }
+                        objAddProperty(nodes[i].childNodes[j].nodeName, nodes[i].childNodes[j].innerText);
+                    }
+                }
+                var txn = Data.db.transaction(["articles"], "readwrite");
+                var articlesStore = txn.objectStore("articles");
+                articlesStore.add(objarticle);
+                if (addToList)
+                    articlelist.push(objarticle);
+
+                var isdone = false;
+
+                txn.oncomplete = function () {
+                    if (!isdone) {
+                        updateUI();
+
+                        loadListforSearch();
+                        switch (WinJS.Navigation.location) {
+                            case "/pages/article/article.html":
+                                showData("article");
+                                break;
+                            case "/pages/favorite/favorite.html":
+                                //showData("favorite");
+                                break;
+                            case "/pages/home/home.html":
+                                Data.changeRegionLan();
+                                break;
+                        }
+                    }
+                    isdone = true;
+                };
+            }
+            break;
     }
+}
 
-    //add new ones
-    articleArray.forEach(function (item) {
-        articlelist.push(item);
-    });
+function cleanList(source) {
+    //clear articlelist
+    var length = source.length;
+    for (var i = 0; i < length; i++) {
+        source.pop();
+    }
+}
+
+function loadData(evt) {
+    Data.db = evt.target.result;
+
+    cleanList(articlelist);
+    cleanList(list);
+
+    var resourceNodes = getNodeData("resource.xml", Data.language, "resource");
+
+    //when subject stored, call function to store article data
+    var subjectNodes = getNodeData(Data.language + ".xml", "subject", "subjects");
+
+    var regionNodes = getNodeData(Data.language + ".xml", "a_region", "regions");
 }
 
 //data for listview
@@ -313,17 +311,12 @@ function updateLanguage() {
         //clear objectstores of article and subject
         Data.db = evt.target.result;
 
-        var txn = Data.db.transaction(["articles"], "readwrite");
-        var store = txn.objectStore("articles");
-        store.clear();
-
-        txn = Data.db.transaction(["subjects"], "readwrite");
-        store = txn.objectStore("subjects");
-        store.clear();
-
-        txn = Data.db.transaction(["regions"], "readwrite");
-        store = txn.objectStore("regions");
-        store.clear();
+        var clearDB = ["articles", "subjects", "regions", "resource"];
+        for (var item in clearDB) {
+            var txn = Data.db.transaction([clearDB[item]], "readwrite");
+            var store = txn.objectStore(clearDB[item]);
+            store.clear();
+        }
 
         //data for listview(home.html)
         var myGroupedList = articlelist.createGrouped(getGroupKey, getGroupData, compareGroups);
@@ -348,7 +341,29 @@ function favlistLoad() {
     var txn = Data.db.transaction(["likes"], "readonly");
     var statusStore = txn.objectStore("likes");
     var request = statusStore.openCursor();
-    articleArray = [];
+    request.onsuccess = function (e) {
+        var like = e.target.result;
+        if (like) {
+            var txn = Data.db.transaction(["articles"], "readonly");
+            var store = txn.objectStore("articles");
+            var request = store.get(parseInt(like.value["articleid"]));
+            var likeid = like.value.id;
+            articleArray = [];
+
+            request.onsuccess = function (e) {
+                var article = e.target.result;
+                if (article) {
+                    Data.favlist.push(article);
+                    articleArray.push(article);
+                } else {
+                    listAdd();
+                }
+            }
+            like.continue();
+
+            updateView();
+        }
+    };
 
 }
 var resourceArray = new Array();
@@ -382,6 +397,7 @@ var groupedItems = list.createGrouped(
 
 function loadArray(region) {
     articleArray = new Array();
+    cleanList(articlelist);
 
     if (region == undefined || region.length <= 0) {
         region = Data.currentRegion;
@@ -400,18 +416,37 @@ function loadArray(region) {
     request.onsuccess = function (e) {
         var article = e.target.result;
         if (article) {
-            if (article.value["region"] == region)
-                articleArray.push(article.value);
-            list.push(article.value);
+            if (article.value["region"] == region) {
+                var addtolist = true;
+                for (var item in articleArray) {
+                    if (article.value.id == articleArray[item]) {
+                        addtolist = false;
+                        break;
+                    }
+                }
+                articleArray.push(article.value.id);
+                if (addtolist) {
+                    articlelist.push(article.value);
+                }
+            }
             article.continue();
         }
-        else {
-            listAdd();
-        }
-
     };
 }
 
+function loadListforSearch() {
+    cleanList(list);
+    var txn = Data.db.transaction(["articles"], "readonly");
+    var store = txn.objectStore("articles");
+    var request = store.openCursor();
+    request.onsuccess = function (e) {
+        var article = e.target.result;
+        if (article) {
+            list.push(article.value);
+            article.continue();
+        }
+    };
+}
 
 var db, articleid, favAddMsg, language = null;
 

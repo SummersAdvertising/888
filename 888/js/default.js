@@ -17,7 +17,8 @@
                 WinJS.Application.onsettings = function (e) {
                     e.detail.applicationcommands = {
                         "language": { title: "語言", href: "/pages/language/language.html" },
-                        "about": { title: "關於 青春食玩誌", href: "/pages/about/about.html" }
+                        "about": { title: "關於 青春食玩誌", href: "/pages/about/about.html" },
+                        //"": { title: "隱私權聲明", href: "http://www.microsoft.com/privacystatement/zh-tw/core/default.aspx" }
                     };
                     WinJS.UI.SettingsFlyout.populateSettings(e);
                 };

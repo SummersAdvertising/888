@@ -51,12 +51,12 @@
     </article>
   </articles>
   <subjects>
-    <subject key="group1" name="主題1" />
-    <subject key="group2" name="主題2" />
-    <subject key="group3" name="主題3" />
-    <subject key="group4" name="主題4" />
-    <subject key="group5" name="主題5" />
-    <subject key="group6" name="主題6" />
+    <subject key="economy" name="超值的青春" />
+    <subject key="family" name="愛家的青春" />
+    <subject key="luxury" name="奢華的青春" />
+    <subject key="myself" name="自我的青春" />
+    <subject key="reminiscent" name="懷舊的青春" />
+    <subject key="romantic" name="浪漫的青春" />
   </subjects>
   <regions>
     <a_region>北部</a_region>

@@ -1,8 +1,6 @@
 ﻿(function () {
     "use strict";
 
-    var listView;
-
     WinJS.UI.Pages.define("/pages/home/home.html", {
         ready: function (element, options) {
             // TODO: 在此初始化頁面。
@@ -14,7 +12,7 @@
             Data.changeRegionLan();
             Data.updateUI(Data.regionChange);
 
-            listView = element.querySelector("#listView").winControl;
+             var listView = element.querySelector("#listView").winControl;
             listView.addEventListener("iteminvoked", itemInvokedHandler);
 
             $(".region").bind("click", function () {
@@ -143,7 +141,6 @@ function snapRegionList() {
 }
 
 function snapFavList() {
-
 
     var txn = Data.db.transaction(["likes"], "readonly");
     var statusStore = txn.objectStore("likes");

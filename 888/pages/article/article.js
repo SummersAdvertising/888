@@ -65,7 +65,12 @@
                             var like = { articleid: Data.articleid };
                             statusStore.add(like);
                             txn.oncomplete = function () {
-                                $("#articlemsg").html($("#articleTitle").html() + " added");
+                               // $("#articlemsg").html($("#articleTitle").html() + " added");
+                                var msg = new Windows.UI.Popups.MessageDialog($("#articleTitle").html() + " 已經加到我的最愛");
+
+                                // Show the message dialog
+                                msg.showAsync().done(function () { });
+
                                 checkLike("del");
                             };
                         }
@@ -100,14 +105,19 @@
             var like = e.target.result;
             if (like) {
                 if (like.value.articleid == record) {
-                    statusStore.delete(parseInt(like.value.id));
+                    var deleteRequest = statusStore.delete(parseInt(like.value.id));
+                    var msg = new Windows.UI.Popups.MessageDialog($("#articleTitle").html() + " 已經從我的最愛中移除");
+                    deleteRequest.onsuccess = function (e) {
+                        // Show the message dialog
+                        msg.showAsync().done(function () { });
+                    }
                     checkLike("del");
                 }
                 like.continue();
             }
         };
 
-        $("#articlemsg").html("article is deleted from the list");
+        // $("#articlemsg").html("article is deleted from the list");
         checkLike("del");
     }
 

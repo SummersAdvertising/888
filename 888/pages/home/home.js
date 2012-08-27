@@ -54,6 +54,10 @@
                 $('.main-all').css('left', 0 );
             }
             
+            if (Home.isFav) {
+                navigatetoFav();
+                Home.isFav = false;
+            }
         }
     });
 
@@ -62,6 +66,7 @@
         updateView();
     }
 
+    var isFav;
 
     //navigate to article page
     function itemInvokedHandler(eventObject) {
@@ -102,7 +107,8 @@
     }
 
     WinJS.Namespace.define("Home",{
-        regionChange: regionChange
+        regionChange: regionChange,
+        isFav: false
     });
 
 })();

@@ -10,22 +10,33 @@
             // TODO: 在此初始化頁面。
             Data.initLanguage();
             Data.showData("article");
+            Data.updateUI();
 
             checkLike("del");
 
             $("#addFav").bind("click", function () { checkLike("add"); });
             $("#delFav").bind("click", function () { delFav(); });
 
+            $("#navtoFav").bind("click", function () { navigatetoFav(); });
+
             //share
             var dataTransferManager = Windows.ApplicationModel.DataTransfer.DataTransferManager.getForCurrentView();
             dataTransferManager.addEventListener("datarequested", dataRequested);
 
+            //DIV content photo: change class
+            //$("#contentPhoto").addClass("content-photo-" + $("#articleSubjectKey").html());
+
             // 重設長度
-            $('[class^="content-photo"]').css('height', $(window).height());
+            //$('[class^="content-photo"]').css('height', $(window).height());
             $('.content-body').css('height', $(window).height());
-            
+
         }
     });
+
+    function navigatetoFav() {
+        Home.isFav = true;
+        WinJS.Navigation.back(WinJS.Navigation.history.backStack.length);
+    }
 
     var check;
     function checkLike(act) {
@@ -62,10 +73,12 @@
                         break;
                     case "del":
                         if (check) {
-                            $("#addFav").remove();
+                            $("#delFav").show();
+                            $("#addFav").hide();
                         }
                         else {
-                            $("#delFav").remove();
+                            $("#delFav").hide();
+                            $("#addFav").show();
                         }
                         break;
                 }
@@ -99,14 +112,14 @@
         var request = e.request;
 
         // Title is required
-        var dataPackageTitle =$("#articletitle").html();
+        var dataPackageTitle = $("#articletitle").html();
         if ((typeof dataPackageTitle === "string") && (dataPackageTitle !== "")) {
             var dataPackageLink = $("#articlecontentnotag").html();
             if ((typeof dataPackageLink === "string") && (dataPackageLink !== "")) {
                 request.data.properties.title = dataPackageTitle;
 
                 try {
-                    request.data.setUri(new Windows.Foundation.Uri(document.getElementById("linkInputBox").value));
+                    request.data.setUri(new Windows.Foundation.Uri("http://msdn.microsoft.com/en-us/library/windows/apps/br211837.aspx"));
                 } catch (ex) {
                     //show error message
                 }

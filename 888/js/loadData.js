@@ -248,10 +248,17 @@ function showData(show) {
                         $("#articleTitle").html(article[element]);
                     else if (element == "id")
                         $("#articleId").html(article[element]);
+                    else if (element == "group") {
+                        $("#contentPhoto").addClass("content-photo-" + article[element].key);
+                        $("#articleSubjectName").html(article[element].name);
+                    }
                     else
                         articles += "<p id='article" + element.toString() + "'>" + element.toString() + ": " + article[element] + "</p>";
                 }
                 $("#article").html(articles);
+                //adjust div height
+                $('[class^="content-photo"]').css('height', $(window).height());
+
                 if (!article) {
                     $("#article").append("can't find this article.");
                 }
@@ -279,7 +286,6 @@ function updateUI(callBack) {
     resourceArray = new Array();
     var dbRequest = window.indexedDB.open("ArticleDB", 1);
     dbRequest.onsuccess = function (evt) {
-
         var txn = Data.db.transaction(["resource"], "readonly");
         var store = txn.objectStore("resource");
         var request = store.openCursor();
@@ -296,10 +302,10 @@ function updateUI(callBack) {
             for (var i in changeContentArray) {
                 var element = changeContentArray[i];
                 if (document.getElementById(element)) {
-                    if (element == "addFav" || element == "delFav")
-                        document.getElementById(element).winControl._labelSpan.innerText = resourceArray[item];
-                    else
-                        document.getElementById(element).textContent = resourceArray[item];
+                    //if (element == "addFav" || element == "delFav")
+                    //    document.getElementById(element).winControl._labelSpan.innerText = resourceArray[item];
+                    //else
+                    document.getElementById(element).textContent = resourceArray[item];
                 }
                 item++;
             }
@@ -337,7 +343,6 @@ var groupedItems = list.createGrouped(
 
 
 function favlistLoad() {
-
     var txn = Data.db.transaction(["likes"], "readonly");
     var statusStore = txn.objectStore("likes");
     var request = statusStore.openCursor();
@@ -352,11 +357,22 @@ function favlistLoad() {
 
             request.onsuccess = function (e) {
                 var article = e.target.result;
-                articlelist.push(article);
+                if (article) {
+                    var addtolist = true;
+                    for (var item in articleArray) {
+                        if (articleArray[item] == article.id) {
+                            addtolist = false;
+                            break;
+                        }
+                    }
+                    articleArray.push(article.id);
+                    if (addtolist)
+                        articlelist.push(article);
+                }
             }
             like.continue();
         }
-    }
+    };
 }
 
 var resourceArray = new Array();
@@ -445,7 +461,7 @@ function loadListforSearch() {
     };
 }
 
-var db, articleid, favAddMsg, language = null;
+var db, articleid, favAddMsg, language, subjectKey = null;
 
 WinJS.Namespace.define("Data", {
     items: groupedItems,
@@ -470,5 +486,7 @@ WinJS.Namespace.define("Data", {
 
     favlistLoad: favlistLoad,
     groupedFavList: groupedFavList,
-    favlist: favlist
+    favlist: favlist,
+
+    subjectKey: subjectKey
 });

@@ -3,8 +3,8 @@
   <en-US>
     <homeTitle>Young Taiwan</homeTitle>
     <homeIndex>Home</homeIndex>
-    <addFav>add to Favlist(en)</addFav>
-    <delFav>del from Favlist(en)</delFav>
+    <addFav>add to Favlist</addFav>
+    <delFav>del from Favlist</delFav>
     <favTitle>我的最愛(en)</favTitle>
     <navHome>Top</navHome>
     <navFav>Love</navFav>
@@ -21,8 +21,8 @@
   <zh-Hant-TW>
     <homeTitle>青春台灣食玩誌</homeTitle>
     <homeIndex>首頁</homeIndex>
-    <addFav>add to Favlist(zh)</addFav>
-    <delFav>del from Favlist(zh)</delFav>
+    <addFav>加入我的最愛</addFav>
+    <delFav>移出我的最愛</delFav>
     <favTitle>我的最愛</favTitle>
     <navHome>首頁</navHome>
     <navFav>我的最愛</navFav>

@@ -11,12 +11,12 @@
             Data.initLanguage();
             Data.showData("article");
             Data.updateUI();
+            document.getElementById('addfav').winControl.label="test";
 
             checkLike("del");
-
-            $("#addFav").bind("click", function () { checkLike("add"); });
-            $("#delFav").bind("click", function () { delFav(); });
-
+            
+            $("#addfav").bind("click", function () { checkLike("add"); });
+            $("#delfav").bind("click", function () { delFav(); });
             $("#navtoFav").bind("click", function () { navigatetoFav(); });
 
             //share
@@ -58,7 +58,6 @@
                         if (check) {
                             $("#articlemsg").prepend("<p>article is already in the list</p>");
                             $("#addFav").unbind();
-                            document.getElementById('createAppBar').winControl.hide();
                         }
                         else {
                             var txn = Data.db.transaction(["likes"], "readwrite");
@@ -67,23 +66,26 @@
                             statusStore.add(like);
                             txn.oncomplete = function () {
                                 $("#articlemsg").html($("#articleTitle").html() + " added");
-                                //WinJS.Navigation.back(0);
+                                checkLike("del");
                             };
                         }
                         break;
+
                     case "del":
                         if (check) {
-                            $("#delFav").show();
-                            $("#addFav").hide();
+                            $("#delfav").show();
+                            $("#addfav").hide();
                         }
                         else {
-                            $("#delFav").hide();
-                            $("#addFav").show();
+                            $("#delfav").hide();
+                            $("#addfav").show();
                         }
                         break;
                 }
             }
-        }
+        };
+        document.getElementById('homeNavBar').winControl.hide();
+        document.getElementById('createAppBar').winControl.hide();
     }
 
     function delFav() {

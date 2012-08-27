@@ -302,9 +302,9 @@ function updateUI(callBack) {
             for (var i in changeContentArray) {
                 var element = changeContentArray[i];
                 if (document.getElementById(element)) {
-                    //if (element == "addFav" || element == "delFav")
-                    //    document.getElementById(element).winControl._labelSpan.innerText = resourceArray[item];
-                    //else
+                   if (element == "addFav" || element == "delFav")
+                        document.getelementbyid(element).wincontrol._labelspan.innertext = resourcearray[item];
+                    else
                     document.getElementById(element).textContent = resourceArray[item];
                 }
                 item++;

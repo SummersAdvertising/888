@@ -11,12 +11,12 @@
             Data.initLanguage();
             Data.showData("article");
             Data.updateUI();
-            document.getElementById('addfav').winControl.label="test";
+            //document.getElementById('addfav').winControl.label="test";
 
             checkLike("del");
             
-            $("#addfav").bind("click", function () { checkLike("add"); });
-            $("#delfav").bind("click", function () { delFav(); });
+            $("#addFav").bind("click", function () { checkLike("add"); });
+            $("#delFav").bind("click", function () { delFav(); });
             $("#navtoFav").bind("click", function () { navigatetoFav(); });
 
             //share
@@ -73,10 +73,12 @@
 
                     case "del":
                         if (check) {
+                            Data.isFav = true;
                             $("#delfav").show();
                             $("#addfav").hide();
                         }
                         else {
+                            Data.isFav = false;
                             $("#delfav").hide();
                             $("#addfav").show();
                         }

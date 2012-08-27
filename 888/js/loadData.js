@@ -302,10 +302,10 @@ function updateUI(callBack) {
             for (var i in changeContentArray) {
                 var element = changeContentArray[i];
                 if (document.getElementById(element)) {
-                   if (element == "addFav" || element == "delFav")
-                        document.getelementbyid(element).wincontrol._labelspan.innertext = resourcearray[item];
+                    if (element == "addFav" || element == "delFav")
+                        document.getElementById(element).winControl.label = resourceArray[item];
                     else
-                    document.getElementById(element).textContent = resourceArray[item];
+                        document.getElementById(element).textContent = resourceArray[item];
                 }
                 item++;
             }
@@ -478,6 +478,8 @@ WinJS.Namespace.define("Data", {
 
     db: db,
     articleid: articleid,
+    isFav: null,
+
     favAddMsg: favAddMsg,
     currentRegion: "b",
     language: language,

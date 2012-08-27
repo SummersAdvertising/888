@@ -18,6 +18,9 @@
 *.suo
 *.pfx
 
+888/AppPackages
+888/AppPackages/*
+
 bin
 bld
 

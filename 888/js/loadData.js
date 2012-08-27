@@ -278,12 +278,13 @@ function initLanguage() {
     //get current language
     var applicationLanguages = Windows.Globalization.ApplicationLanguages.languages;
     if (!Data.language) {
-        //no language config, check user's setting
-        if (applicationLanguages[0])
-            Data.language = applicationLanguages[0].indexOf("zh") == 0 ? "zh-Hant-TW" : applicationLanguages[0];
-            //can't support user's setting, set default language
-        else
-            Data.language = "en-US";
+        Data.language = "zh-Hant-TW";
+        ////no language config, check user's setting
+        //if (applicationLanguages[0])
+        //    Data.language = applicationLanguages[0].indexOf("zh") == 0 ? "zh-Hant-TW" : applicationLanguages[0];
+        //    //can't support user's setting, set default language
+        //else
+        //    Data.language = "en-US";
     }
 
 }
@@ -308,8 +309,9 @@ function updateUI(callBack) {
             for (var i in changeContentArray) {
                 var element = changeContentArray[i];
                 if (document.getElementById(element)) {
-                    if (element == "addFav" || element == "delFav")
+                    if (element == "addFav" || element == "delFav") {
                         document.getElementById(element).winControl.label = resourceArray[item];
+                    }
                     else
                         document.getElementById(element).textContent = resourceArray[item];
                 }

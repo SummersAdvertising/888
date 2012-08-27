@@ -18,7 +18,7 @@
 
                 WinJS.Application.onsettings = function (e) {
                     e.detail.applicationcommands = {
-                        "language": { title: "語言", href: "/pages/language/language.html" },
+                        //"language": { title: "語言", href: "/pages/language/language.html" },
                         "about": { title: "關於 青春台灣食玩誌", href: "/pages/about/about.html" },
                         "authorization": { title: "隱私權聲明", href: "/pages/authorization/authorization.html" }
                     };

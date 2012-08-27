@@ -78,14 +78,12 @@
 
                     case "del":
                         if (check) {
-                            Data.isFav = true;
-                            $("#delfav").show();
+                            $("#delFav").show();
                             $("#addfav").hide();
                         }
                         else {
-                            Data.isFav = false;
-                            $("#delfav").hide();
-                            $("#addfav").show();
+                            $("#delFav").hide();
+                            $("#addFav").show();
                         }
                         break;
                 }

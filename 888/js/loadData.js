@@ -243,9 +243,15 @@ function showData(show) {
             request.onsuccess = function (e) {
                 var article = e.target.result;
                 Data.currnetArticle = article;
-                for (var element in article) {
+                for (var element in article) {                    
                     if (element == "title")
                         $("#articleTitle").html(article[element]);
+                    else if (element == "subtitle")
+                        $("#articleSubTitle").html(article[element]);
+                    else if (element == "author")
+                        $("#articleAuthor").html(article[element]);
+                    else if (element == "content")
+                        $(".articleArea").html($(".articleArea").html() + article[element]);
                     else if (element == "id")
                         $("#articleId").html(article[element]);
                     else if (element == "group") {

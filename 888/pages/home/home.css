@@ -2,9 +2,16 @@
 .homepage section[role=main] {
     margin-left: 120px;
 }
-#listViewSnap,#snapBody {
+
+#listView {
+    overflow-x: scroll;
+    overflow-y: hidden;
+    width: 800px;
+    height: 600px;
+}
+
+#listViewSnap,#snapBody,#homeAppBar {
     display: none;
-    z-index: 50;
 }
 
 
@@ -13,13 +20,10 @@ li {
     padding: 0px 5px;
 }
 
-#homeAppBar {
-    display: none;
-}
 
 @media screen and (-ms-view-state: snapped) {
     #listViewSnap,#snapBody,#homeAppBar {
-        display: inherit;
+        display: block;
     }
     
     #snapBody {

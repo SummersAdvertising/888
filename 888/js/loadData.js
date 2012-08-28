@@ -3,7 +3,6 @@
     dbRequest.onsuccess = function (evt) { dbSuccess(evt); };
     dbRequest.onupgradeneeded = function (evt) { dbVersionUpgrade(evt); };
 }
-
 function dbSuccess(evt) {
     Data.db = evt.target.result;
 

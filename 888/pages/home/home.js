@@ -43,6 +43,9 @@
 
             $('#listView').css({ 'width': $(window).width() - $('#taiwanMap').width() - 80, 'height': $(window).height() * 0.85 - $('.main-title').height() });
             
+            // 預選台灣地圖
+            $('#taiwanMap').attr('src', "../../images/map-" + Data.currentRegion + ".png");
+
             if (!animated) {
                 // 頁首動畫
                 $('#mainImg').css('height', $(window).height());
@@ -99,7 +102,7 @@ function checkFav() {
         if (like)
             $("#favinfo").hide();
         else
-            $("#favinfo").show();
+            $("#favinfo").show().width($(window).width() - $('#taiwanMap').width() - 100).height($(window).height()-200);
     };
 }
 
@@ -158,6 +161,7 @@ function snapRegionList() {
                 var itemBox = $('#snapItemTemplate').clone();
                 itemContent = itemBox.children('.articleArea');
                 itemContent.children('h4').children('.itemTitle').html(article.title);
+                itemContent.children('img').attr('src', article.folder + 'search.png');
                 itemBox.data('article-id', article.id);
                 itemBox.click(function () {
 
@@ -254,12 +258,14 @@ function updateView() {
     var viewStates = Windows.UI.ViewManagement.ApplicationViewState;
     $('#listViewSnap').children().remove();
 
+    $('#listViewSnap').height($(window).height() - 180);
+
     
     switch (myViewState) {
         case viewStates.snapped:            
 
             if (WinJS.Navigation.location == '/pages/article/article.html' || WinJS.Navigation.location == '/pages/search/searchResults.html') {
-                WinJS.Navigation.back().done(function (e) {
+                WinJS.Navigation.navigate('/pages/home/home.html').done(function (e) {
                     var offset = { top: "12px", left: "0px", rtlflip: true };
                     // WinJS.UI.Animation.enterPage(document.getElementsByTagName('body'), offset);
                 });
@@ -288,7 +294,7 @@ function updateView() {
 
             // 標籤
             $('.region-selected').removeClass('region-selected');
-            $('#region' + Data.currentRegion).children().addClass('region-selected');
+            $('.snapped-select #region' + Data.currentRegion).children().addClass('region-selected');
 
             break;
         default:

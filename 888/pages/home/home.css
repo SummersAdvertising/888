@@ -20,10 +20,20 @@ li {
     padding: 0px 5px;
 }
 
+#favinfo {
+    overflow-x: scroll;
+    overflow-y: hidden;
+}
+
 
 @media screen and (-ms-view-state: snapped) {
     #listViewSnap,#snapBody,#homeAppBar {
         display: block;
+    }
+
+    #listViewSnap {
+        overflow-y: scroll;
+        overflow-x: hidden;
     }
     
     #snapBody {
@@ -99,9 +109,10 @@ li {
     .articleArea{ 
 	    margin-top:10px; 
 	    display:block;
-	    width:230px;
+	    width:220px!important;
 	    height:55px;
 	    overflow:hidden;
+        padding: 8px 2px 12px 10px !important;
     }
     .articleArea img{
 	    border:1px solid rgba(225,225,225,1);

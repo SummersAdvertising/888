@@ -198,7 +198,7 @@ function loadData(evt) {
     Data.db = evt.target.result;
 
     cleanList(articlelist);
-    cleanList(list);
+    cleanList(list);ㄋ
 
     var resourceNodes = getNodeData("resource.xml", Data.language, "resource");
 
@@ -269,6 +269,8 @@ function showData(show) {
                         var descript = article[element].descript.replace(/br/gi, "<br />");
                         $("#articleSubjectDescrip").html(descript);
                     }
+                    else if (element == "link")
+                        $("#articleLink").html(article[element]);
                     else
                         articles += "<p id='article" + element.toString() + "'>" + element.toString() + ": " + article[element] + "</p>";
                 }
@@ -480,6 +482,7 @@ function loadListforSearch() {
     request.onsuccess = function (e) {
         var article = e.target.result;
         if (article) {
+            article.value.search = article.value.folder + 'search.png';
             list.push(article.value);
             article.continue();
         }

@@ -8,7 +8,6 @@
         這裡的咖啡可以品嚐到義式、手沖或虹吸式，價錢約為100元上下，想要自己嚐試煮咖啡，
         當然也是可以。
       </subtitle>
-      <date>year/month/day</date>
       <author>達人：PEPE</author>
       <content>
         <![CDATA[<p>
@@ -59,12 +58,12 @@
       <subjectid>1</subjectid>
       <region>4</region>
       <selected>1</selected>
+      <link>http://win888.events.pixnet.net/articles/0?category=economy</link>
     </article>
     <article>
       <folder>/images/article/family/selected/</folder>
       <title>花蓮山海青春全家遊</title>
       <subtitle>花蓮大山大水、風光明媚，一直是我們的最愛之一，悠遊於花蓮山海美景之中，除了美景美食，徜徉於山水淨土之中，讓身心靈得以洗滌、沉靜、才是它真正的吸引人之處</subtitle>
-      <date>year/month/day</date>
       <author>達人：紫色微笑</author>
       <content>
         <![CDATA[<p>美麗的花東，是我們全家人幾乎每年都會來的地點，沿途風景名勝、美味小吃~~~景點非常多，即使已經來很多趟了，但還是覺得玩不完，而且徜徉於花蓮這片山水淨土之中，身心靈可以得到洗滌、沉靜，才是它真正的吸引人之處。</p>
@@ -115,12 +114,12 @@
       <subjectid>2</subjectid>
       <region>2</region>
       <selected>1</selected>
+      <link>http://win888.events.pixnet.net/articles/0?category=family</link>
     </article>
     <article>
       <folder>/images/article/luxury/selected/</folder>
       <title>南台灣的藍天、沙灘、水上活動、SPA、飯店，渡假享受去～</title>
       <subtitle>如果你問大方，台灣那裏最有南國渡假風？有藍天、白雲、沙灘、比基尼？答案就是墾丁</subtitle>
-      <date>year/month/day</date>
       <author>達人：大方</author>
       <content>
         <![CDATA[<p>隨著高鐵的便利性，就算台北人來墾丁渡假也變的方便，墾丁的渡假飯店， 大方挺青睞的就是墾丁凱撒大飯店 (看房價) ，飯店除了有五星級的水準外， 還有一片很棒的沙灘，在這玩水、晒晒太陽、聽個音樂或者滑個獨木舟也挺棒的啊。</p>  
@@ -205,12 +204,12 @@
       <subjectid>3</subjectid>
       <region>4</region>
       <selected>1</selected>
+      <link>http://win888.events.pixnet.net/articles/0?category=luxury</link>
     </article>
     <article>
       <folder>/images/article/myself/selected/</folder>
       <title>旗山。一次拍盡～美如童話的多姿多彩</title>
       <subtitle>旗山是高雄山區的起點，是個富有活力的小城，童話車站、石拱街道、大教堂，以及金黃的香蕉，旗山依然漾著歷史驕傲的光芒！</subtitle>
-      <date>year/month/day</date>
       <author>達人：640</author>
       <content>
         <![CDATA[<p>一個人旅行也很好，跟著心的意志就好了，不用在旅程上討好別人，只需要顧好自己，想走就走，想停就停，想回家就結束行程。</p>
@@ -261,13 +260,13 @@
       </content>
       <subjectid>4</subjectid>
       <region>4</region>
-      <selected>1</selected>
+      <selected>1</selected>\
+      <link>http://win888.events.pixnet.net/articles/0?category=myself</link>
     </article>
     <article>
-      <folder>/images/article/reminiscent/selected/</folder>
+      <folder>/images/article/romantic/selected/</folder>
       <title>義大世界的耍浪漫小旅行</title>
       <subtitle>義大世界真的很適合情侶安排一趟約會小旅行，即使沒有假期出國也沒關係，來到義大就有出國的 fu 喔。</subtitle>
-      <date>year/month/day</date>
       <author>達人：莎莎</author>
       <content>
         <![CDATA[<p>和大呆一起去歐洲旅行，一直是我們的夢想之一，雖然暫時還沒辦法安排一趟真正的歐洲旅行，但是沒關係，
@@ -315,15 +314,15 @@
             </div>
             <div class="placeBox">&nbsp;</div>]]>
       </content>
-      <subjectid>5</subjectid>
+      <subjectid>6</subjectid>
       <region>4</region>
       <selected>1</selected>
+      <link>http://win888.events.pixnet.net/articles/0?category=romantic</link>
     </article>
     <article>
-      <folder>/images/article/romantic/selected/</folder>
+      <folder>/images/article/reminiscent/selected/</folder>
       <title>南庄＆桂花巷探索，這裡真的是時光的廊道呀！</title>
       <subtitle>復古的老戲院、充滿兒時玩味的小柑仔店……</subtitle>
-      <date>year/month/day</date>
       <author>達人：Aiko</author>
       <content>
         <![CDATA[<p>一直很喜歡南庄這個復古的所在，今天就決定來個懷舊一日遊。我們的停車場就在南庄戲院的旁邊，一下車就能看到復古的電影海報及老戲院的場次！以前的海報總是有種美麗的回憶！以往宣傳電影的腳踏車，戲院前面的小柑仔店，只是現在換成了爆米花與汽水．．．以往新潮，現今復古，今昔大不同呀！</p>
@@ -376,9 +375,10 @@
             </div>
             <div class="placeBox">&nbsp;</div>]]>
       </content>
-      <subjectid>6</subjectid>
+      <subjectid>5</subjectid>
       <region>3</region>
       <selected>1</selected>
+      <link>http://win888.events.pixnet.net/articles/0?category=reminiscent</link>
     </article>
 
   </articles>

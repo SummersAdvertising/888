@@ -686,35 +686,6 @@
         margin: 5px auto 0px auto;
     }
 
-    @media screen and (max-width: 1365px) {
-        .placeArea {
-            width: auto;
-            font-size: 9pt;
-            position: static;
-            margin: 0px 40px 40px 40px;
-        }
-
-        .articleArea {
-            width: auto;
-            padding: 40px;
-            font-size: 11pt;
-            line-height: 18pt;
-            float: left;
-        }
-
-        .content-title h2 {
-            margin: 40px 0px 0px 40px;
-            color: rgba(255,255,255,1);
-            font-weight: normal;
-        }
-
-        .content-title p {
-            color: rgba(255,255,255,1);
-            margin: 15px 0px 0px 40px;
-            font-size: 11pt;
-            line-height: 15pt;
-        }
-    }
 
 
     /*修改範圍START*/
@@ -799,3 +770,34 @@
     }
     /*修改範圍END*/
 }
+
+
+    @media screen and (max-width: 1365px) {
+        .placeArea {
+            width: auto;
+            font-size: 9pt;
+            position: static;
+            margin: 0px 40px 40px 40px;
+        }
+
+        .articleArea {
+            width: auto;
+            padding: 40px;
+            font-size: 11pt;
+            line-height: 18pt;
+            float: left;
+        }
+
+        .content-title h2 {
+            margin: 40px 0px 0px 40px;
+            color: rgba(255,255,255,1);
+            font-weight: normal;
+        }
+
+        .content-title p {
+            color: rgba(255,255,255,1);
+            margin: 15px 0px 0px 40px;
+            font-size: 11pt;
+            line-height: 15pt;
+        }
+    }

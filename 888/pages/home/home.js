@@ -41,6 +41,7 @@
 
             window.addEventListener("resize", onResize);
 
+            $('#listView').css({ 'width': $(window).width() - $('#taiwanMap').width() - 80, 'height': $(window).height() * 0.85 - $('.main-title').height() });
             
             if (!animated) {
                 // 頁首動畫

@@ -383,12 +383,12 @@
 
   </articles>
   <subjects>
-    <subject key="economy" name="超值的青春" />
-    <subject key="family" name="愛家的青春" />
-    <subject key="luxury" name="奢華的青春" />
-    <subject key="myself" name="自我的青春" />
-    <subject key="reminiscent" name="懷舊的青春" />
-    <subject key="romantic" name="浪漫的青春" />
+    <subject key="economy" name="超值的青春" descript="花小錢就能享受無敵美景與br吮指美味！br台灣便宜省錢（或不要錢）br的景點和美食" />
+    <subject key="family" name="愛家的青春" descript="青春是一棵血濃於水的永生樹br台灣適合家庭聚會的景點和餐廳" />
+    <subject key="luxury" name="奢華的青春" descript="攀登感官享樂的巔峰！br台灣最頂級、最奢華的景點和餐廳" />
+    <subject key="myself" name="自我的青春" descript="青春是一本祕密日記br台灣適合一個人發呆、作夢、br追尋自我的景點和餐飲" />
+    <subject key="reminiscent" name="懷舊的青春" descript="青春的心穿越過去回到未來br台灣有歷史的老店、古蹟、br老房子、古早味小吃…" />
+    <subject key="romantic" name="浪漫的青春" descript="墜入情網不需要理由！br台灣適合約會、求婚的br景點和餐飲" />
   </subjects>
   <regions>
     <a_region>北台灣</a_region>

@@ -1,7 +1,7 @@
 ﻿<!DOCTYPE html>
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta charset="utf-8" />
     <meta name="ms-design-extensionType" content="Search" />
     <title>搜尋合約</title>
@@ -19,9 +19,10 @@
     <div class="itemtemplate" data-win-control="WinJS.Binding.Template">
         <div class="item search-box">
             <div class="search-list item-content">
-                <a href="#"><img src="../../images/example/s-pic.jpg" width="50" height="50" align="left" /></a>
+                <a href="#">
+                    <img src="../../images/example/s-pic.jpg" width="50" height="50" align="left" /></a>
                 <h4><a href="#" data-win-bind="innerHTML: title searchResults.markText"></a></h4>
-          	    <p data-win-bind="innerHTML: contentnotag searchResults.markText"></p>
+                <p data-win-bind="innerHTML: contentnotag searchResults.markText"></p>
             </div>
         </div>
     </div>
@@ -29,9 +30,9 @@
     <!-- 將載入並顯示的內容。 -->
     <div class="searchResults fragment">
         <div class="titlearea search-title">
-        <div class="search-Bback" onclick="WinJS.Navigation.back();"> </div>
-		<h2 class="pagesubtitle"></h2>
-            <h2 class="pagetitle" style="display: none;"></h2>
+            <div class="search-Bback" onclick="WinJS.Navigation.back();"></div>
+
+            <h2 class="pagetitle"></h2>
         </div>
         <section aria-label="Main content" role="main">
             <div class="resultsmessage win-type-x-large">沒有結果符合您的搜尋。</div>

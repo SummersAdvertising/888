@@ -116,8 +116,7 @@
                 listView.layout = new ui.GridLayout();
 
                 // TODO: 將 "App Name" 變更為您的應用程式名稱。
-                document.querySelector(".titlearea .pagetitle").textContent = "kerkerker";
-                document.querySelector(".titlearea .pagesubtitle").textContent = "Results for “" + this._lastSearch + '”';
+                document.querySelector(".titlearea .pagetitle").textContent = "搜尋 “" + this._lastSearch + '”';
             }
         },
 
@@ -180,7 +179,7 @@
             // TODO: 針對您的資料執行適當的搜尋。
             if (window.Data) {
                 originalResults = Data.items.createFiltered(function (item) {
-                    return (item.title.indexOf(queryText) >= 0 || item.contentnotag.indexOf(queryText) >= 0 || item.address.indexOf(queryText) >= 0);
+                    return (item.title.indexOf(queryText) >= 0 || item.contentnotag.indexOf(queryText) >= 0);
                 });
             } else {
                 originalResults = new WinJS.Binding.List();

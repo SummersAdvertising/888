@@ -267,6 +267,8 @@ function showData(show) {
                     else if (element == "group") {
                         $("#contentPhoto").addClass("content-photo-" + article[element].key);
                         $("#articleSubjectName").html(article[element].name);
+                        var descript = article[element].descript.replace(/br/gi, "<br />");
+                        $("#articleSubjectDescrip").html(descript);
                     }
                     else
                         articles += "<p id='article" + element.toString() + "'>" + element.toString() + ": " + article[element] + "</p>";

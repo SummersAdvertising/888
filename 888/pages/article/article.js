@@ -79,7 +79,7 @@
                     case "del":
                         if (check) {
                             $("#delFav").show();
-                            $("#addfav").hide();
+                            $("#addFav").hide();
                         }
                         else {
                             $("#delFav").hide();

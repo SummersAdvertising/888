@@ -6,16 +6,14 @@
 
 function dbSuccess(evt) {
     Data.db = evt.target.result;
+    loadData(evt);
+
     if (Data.db.objectStoreNames.length === 0) {
         Data.db.close();
         Data.db = null;
         window.indexedDB.deleteDatabase("ArticleDB", 1);
 
         createDB();
-    }
-    else {
-        updateView();
-        loadListforSearch();
     }
 }
 function dbVersionUpgrade(evt) {
@@ -31,7 +29,7 @@ function dbVersionUpgrade(evt) {
 
     var resourceStore = Data.db.createObjectStore("resource", { keyPath: "id", autoIncrement: false });
 
-    loadData(evt);
+    
 }
 
 //declare WinJS.Binding.List(for search)
@@ -140,7 +138,7 @@ function addObjectStore(storeName, nodes) {
                             var content = nodes[i].childNodes[j].innerText.replace(/<\s*\w.*?>/g, "").replace(/<\s*\/\s*\w\s*.*?>|<\s*br\s*>/g, "");
                             objAddProperty("contentnotag", content);
                         }
-                        if (nodes[i].childNodes[j].nodeName == "selected") {
+                        if (nodes[i].childNodes[j].nodeName == "selected" && Data.currentRegion!="f") {
                             addToList = true;
                         }
                         objAddProperty(nodes[i].childNodes[j].nodeName, nodes[i].childNodes[j].innerText);
@@ -156,6 +154,9 @@ function addObjectStore(storeName, nodes) {
 
                 txn.oncomplete = function () {
                     if (!isdone) {
+                        
+                            updateView();
+                        
                         updateUI();
 
                         loadListforSearch();
@@ -198,6 +199,7 @@ function loadData(evt) {
     var subjectNodes = getNodeData(Data.language + ".xml", "subject", "subjects");
 
     var regionNodes = getNodeData(Data.language + ".xml", "a_region", "regions");
+
 }
 
 //data for listview
@@ -243,7 +245,7 @@ function showData(show) {
             request.onsuccess = function (e) {
                 var article = e.target.result;
                 Data.currnetArticle = article;
-                for (var element in article) {                    
+                for (var element in article) {
                     if (element == "title")
                         $("#articleTitle").html(article[element]);
                     else if (element == "subtitle")
@@ -311,6 +313,7 @@ function updateUI(callBack) {
                 if (document.getElementById(element)) {
                     if (element == "addFav" || element == "delFav") {
                         document.getElementById(element).winControl.label = resourceArray[item];
+                        Article.checkLike("del");
                     }
                     else
                         document.getElementById(element).textContent = resourceArray[item];

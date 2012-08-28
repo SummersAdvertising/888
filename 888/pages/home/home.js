@@ -258,7 +258,7 @@ function updateView() {
     var viewStates = Windows.UI.ViewManagement.ApplicationViewState;
     $('#listViewSnap').children().remove();
 
-    $('#listViewSnap').height($(window).height() - 150);
+    $('#listViewScrollContainer').height($(window).height() - 150);
 
     
     switch (myViewState) {

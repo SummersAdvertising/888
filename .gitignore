@@ -16,6 +16,7 @@
 *.sln
 *.jsproj
 *.suo
+*.pfx
 
 bin
 bld

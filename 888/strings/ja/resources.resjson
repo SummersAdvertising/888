@@ -1,0 +1,10 @@
+﻿// 如需當地語系化 Windows 應用程式的詳細資訊，請參閱: http://go.microsoft.com/fwlink/?LinkId=212836
+
+{
+    "homeTitle"              : "Test ker ker(ja)",
+    "_greeting.comment"      : "ja",
+    "homeFavadded"           : "added!(ja)",
+    "homeFavlist"            : "Favlist(ja)",
+    "articleFavlist"         : "add to Favlist(ja)",
+    "favTitle"               : "favorite(ja)"
+}

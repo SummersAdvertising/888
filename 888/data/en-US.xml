@@ -1,0 +1,61 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<data>
+  <articles>
+    <article>
+      <title>articleI</title>
+      <date>year/month/day</date>
+      <content><![CDATA[content]]></content>
+      <subjectid>1</subjectid>
+      <city>1</city>
+      <address>address</address>
+    </article>
+    <article>
+      <title>articleII</title>
+      <date>year/month/day</date>
+      <content><![CDATA[content]]></content>
+      <subjectid>4</subjectid>
+      <city>6</city>
+      <address>address</address>
+    </article>
+    <article>
+      <title>articleIII</title>
+      <date>year/month/day</date>
+      <content><![CDATA[content]]></content>
+      <subjectid>2</subjectid>
+      <city>11</city>
+      <address>address</address>
+    </article>
+    <article>
+      <title>articleIV</title>
+      <date>year/month/day</date>
+      <content><![CDATA[content]]></content>
+      <subjectid>1</subjectid>
+      <city>1</city>
+      <address>address</address>
+    </article>
+    <article>
+      <title>articleV</title>
+      <date>year/month/day</date>
+      <content><![CDATA[content]]></content>
+      <subjectid>6</subjectid>
+      <city>5</city>
+      <address>address</address>
+    </article>
+    <article>
+      <title>articleVI</title>
+      <date>year/month/day</date>
+      <content><![CDATA[content]]></content>
+      <subjectid>2</subjectid>
+      <address>address</address>
+      <city>5</city>
+    </article>
+  </articles>
+  <subjects>
+    <subject key="group1" name="subject1" />
+    <subject key="group2" name="subject2" />
+    <subject key="group3" name="subject3" />
+    <subject key="group4" name="subject4" />
+    <subject key="group5" name="subject5" />
+    <subject key="group6" name="subject6" />
+  </subjects>
+</data>

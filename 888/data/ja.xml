@@ -1,0 +1,61 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<data>
+  <articles>
+    <article>
+      <title>(´∀｀*)ﾉｼ</title>
+      <date>year/month/day</date>
+      <content><![CDATA[content]]></content>
+      <subjectid>1</subjectid>
+      <city>1</city>
+      <address>address</address>
+    </article>
+    <article>
+      <title>( ノﾟДﾟ)</title>
+      <date>year/month/day</date>
+      <content><![CDATA[content]]></content>
+      <subjectid>4</subjectid>
+      <city>6</city>
+      <address>address</address>
+    </article>
+    <article>
+      <title>(*´∀｀*)</title>
+      <date>year/month/day</date>
+      <content><![CDATA[content]]></content>
+      <subjectid>2</subjectid>
+      <city>11</city>
+      <address>address</address>
+    </article>
+    <article>
+      <title>(ﾉ´∀｀*)</title>
+      <date>year/month/day</date>
+      <content><![CDATA[content]]></content>
+      <subjectid>1</subjectid>
+      <city>1</city>
+      <address>address</address>
+    </article>
+    <article>
+      <title>･:*:･(*´∀｀*)･:*:･</title>
+      <date>year/month/day</date>
+      <content><![CDATA[content]]></content>
+      <subjectid>6</subjectid>
+      <city>5</city>
+      <address>address</address>
+    </article>
+    <article>
+      <title>(*´ω｀*)</title>
+      <date>year/month/day</date>
+      <content><![CDATA[content]]></content>
+      <subjectid>2</subjectid>
+      <city>5</city>
+      <address>address</address>
+    </article>
+  </articles>
+  <subjects>
+    <subject key="group1" name="ｷﾀ━(ﾟ∀ﾟ)━1" />
+    <subject key="group2" name="ｷﾀ━(ﾟ∀ﾟ)━2" />
+    <subject key="group3" name="ｷﾀ━(ﾟ∀ﾟ)━3" />
+    <subject key="group4" name="ｷﾀ━(ﾟ∀ﾟ)━4" />
+    <subject key="group5" name="ｷﾀ━(ﾟ∀ﾟ)━5" />
+    <subject key="group6" name="ｷﾀ━(ﾟ∀ﾟ)━6" />
+  </subjects>
+</data>

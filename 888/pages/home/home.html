@@ -1,0 +1,53 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
+    <title>homePage</title>
+
+    <!-- WinJS 參考 -->
+    <link href="//Microsoft.WinJS.1.0/css/ui-light.css" rel="stylesheet" />
+    <script src="//Microsoft.WinJS.1.0/js/base.js"></script>
+    <script src="//Microsoft.WinJS.1.0/js/ui.js"></script>
+    <script src="/js/jquery-1.7.2.min.js"></script>
+    <script src="/js/default.js"></script>
+    <script src="/js/loadData.js"></script>
+
+    <link href="/css/default.css" rel="stylesheet" />
+    <link href="/pages/home/home.css" rel="stylesheet" />
+    <script src="/pages/home/home.js"></script>
+</head>
+<body>
+    <div class="fragment homepage">
+        <header aria-label="Header content" role="banner">
+            <button class="win-backbutton" aria-label="Back" disabled type="button"></button>
+            <h1 class="titlearea win-type-ellipsis">
+                <span id="homeTitle" data-win-res="{textContent: 'homeTitle'}">TEST kerker</span>
+            </h1>
+        </header>
+        <section aria-label="Main content" role="main">
+            <p id="favAddMsg"></p>
+            <ul id="subject"></ul>
+            <ul>
+                <li id="fav"><span id="homeFavlist" data-win-res="{textContent: 'homeFavlist'}"></span></li>
+            </ul>
+            <div id="output"></div>
+
+            <div id="listView"
+                data-win-control="WinJS.UI.ListView"
+                data-win-options="{ 
+                    itemDataSource: Data.myGroupedList.dataSource, 
+                    itemTemplate: MyJSItemTemplate, 
+                    groupDataSource: Data.myGroupedList.groups.dataSource,
+                    groupHeaderTemplate: headerTemplate, 
+                    selectionMode: 'none', 
+                    tapBehavior: 'none', 
+                    swipeBehavior: 'none',
+                    oniteminvoked :itemInvokedHandler
+                }">
+            </div>
+
+        </section>
+    </div>
+</body>
+</html>

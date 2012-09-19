@@ -45,6 +45,7 @@
             Data.language = language;
             //load new language data
             Data.updateLanguage();
+            Data.createDB();
         }
     }
 })();

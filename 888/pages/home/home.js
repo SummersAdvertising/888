@@ -63,56 +63,17 @@ var headerTemplate = WinJS.Utilities.markSupportedForProcessing(function MyJSIte
             Data.createDB();
 
             isAddMsg();
-            $("#fav").click(function () {
-                WinJS.Navigation.navigate("/pages/favorite/favorite.html");
-            });
 
             var listView = element.querySelector("#listView").winControl;
             listView.addEventListener("iteminvoked", itemInvokedHandler);
-
-
         }
     });
 
-    function selectData(subject) {
-        $("#output").html("subject: " + subject);
-        $("#output").append("<p id='noEntry'>no articles in subject " + subject + "</p>");
-
-        if (subject == 0)
-            Data.showData("articles");
-        else {
-            var txn = Data.db.transaction(["articles"], "readonly");
-            var cursorRequest = txn.objectStore("articles").openCursor();
-            cursorRequest.onsuccess = function (e) {
-                var cursor = e.target.result;
-                if (cursor) {
-                    if (cursor.value["subjectid"] == subject) {
-                        var str = "";
-                        for (var i in cursor.value) {
-                            if (i != "content")
-                                str += i.toString() + ": " + cursor.value[i] + " / ";
-                        }
-                        $("#noEntry").remove();
-                        $("#output").append("<p>" + str + "<a class='article' id='article" + cursor.value["id"] + "' href='/pages/article/article.html'>show</a></p>");
-
-                        $(".article").unbind();
-                        $(".article").bind("click", function () { showArticle(this); return false; });
-                    }
-                    cursor.continue();
-                }
-            }
-        }
-    }
-
     //navigate to article page
-    function showArticle(article) {
-        Data.articleid = article.id.slice(7, article.id.length);
-        WinJS.Navigation.navigate(article.href);
-    }
-
     function itemInvokedHandler(eventObject) {
         eventObject.detail.itemPromise.done(function (invokedItem) {
-            var itemData = invokedItem.data;
+            Data.articleid = invokedItem.data.id;
+            WinJS.Navigation.navigate("/pages/article/article.html");
         });
     }
 
@@ -122,9 +83,4 @@ var headerTemplate = WinJS.Utilities.markSupportedForProcessing(function MyJSIte
             Data.favAddMsg = null;
         }
     }
-
-    WinJS.Namespace.define("Home", {
-        selectData: selectData,
-        showArticle: showArticle
-    });
 })();

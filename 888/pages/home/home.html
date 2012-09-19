@@ -27,12 +27,6 @@
         </header>
         <section aria-label="Main content" role="main">
             <p id="favAddMsg"></p>
-            <ul id="subject"></ul>
-            <ul>
-                <li id="fav"><span id="homeFavlist" data-win-res="{textContent: 'homeFavlist'}"></span></li>
-            </ul>
-            <div id="output"></div>
-
             <div id="listView"
                 data-win-control="WinJS.UI.ListView"
                 data-win-options="{ 
@@ -41,7 +35,7 @@
                     groupDataSource: Data.myGroupedList.groups.dataSource,
                     groupHeaderTemplate: headerTemplate, 
                     selectionMode: 'none', 
-                    tapBehavior: 'none', 
+                    tapBehavior: 'invokeOnly', 
                     swipeBehavior: 'none',
                     oniteminvoked :itemInvokedHandler
                 }">

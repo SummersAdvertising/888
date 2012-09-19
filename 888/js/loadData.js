@@ -47,6 +47,8 @@
     function loadData(evt) {
         var foldername = "data";
         var filename = Data.language + ".xml";
+        subject = new Array();
+        article = new Array();
 
         Data.db = evt.target.result;
 
@@ -74,12 +76,7 @@
                         subject.push(objarticle);
 
                         txn.oncomplete = function () {
-                            if (counter >= nodes.length)
-                                showData("subjects");
-                            if (list._currentKey == 0)
-                                listAdd();
-
-                            counter++;
+                            listAdd();
                         };
                     }
 
@@ -128,14 +125,22 @@
                         articlesStore.add(objarticle);
                         article.push(objarticle);
 
+                        var isdone = false;
                         txn.oncomplete = function () {
-                            counter++;
-                            if (counter >= nodes.length) {
-                                showData("articles");
-                                if (Data.articleid)
-                                    showData("article");
-                                counter = 1;
+                            //update data in page
+                            if (!isdone) {
+                                switch (WinJS.Navigation.location) {
+                                    case "/pages/article/article.html":
+                                        showData("article");
+                                        break;
+                                    case "/pages/favorite/favorite.html":
+                                        showData("favorite");
+                                        break;
+                                    case "/pages/search/search.html":
+                                        break;
+                                }
                             }
+                            isdone = true;
                         };
                     }
                 });
@@ -144,6 +149,13 @@
     }
 
     function listAdd() {
+        //remove old data
+        var length = list.length;
+        for (var i = 0; i < length; i++) {
+            list.pop();
+        }
+
+        //add new ones
         article.forEach(function (item) {
             list.push(item);
         });
@@ -185,30 +197,6 @@
 
     function showData(show) {
         switch (show) {
-            //list all the articles
-            case "articles":
-                var txn = Data.db.transaction(["articles"], "readonly");
-                var cursorRequest = txn.objectStore("articles").openCursor();
-                var articles = "";
-                cursorRequest.onsuccess = function (e) {
-                    var cursor = e.target.result;
-                    if (cursor) {
-                        var str = "";
-                        for (var i in cursor.value) {
-                            if (i != "content")
-                                str += i.toString() + ": " + cursor.value[i] + " / ";
-                        }
-                        articles += "<p>" + str + "<a class='article' id='article" + cursor.value["id"] + "' href='/pages/article/article.html'>show</a></p>";
-
-                        cursor.continue();
-                    }
-                    $("#output").html(articles);
-                    $(".article").unbind();
-                    $(".article").bind("click", function () { Home.showArticle(this); return false; });
-                }
-                break;
-
-                //list a single article
             case "article":
                 var txn = Data.db.transaction(["articles"], "readonly");
                 var store = txn.objectStore("articles");
@@ -234,31 +222,47 @@
                     }
                 }
                 break;
+            case "favorite":
+                $("#favList").html("<p id='noEntries'>no entries in the list</p>");
 
-                //list all the subjects
-            case "subjects":
-                var txn = Data.db.transaction(["subjects"], "readonly");
-                var cursorRequest = txn.objectStore("subjects").openCursor();
-                var subjects = "";
-                var counter = 0;
-                cursorRequest.onsuccess = function (e) {
+                var txn = Data.db.transaction(["likes"], "readonly");
+                var statusStore = txn.objectStore("likes");
 
-                    var cursor = e.target.result;
-                    if (cursor) {
-                        subjects += "<li id='subject" + cursor.value.id + "' class='subject'>" + cursor.value.name + "</li>";
-                        cursor.continue();
+                var request = statusStore.openCursor();
+                request.onsuccess = function (e) {
+                    var like = e.target.result;
+                    if (like) {
+                        var txn = Data.db.transaction(["articles"], "readonly");
+                        var store = txn.objectStore("articles");
+                        var request = store.get(parseInt(like.value["articleid"]));
+                        var likeid = like.value.id;
+                        request.onsuccess = function (e) {
+                            var article = e.target.result;
+                            if (article) {
+                                $("#favList").append("<p>" + article["title"] + " | <a class='article' id='article" + article["id"] + "' href='/pages/article/article.html'>show</a> | <a class='delete' id='delete" + likeid + "' href='#'>delete</a></p>");
+                                $(".article").unbind();
+                                $(".article").bind("click", function () {
+                                    Data.articleid = this.id.slice(7, article.id.length);
+                                    WinJS.Navigation.navigate("/pages/article/article.html");
+                                });
+
+                                $(".delete").unbind();
+                                $(".delete").bind("click", function () {
+                                    var record = this.id.slice(6, article.id.length);
+
+                                    var txn = Data.db.transaction(["likes"], "readwrite");
+                                    var statusStore = txn.objectStore("likes");
+                                    statusStore.delete(parseInt(record));
+
+                                    showData("favorite");
+                                });
+
+                                $("#noEntries").remove();
+                            }
+                        }
+                        like.continue();
                     }
-                    $("#subject").html("<li id='subject0' class='subject'>all</li>" + subjects);
-
-                    $(".subject").unbind();
-                    $(".subject").bind("click", function () {
-                        var subjectid = this.id.slice(7, this.id.length);
-                        Home.selectData(subjectid);
-                    });
-                }
-                break;
-
-            default:
+                };
                 break;
         }
     }

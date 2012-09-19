@@ -10,20 +10,13 @@
             // TODO: 在此初始化頁面。
             Data.updateLanguage();
             Data.showData("article");
-        },
 
-        unload: function () {
-            // TODO: 回應離開這個頁面的導覽。
-        },
-
-        updateLayout: function (element, viewState, lastViewState) {
-            /// <param name="element" domElement="true" />
-            // TODO: 回應 viewState 中的變更。
+            $("#addFav").bind("click", function () { checkLike(); });
         }
     });
 
     var check;
-    function checkLike(title) {
+    function checkLike() {
         check = false;
         var txn = Data.db.transaction(["likes"], "readonly");
         var statusStore = txn.objectStore("likes");
@@ -40,6 +33,7 @@
                 if (check) {
                     $("#article").prepend("article is already in the list");
                     $("#addFav").unbind();
+                    document.getElementById('createAppBar').winControl.hide();
                 }
                 else {
                     var txn = Data.db.transaction(["likes"], "readwrite");
@@ -47,7 +41,7 @@
                     var like = { articleid: Data.articleid };
                     statusStore.add(like);
                     txn.oncomplete = function () {
-                        Data.favAddMsg = title + " added";
+                        Data.favAddMsg = $("#articleTitle").html() + " added";
                         WinJS.Navigation.back(0);
                     };
                 }

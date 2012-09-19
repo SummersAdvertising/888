@@ -12,6 +12,7 @@
             languageSelect(Data.language);
             document.getElementById("languageList").addEventListener("change", function () {
                 languageSelect(this.value);
+                Data.createDB();
             });
         },
 
@@ -43,6 +44,7 @@
             }
             var select = document.getElementById("languageList")[languageChild].selected = true;
             Data.language = language;
+
             //load new language data
             Data.updateLanguage();
         }

@@ -36,17 +36,18 @@
         var articleStore = Data.db.createObjectStore("articles", { keyPath: "id", autoIncrement: false });
         var subjectStore = Data.db.createObjectStore("subjects", { keyPath: "id", autoIncrement: false });
         var statusStore = Data.db.createObjectStore("likes", { keyPath: "id", autoIncrement: true });
-
-        loadData(evt);
     }
-    //declare WinJS.Binding.List
+
+    //declare WinJS.Binding.List(for search)
     var list = new WinJS.Binding.List();
-    var subject = new Array();//groups in list
-    var article = new Array();//groupitems in list
+    var subjectArray = new Array();//groups in list
+    var articleArray = new Array();//groupitems in list
 
     function loadData(evt) {
         var foldername = "data";
         var filename = Data.language + ".xml";
+        subjectArray = new Array();
+        //article = new Array();
 
         Data.db = evt.target.result;
 
@@ -56,7 +57,6 @@
                 loadSettings.prohibitDtd = false;
                 loadSettings.resolveExternals = false;
 
-                //load XML
                 Windows.Data.Xml.Dom.XmlDocument.loadFromFileAsync(file, loadSettings).done(function (xmlDoc) {
                     //load subject nodes
                     var nodes = xmlDoc.getElementsByTagName('subject');
@@ -71,16 +71,7 @@
                         var subjectsStore = txn.objectStore("subjects");
 
                         subjectsStore.put(objarticle);
-                        subject.push(objarticle);
-
-                        txn.oncomplete = function () {
-                            if (counter >= nodes.length)
-                                showData("subjects");
-                            if (list._currentKey == 0)
-                                listAdd();
-
-                            counter++;
-                        };
+                        subjectArray.push(objarticle);
                     }
 
                     //load article nodes
@@ -93,22 +84,22 @@
                                 if (nodes[i].childNodes[j].nodeName == "subjectid") {
                                     switch (nodes[i].childNodes[j].innerText) {
                                         case "1":
-                                            objAddProperty("group", subject[0]);
+                                            objAddProperty("group", subjectArray[0]);
                                             break;
                                         case "2":
-                                            objAddProperty("group", subject[1]);
+                                            objAddProperty("group", subjectArray[1]);
                                             break;
                                         case "3":
-                                            objAddProperty("group", subject[2]);
+                                            objAddProperty("group", subjectArray[2]);
                                             break;
                                         case "4":
-                                            objAddProperty("group", subject[3]);
+                                            objAddProperty("group", subjectArray[3]);
                                             break;
                                         case "5":
-                                            objAddProperty("group", subject[4]);
+                                            objAddProperty("group", subjectArray[4]);
                                             break;
                                         case "6":
-                                            objAddProperty("group", subject[5]);
+                                            objAddProperty("group", subjectArray[5]);
                                             break;
                                     }
                                 }
@@ -126,25 +117,59 @@
                         var txn = Data.db.transaction(["articles"], "readwrite");
                         var articlesStore = txn.objectStore("articles");
                         articlesStore.add(objarticle);
-                        article.push(objarticle);
+                        //article.push(objarticle);
 
+                        var isdone = false;
                         txn.oncomplete = function () {
-                            counter++;
-                            if (counter >= nodes.length) {
-                                showData("articles");
-                                if (Data.articleid)
-                                    showData("article");
-                                counter = 1;
+                            //update data in page
+                            if (!isdone) {
+                                loadArray("0");
+
+                                switch (WinJS.Navigation.location) {
+                                    case "/pages/article/article.html":
+                                        showData("article");
+                                        break;
+                                    case "/pages/favorite/favorite.html":
+                                        showData("favorite");
+                                        break;
+                                    case "/pages/search/search.html":
+                                        break;
+                                }
                             }
+                            isdone = true;
                         };
                     }
                 });
             });
         });
     }
+    function loadArray(region) {
+        articleArray = new Array();
+
+        var txn = Data.db.transaction(["articles"], "readonly");
+        var store = txn.objectStore("articles");
+        var request = store.openCursor();
+        request.onsuccess = function (e) {
+            var article = e.target.result;
+            if (article) {
+                if (article.value["region"] == region)
+                    articleArray.push(article.value);
+                article.continue();
+            }
+            else
+                listAdd();
+        };
+    }
 
     function listAdd() {
-        article.forEach(function (item) {
+        //remove old data
+        var length = list.length;
+        for (var i = 0; i < length; i++) {
+            list.pop();
+        }
+
+        //add new ones
+        articleArray.forEach(function (item) {
             list.push(item);
         });
         groupedItems = list.createGrouped(
@@ -160,12 +185,10 @@
     function compareGroups(left, right) {
         return left.charCodeAt(0) - right.charCodeAt(0);
     }
-
     // Function which returns the group key that an item belongs to
     function getGroupKey(dataItem) {
         return dataItem.subjectid;
     }
-
     // Function which returns the data for a group
     function getGroupData(dataItem) {
         return {
@@ -185,37 +208,15 @@
 
     function showData(show) {
         switch (show) {
-            //list all the articles
-            case "articles":
-                var txn = Data.db.transaction(["articles"], "readonly");
-                var cursorRequest = txn.objectStore("articles").openCursor();
-                var articles = "";
-                cursorRequest.onsuccess = function (e) {
-                    var cursor = e.target.result;
-                    if (cursor) {
-                        var str = "";
-                        for (var i in cursor.value) {
-                            if (i != "content")
-                                str += i.toString() + ": " + cursor.value[i] + " / ";
-                        }
-                        articles += "<p>" + str + "<a class='article' id='article" + cursor.value["id"] + "' href='/pages/article/article.html'>show</a></p>";
-
-                        cursor.continue();
-                    }
-                    $("#output").html(articles);
-                    $(".article").unbind();
-                    $(".article").bind("click", function () { Home.showArticle(this); return false; });
-                }
-                break;
-
-                //list a single article
             case "article":
-                var txn = Data.db.transaction(["articles"], "readonly");
+                var txn = Data.db.transaction(["articles"], "readwrite");
                 var store = txn.objectStore("articles");
                 var request = store.get(parseInt(Data.articleid));
                 var articles = "";
+
                 request.onsuccess = function (e) {
                     var article = e.target.result;
+                    Data.currnetArticle = article;
                     for (var element in article) {
                         if (element == "title")
                             $("#articleTitle").html(article[element]);
@@ -223,42 +224,52 @@
                             articles += "<p>" + element.toString() + ": " + article[element] + "</p>";
                     }
                     $("#article").html(articles);
-
-                    if (article) {
-                        $("#addFav").bind("click", function () {
-                            Article.checkLike($("#articleTitle").html());
-                        });
-                    }
-                    else {
+                    if (!article) {
                         $("#article").append("can't find this article.");
                     }
                 }
+
                 break;
+            case "favorite":
+                $("#favList").html("<p id='noEntries'>no entries in the list</p>");
 
-                //list all the subjects
-            case "subjects":
-                var txn = Data.db.transaction(["subjects"], "readonly");
-                var cursorRequest = txn.objectStore("subjects").openCursor();
-                var subjects = "";
-                var counter = 0;
-                cursorRequest.onsuccess = function (e) {
+                var txn = Data.db.transaction(["likes"], "readonly");
+                var statusStore = txn.objectStore("likes");
+                var request = statusStore.openCursor();
+                request.onsuccess = function (e) {
+                    var like = e.target.result;
+                    if (like) {
+                        var txn = Data.db.transaction(["articles"], "readonly");
+                        var store = txn.objectStore("articles");
+                        var request = store.get(parseInt(like.value["articleid"]));
+                        var likeid = like.value.id;
+                        request.onsuccess = function (e) {
+                            var article = e.target.result;
+                            if (article) {
+                                $("#favList").append("<p>" + article["title"] + " | <a class='article' id='article" + article["id"] + "' href='/pages/article/article.html'>show</a> | <a class='delete' id='delete" + likeid + "' href='#'>delete</a></p>");
+                                $(".article").unbind();
+                                $(".article").bind("click", function () {
+                                    Data.articleid = parseInt(this.id.slice(7, this.id.length));
+                                    WinJS.Navigation.navigate("/pages/article/article.html");
+                                });
 
-                    var cursor = e.target.result;
-                    if (cursor) {
-                        subjects += "<li id='subject" + cursor.value.id + "' class='subject'>" + cursor.value.name + "</li>";
-                        cursor.continue();
+                                $(".delete").unbind();
+                                $(".delete").bind("click", function () {
+                                    var record = this.id.slice(6, this.id.length);
+
+                                    var txn = Data.db.transaction(["likes"], "readwrite");
+                                    var statusStore = txn.objectStore("likes");
+                                    statusStore.delete(parseInt(record));
+
+                                    showData("favorite");
+                                });
+
+                                $("#noEntries").remove();
+                            }
+                        }
+                        like.continue();
                     }
-                    $("#subject").html("<li id='subject0' class='subject'>all</li>" + subjects);
-
-                    $(".subject").unbind();
-                    $(".subject").bind("click", function () {
-                        var subjectid = this.id.slice(7, this.id.length);
-                        Home.selectData(subjectid);
-                    });
-                }
-                break;
-
-            default:
+                };
                 break;
         }
     }
@@ -305,6 +316,8 @@
         createDB: createDB,
         showData: showData,
         updateLanguage: updateLanguage,
+
+        regionChange: loadArray,
 
         db: db,
         articleid: articleid,

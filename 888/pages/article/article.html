@@ -16,6 +16,9 @@
 
 </head>
 <body>
+    <div id="createAppBar" data-win-control="WinJS.UI.AppBar">
+        <button data-win-control="WinJS.UI.AppBarCommand" data-win-options="{id:'addFav',label:'add to fav',icon:'add'}"></button>
+    </div>
     <div class="article fragment">
         <header aria-label="Header content" role="banner">
             <button class="win-backbutton" aria-label="Back" disabled type="button"></button>
@@ -25,7 +28,7 @@
         </header>
         <section aria-label="Main content" role="main">
             <div>
-                <p id='addFav'><span id='articleFavlist' data-win-res='{textContent: "articleFavlist"}'></span></p>
+                <p><span id='articleFavlist' data-win-res='{textContent: "articleFavlist"}'></span></p>
                 <hr />
             </div>
             <div id="article"></div>

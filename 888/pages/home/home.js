@@ -111,6 +111,7 @@ var headerTemplate = WinJS.Utilities.markSupportedForProcessing(function MyJSIte
     }
 
     function itemInvokedHandler(eventObject) {
+        
         eventObject.detail.itemPromise.done(function (invokedItem) {
             var itemData = invokedItem.data;
         });

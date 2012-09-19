@@ -1,20 +1,33 @@
 ﻿<!DOCTYPE html>
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta charset="utf-8" />
     <title>_888</title>
 
     <!-- WinJS 參考 -->
-    <link href="//Microsoft.WinJS.1.0/css/ui-dark.css" rel="stylesheet" />
+    <link href="//Microsoft.WinJS.1.0/css/ui-light.css" rel="stylesheet" />
     <script src="//Microsoft.WinJS.1.0/js/base.js"></script>
     <script src="//Microsoft.WinJS.1.0/js/ui.js"></script>
+    <script src="/js/jquery-1.7.2.min.js"></script>
 
     <!-- _888 參考 -->
     <link href="/css/default.css" rel="stylesheet" />
     <script src="/js/default.js"></script>
+    <script src="/js/navigator.js"></script>
+    <script src="/pages/search/searchResults.js"></script>
+    <script src="/js/loadData.js"></script>
 </head>
 <body>
-    <p>內容在此處出現</p>
+    <!-- BEGINTEMPLATE: Template code for AppBar -->
+    <div id="customLayoutAppBar" data-win-control="WinJS.UI.AppBar" aria-label="Navigation Bar"
+        data-win-options="{layout:'custom',placement:'top'}">
+        <header aria-label="Navigation bar" role="banner">
+            <!--nav bar: 首頁/我的最愛 靠左-->
+            <h3 class="win-type-xx-large" tabindex="0" style="background-color: aquamarine;"><span onclick="console.log(WinJS.Navigation.history);WinJS.Navigation.back(WinJS.Navigation.history.backStack.length); document.getElementById('customLayoutAppBar').winControl.hide();">top</span> | <span id="navtoFav" onclick="WinJS.Navigation.navigate('/pages/favorite/favorite.html'); document.getElementById('customLayoutAppBar').winControl.hide();">fav</span></h3>
+        </header>
+    </div>
+    <!-- ENDTEMPLATE -->
+    <div id="contenthost" data-win-control="Application.PageControlNavigator" data-win-options="{home: '/pages/home/home.html'}"></div>
 </body>
 </html>

@@ -1,4 +1,4 @@
-﻿// 如需頁面控制項範本的簡介，請參閱下列文件:
+﻿﻿// 如需頁面控制項範本的簡介，請參閱下列文件:
 // http://go.microsoft.com/fwlink/?LinkId=232511
 (function () {
     "use strict";

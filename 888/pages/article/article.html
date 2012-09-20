@@ -17,20 +17,19 @@
 </head>
 <body>
     <div id="createAppBar" data-win-control="WinJS.UI.AppBar">
-        <button data-win-control="WinJS.UI.AppBarCommand" data-win-options="{id:'addFav',label:'add to fav',icon:'add'}"></button>
+        <button data-win-control="WinJS.UI.AppBarCommand" data-win-options="{id:'addFav',label:'articleFavlist',icon:'add'}"></button>
+        <button data-win-control="WinJS.UI.AppBarCommand" data-win-options="{id:'delFav',label:'delete from fav',icon:'remove'}"></button>
     </div>
     <div class="article fragment">
         <header aria-label="Header content" role="banner">
             <button class="win-backbutton" aria-label="Back" disabled type="button"></button>
             <h1 class="titlearea win-type-ellipsis">
                 <span id="articleTitle">article</span>
+                <span id="articleId" style="display:none;"></span>
             </h1>
         </header>
         <section aria-label="Main content" role="main">
-            <div>
-                <p><span id='articleFavlist' data-win-res='{textContent: "articleFavlist"}'></span></p>
-                <hr />
-            </div>
+            <p id="articlemsg"></p>
             <div id="article"></div>
         </section>
     </div>

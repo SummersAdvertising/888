@@ -5,6 +5,7 @@
     "_greeting.comment"      : "en",
     "homeFavadded"           : "added!(en)",
     "homeFavlist"            : "Favlist(en)",
-    "articleFavlist"         : "add to Favlist(en)",
+    "addFav"         : "add to Favlist(en)",
+    "delFav"         : "del from Favlist(en)",
     "favTitle"               : "favorite(en)"
 }

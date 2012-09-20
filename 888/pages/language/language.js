@@ -31,22 +31,25 @@
         if (language) {
             var languageChild;
             switch (language) {
-                case "en-US":
+                case "zh-Hant-TW":
                     languageChild = 0;
                     break;
-                case "ja":
+                case "en-US":
                     languageChild = 1;
                     break;
-                case "zh-Hant-TW":
+                case "ja":
                     languageChild = 2;
                     break;
 
             }
             var select = document.getElementById("languageList")[languageChild].selected = true;
-            Data.language = language;
 
-            //load new language data
-            Data.updateLanguage();
+            if (Data.language != language) {
+                Data.language = language;
+
+                //load new language data
+                Data.updateLanguage();
+            }
         }
     }
 })();

@@ -15,11 +15,12 @@
                 // TODO: 這個應用程式剛啟動。請在這裡初始化
                 // 您的應用程式。
                 WinJS.Application.onsettings = function (e) {
-                    e.detail.applicationcommands = { "language": { title: "Language", href: "/pages/language/language.html" } };
+                    e.detail.applicationcommands = {
+                        "language": { title: "語言", href: "/pages/language/language.html" },
+                        "about": { title: "關於 青春食玩誌", href: "/pages/about/about.html" }
+                    };
                     WinJS.UI.SettingsFlyout.populateSettings(e);
                 };
-
-
             } else {
                 // TODO: 這個應用程式已經從擱置重新啟用。
                 // 請在這裡還原應用程式狀態。

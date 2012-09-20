@@ -1,0 +1,74 @@
+@charset "utf-8";
+/* CSS Document */
+
+/*移除元素中margin以及padding*/
+ * { margin:0; padding:0; list-style:none;}
+html{height:100%;}
+body{ 
+	font-family:微軟正黑體, Segoe UI ;
+	height:100%;
+}
+.search-title{ font-size:20pt;}
+.search-title span{ font-size:16pt;}
+.search-title h2 { 
+	margin:45px 0px 0px 70px;
+	color: rgba(0,0,0,1);
+	font-weight:normal; 
+}
+.search-Bback{
+	background-image:url(../../images/buttons/back-b.png);
+	background-repeat:no-repeat;
+	width:36px;
+	height:36px;
+	cursor:pointer;
+	margin:auto auto;
+	float:left;
+	margin:8px 15px 0px 0px;
+}
+.search-Bback:active{
+	filter:alpha(opacity=65); opacity:0.65;
+}
+.search-listArea{
+	position:absolute;
+	top:10%; 
+	margin:5% 15px 10% 120px;
+}
+.search-box{ width:255px; float:left; margin-right:10px;}
+.search-list{ 
+	margin-top:20px; 
+	display:block;
+	height:60px;
+}
+.search-list img{
+	border:1px solid rgba(225,225,225,1);
+	margin-right:5px;
+}
+.search-list img:active{ 
+	filter:alpha(opacity=65); opacity:0.65;
+}
+.search-list p{
+	font-size:9pt;
+	line-height:15pt;
+	color: rgba(102,102,102,1);
+}
+.search-list h4{
+	color: rgba(0,0,0,1);
+	font-size:11pt;
+	line-height:20pt;
+	font-weight: normal;
+}
+.search-list h4 a:link{
+	color: rgba(0,0,0,1);
+	font-size:11pt;
+	line-height:20pt;
+	font-weight: normal;
+	text-decoration:none;
+}
+.search-list h4 a:active{
+	color: rgba(0,114,198,1);
+}
+.search-list h4 a:visited{
+	color: rgba(51,51,51,1);
+}
+	
+.search-function{}

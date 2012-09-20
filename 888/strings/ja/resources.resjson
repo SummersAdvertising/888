@@ -5,6 +5,7 @@
     "_greeting.comment"      : "ja",
     "homeFavadded"           : "added!(ja)",
     "homeFavlist"            : "Favlist(ja)",
-    "articleFavlist"         : "add to Favlist(ja)",
+    "addFav"         : "add to Favlist(ja)",
+    "delFav"         : "del from Favlist(ja)",
     "favTitle"               : "favorite(ja)"
 }

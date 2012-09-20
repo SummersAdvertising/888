@@ -8,15 +8,22 @@
         // 會將應用程式的資料填入頁面項目。
         ready: function (element, options) {
             // TODO: 在此初始化頁面。
-            Data.updateLanguage();
+            Data.initLanguage();
             Data.showData("article");
 
-            $("#addFav").bind("click", function () { checkLike(); });
+            checkLike("del");
+
+            $("#addFav").bind("click", function () { checkLike("add"); });
+            $("#delFav").bind("click", function () { delFav(); });
+
+            //share
+            var dataTransferManager = Windows.ApplicationModel.DataTransfer.DataTransferManager.getForCurrentView();
+            dataTransferManager.addEventListener("datarequested", dataRequested);
         }
     });
 
     var check;
-    function checkLike() {
+    function checkLike(act) {
         check = false;
         var txn = Data.db.transaction(["likes"], "readonly");
         var statusStore = txn.objectStore("likes");
@@ -30,21 +37,75 @@
                 like.continue();
             }
             else {
-                if (check) {
-                    $("#article").prepend("article is already in the list");
-                    $("#addFav").unbind();
-                    document.getElementById('createAppBar').winControl.hide();
+                switch (act) {
+                    case "add":
+                        if (check) {
+                            $("#articlemsg").prepend("<p>article is already in the list</p>");
+                            $("#addFav").unbind();
+                            document.getElementById('createAppBar').winControl.hide();
+                        }
+                        else {
+                            var txn = Data.db.transaction(["likes"], "readwrite");
+                            var statusStore = txn.objectStore("likes");
+                            var like = { articleid: Data.articleid };
+                            statusStore.add(like);
+                            txn.oncomplete = function () {
+                                $("#articlemsg").html($("#articleTitle").html() + " added");
+                                //WinJS.Navigation.back(0);
+                            };
+                        }
+                        break;
+                    case "del":
+                        if (check) {
+                            $("#addFav").remove();
+                        }
+                        else {
+                            $("#delFav").remove();
+                        }
+                        break;
                 }
-                else {
-                    var txn = Data.db.transaction(["likes"], "readwrite");
-                    var statusStore = txn.objectStore("likes");
-                    var like = { articleid: Data.articleid };
-                    statusStore.add(like);
-                    txn.oncomplete = function () {
-                        Data.favAddMsg = $("#articleTitle").html() + " added";
-                        WinJS.Navigation.back(0);
-                    };
+            }
+        }
+    }
+
+    function delFav() {
+        var record = $("#articleId").html();
+
+        var txn = Data.db.transaction(["likes"], "readwrite");
+        var statusStore = txn.objectStore("likes");
+        var request = statusStore.openCursor();
+        request.onsuccess = function (e) {
+            var like = e.target.result;
+            if (like) {
+                if (like.value.articleid == record) {
+                    statusStore.delete(parseInt(like.value.id));
+                    checkLike("del");
                 }
+                like.continue();
+            }
+        };
+
+        $("#articlemsg").html("article is deleted from the list");
+        checkLike("del");
+    }
+
+    function dataRequested(e) {
+        var request = e.request;
+
+        // Title is required
+        var dataPackageTitle =$("#articletitle").html();
+        if ((typeof dataPackageTitle === "string") && (dataPackageTitle !== "")) {
+            var dataPackageLink = $("#articlecontentnotag").html();
+            if ((typeof dataPackageLink === "string") && (dataPackageLink !== "")) {
+                request.data.properties.title = dataPackageTitle;
+
+                try {
+                    request.data.setUri(new Windows.Foundation.Uri(document.getElementById("linkInputBox").value));
+                } catch (ex) {
+                    //show error message
+                }
+            } else {
+                request.failWithDisplayText("Enter the text you would like to share and try again.");
             }
         }
     }

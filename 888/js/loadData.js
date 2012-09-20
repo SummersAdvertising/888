@@ -15,16 +15,7 @@
             createDB();
         }
         else {
-            //clear objectstores of article and subject, load data
-            var txn = Data.db.transaction(["articles"], "readwrite");
-            var store = txn.objectStore("articles");
-            store.clear();
-
-            txn = Data.db.transaction(["subjects"], "readwrite");
-            store = txn.objectStore("subjects");
-            store.clear();
-
-            loadData(evt);
+            loadArray("0");
         }
     }
     function dbVersionUpgrade(evt) {
@@ -36,10 +27,16 @@
         var articleStore = Data.db.createObjectStore("articles", { keyPath: "id", autoIncrement: false });
         var subjectStore = Data.db.createObjectStore("subjects", { keyPath: "id", autoIncrement: false });
         var statusStore = Data.db.createObjectStore("likes", { keyPath: "id", autoIncrement: true });
+
+        loadData(evt);
     }
 
     //declare WinJS.Binding.List(for search)
     var list = new WinJS.Binding.List();
+
+
+    //declare bindinglist(for article)
+    var articlelist = new WinJS.Binding.List();
     var subjectArray = new Array();//groups in list
     var articleArray = new Array();//groupitems in list
 
@@ -47,7 +44,6 @@
         var foldername = "data";
         var filename = Data.language + ".xml";
         subjectArray = new Array();
-        //article = new Array();
 
         Data.db = evt.target.result;
 
@@ -82,32 +78,11 @@
                         for (var j = 0; j < nodes[i].childNodes.length; j++) {
                             if (nodes[i].childNodes[j].nodeType == 1) {
                                 if (nodes[i].childNodes[j].nodeName == "subjectid") {
-                                    switch (nodes[i].childNodes[j].innerText) {
-                                        case "1":
-                                            objAddProperty("group", subjectArray[0]);
-                                            break;
-                                        case "2":
-                                            objAddProperty("group", subjectArray[1]);
-                                            break;
-                                        case "3":
-                                            objAddProperty("group", subjectArray[2]);
-                                            break;
-                                        case "4":
-                                            objAddProperty("group", subjectArray[3]);
-                                            break;
-                                        case "5":
-                                            objAddProperty("group", subjectArray[4]);
-                                            break;
-                                        case "6":
-                                            objAddProperty("group", subjectArray[5]);
-                                            break;
-                                    }
+                                    var group = parseInt(nodes[i].childNodes[j].innerText) - 1;
+                                    objAddProperty("group", subjectArray[group]);
                                 }
                                 //save content without html tag
                                 if (nodes[i].childNodes[j].nodeName == "content") {
-                                    //regex:html tag /<\s*(\S+)(\s[^>]*)?>[\s\S]*<\s*\/\1\s*>/ 
-                                    //htmltag open /<\s*\w.*?>/g
-                                    //htmltag close /<\s*\/\s*\w\s*.*?>|<\s*br\s*>/g
                                     var content = nodes[i].childNodes[j].innerText.replace(/<\s*\w.*?>/g, "").replace(/<\s*\/\s*\w\s*.*?>|<\s*br\s*>/g, "");
                                     objAddProperty("contentnotag", content);
                                 }
@@ -123,16 +98,14 @@
                         txn.oncomplete = function () {
                             //update data in page
                             if (!isdone) {
-                                loadArray(Data.currentRegion);
+                                loadArray("0");
 
                                 switch (WinJS.Navigation.location) {
                                     case "/pages/article/article.html":
                                         showData("article");
                                         break;
                                     case "/pages/favorite/favorite.html":
-                                        showData("favorite");
-                                        break;
-                                    case "/pages/search/search.html":
+                                        //showData("favorite");
                                         break;
                                 }
                             }
@@ -145,45 +118,43 @@
     }
     function loadArray(region) {
         articleArray = new Array();
-        
+
+        var length = list.length;
+        for (var i = 0; i < length; i++) {
+            list.pop();
+        }
+
         var txn = Data.db.transaction(["articles"], "readonly");
         var store = txn.objectStore("articles");
         var request = store.openCursor();
         request.onsuccess = function (e) {
             var article = e.target.result;
             if (article) {
-                if (article.value["region"] == region) {
+                if (article.value["region"] == region)
                     articleArray.push(article.value);
-                    
-                }
+                list.push(article.value);
                 article.continue();
             }
             else
                 listAdd();
-
-            updateView();
         };
     }
 
     function listAdd() {
         //remove old data
-        var length = list.length;
+        var length = articlelist.length;
         for (var i = 0; i < length; i++) {
-            list.pop();
+            articlelist.pop();
         }
 
         //add new ones
         articleArray.forEach(function (item) {
-            list.push(item);
+            articlelist.push(item);
         });
-        groupedItems = list.createGrouped(
-                    function groupKeySelector(item) { return item.group.key; },
-                    function groupDataSelector(item) { return item.group; }
-                );
     }
 
     //data for listview
-    var myGroupedList = list.createGrouped(getGroupKey, getGroupData, compareGroups);
+    var myGroupedList = articlelist.createGrouped(getGroupKey, getGroupData, compareGroups);
 
     // Function used to sort the groups by first letter
     function compareGroups(left, right) {
@@ -224,8 +195,10 @@
                     for (var element in article) {
                         if (element == "title")
                             $("#articleTitle").html(article[element]);
+                        else if (element == "id")
+                            $("#articleId").html(article[element]);
                         else
-                            articles += "<p>" + element.toString() + ": " + article[element] + "</p>";
+                            articles += "<p id='article" + element.toString() + "'>" + element.toString() + ": " + article[element] + "</p>";
                     }
                     $("#article").html(articles);
                     if (!article) {
@@ -278,7 +251,7 @@
         }
     }
 
-    function updateLanguage() {
+    function initLanguage() {
         //get current language
         var applicationLanguages = Windows.Globalization.ApplicationLanguages.languages;
         if (!Data.language) {
@@ -297,20 +270,71 @@
         context.languages = languagesVector;
 
         //chang UI language
-        var changeContentArray = ["homeTitle", "homeFavlist", "articleFavlist", "favTitle"];
+        var changeContentArray = ["homeTitle", "homeFavlist", "addFav", "delFav", "favTitle"];
         for (var i in changeContentArray) {
             var element = changeContentArray[i];
             if (document.getElementById(element)) {
-                document.getElementById(element).textContent = resourceMap.getValue(element, context).valueAsString;
+                if (element == "addFav" || element == "delFav")
+                    document.getElementById(element).winControl._labelSpan.innerText = resourceMap.getValue(element, context).valueAsString;
+                else
+                    document.getElementById(element).textContent = resourceMap.getValue(element, context).valueAsString;
             }
         }
+    }
+    function updateLanguage() {
+        initLanguage();
 
+        //load new language data to db
+        var dbRequest = window.indexedDB.open("ArticleDB", 1);
+        dbRequest.onsuccess = function (evt) {
+            //clear objectstores of article and subject
+            Data.db = evt.target.result;
+
+            var txn = Data.db.transaction(["articles"], "readwrite");
+            var store = txn.objectStore("articles");
+            store.clear();
+
+            txn = Data.db.transaction(["subjects"], "readwrite");
+            store = txn.objectStore("subjects");
+            store.clear();
+
+            loadData(evt);
+        };
     }
 
     var groupedItems = list.createGrouped(
                     function groupKeySelector(item) { return item.group.key; },
                     function groupDataSelector(item) { return item.group; }
                 );
+
+    var favlist = new WinJS.Binding.List();
+
+    function favlistLoad() {
+        var length = Data.favlist.length;
+        for (var i = 0; i < length; i++) {
+            Data.favlist.pop();
+        }
+
+        var txn = Data.db.transaction(["likes"], "readonly");
+        var statusStore = txn.objectStore("likes");
+        var request = statusStore.openCursor();
+        request.onsuccess = function (e) {
+            var like = e.target.result;
+            if (like) {
+                var txn = Data.db.transaction(["articles"], "readonly");
+                var store = txn.objectStore("articles");
+                var request = store.get(parseInt(like.value["articleid"]));
+                var likeid = like.value.id;
+                request.onsuccess = function (e) {
+                    var article = e.target.result;
+                    if (article) {
+                        Data.favlist.push(article);
+                    }
+                }
+                like.continue();
+            }
+        };
+    }
 
     var db, articleid, favAddMsg, language = null;
 
@@ -319,17 +343,21 @@
         groups: groupedItems.groups,
         createDB: createDB,
         showData: showData,
+
+        initLanguage: initLanguage,
         updateLanguage: updateLanguage,
 
         regionChange: loadArray,
 
         db: db,
         articleid: articleid,
-        currentRegion: "0",
         favAddMsg: favAddMsg,
         language: language,
 
-        myGroupedList: myGroupedList
+        myGroupedList: myGroupedList,
+
+        favlistLoad: favlistLoad,
+        favlist: favlist
     });
 
 })();

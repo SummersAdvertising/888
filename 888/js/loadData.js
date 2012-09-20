@@ -123,7 +123,7 @@
                         txn.oncomplete = function () {
                             //update data in page
                             if (!isdone) {
-                                loadArray("0");
+                                loadArray(Data.currentRegion);
 
                                 switch (WinJS.Navigation.location) {
                                     case "/pages/article/article.html":
@@ -145,19 +145,23 @@
     }
     function loadArray(region) {
         articleArray = new Array();
-
+        
         var txn = Data.db.transaction(["articles"], "readonly");
         var store = txn.objectStore("articles");
         var request = store.openCursor();
         request.onsuccess = function (e) {
             var article = e.target.result;
             if (article) {
-                if (article.value["region"] == region)
+                if (article.value["region"] == region) {
                     articleArray.push(article.value);
+                    
+                }
                 article.continue();
             }
             else
                 listAdd();
+
+            updateView();
         };
     }
 
@@ -321,6 +325,7 @@
 
         db: db,
         articleid: articleid,
+        currentRegion: "0",
         favAddMsg: favAddMsg,
         language: language,
 

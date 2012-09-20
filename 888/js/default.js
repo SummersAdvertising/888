@@ -19,6 +19,7 @@
                     WinJS.UI.SettingsFlyout.populateSettings(e);
                 };
 
+
             } else {
                 // TODO: 這個應用程式已經從擱置重新啟用。
                 // 請在這裡還原應用程式狀態。
@@ -48,5 +49,7 @@
     };
 
     app.start();
+
+
 
 })();

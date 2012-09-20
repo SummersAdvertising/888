@@ -6,7 +6,7 @@
       <date>year/month/day</date>
       <content><![CDATA[content]]></content>
       <subjectid>1</subjectid>
-      <city>1</city>
+      <region>1</region>
       <address>address</address>
     </article>
     <article>
@@ -14,7 +14,7 @@
       <date>year/month/day</date>
       <content><![CDATA[content]]></content>
       <subjectid>4</subjectid>
-      <city>6</city>
+      <region>0</region>
       <address>address</address>
     </article>
     <article>
@@ -22,7 +22,7 @@
       <date>year/month/day</date>
       <content><![CDATA[content]]></content>
       <subjectid>2</subjectid>
-      <city>11</city>
+      <region>0</region>
       <address>address</address>
     </article>
     <article>
@@ -30,7 +30,7 @@
       <date>year/month/day</date>
       <content><![CDATA[content]]></content>
       <subjectid>1</subjectid>
-      <city>1</city>
+      <region>1</region>
       <address>address</address>
     </article>
     <article>
@@ -38,7 +38,7 @@
       <date>year/month/day</date>
       <content><![CDATA[content]]></content>
       <subjectid>6</subjectid>
-      <city>5</city>
+      <region>5</region>
       <address>address</address>
     </article>
     <article>
@@ -46,8 +46,8 @@
       <date>year/month/day</date>
       <content><![CDATA[content]]></content>
       <subjectid>2</subjectid>
-      <address>address</address>
-      <city>5</city>
+      <region>5</region>
+      <address>address</address>      
     </article>
   </articles>
   <subjects>

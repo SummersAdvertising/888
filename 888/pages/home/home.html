@@ -11,13 +11,21 @@
     <script src="//Microsoft.WinJS.1.0/js/ui.js"></script>
     <script src="/js/jquery-1.7.2.min.js"></script>
     <script src="/js/default.js"></script>
-    <script src="/js/loadData.js"></script>
 
     <link href="/css/default.css" rel="stylesheet" />
     <link href="/pages/home/home.css" rel="stylesheet" />
     <script src="/pages/home/home.js"></script>
 </head>
 <body>
+    <!-- nav bar -->
+    <div id="customLayoutAppBar" data-win-control="WinJS.UI.AppBar" aria-label="Navigation Bar"
+        data-win-options="{layout:'custom',placement:'top'}">
+        <header aria-label="Navigation bar" role="banner">
+            <!--nav bar: 首頁/我的最愛 靠左-->
+            <h3 class="win-type-xx-large" tabindex="0" style="background-color: aquamarine;"><span onclick="WinJS.Navigation.back(WinJS.Navigation.history.backStack.length); document.getElementById('customLayoutAppBar').winControl.hide();">top</span> | <span id="navtoFav">fav</span></h3>
+        </header>
+    </div>
+
     <div class="fragment homepage">
         <header aria-label="Header content" role="banner">
             <button class="win-backbutton" aria-label="Back" disabled type="button"></button>
@@ -27,21 +35,27 @@
         </header>
         <section aria-label="Main content" role="main">
             <p id="favAddMsg"></p>
-            <ul id="subject"></ul>
-            <ul>
-                <li id="fav"><span id="homeFavlist" data-win-res="{textContent: 'homeFavlist'}"></span></li>
-            </ul>
-            <div id="output"></div>
-
+            <p>region:  <span id="region0" class="region_c region">Top</span> / <span id="region1" class="region">North</span> / <span id="region2" class="region">West</span> / <span id="region3" class="region">South</span> / <span id="region4" class="region">East</span> / <span id="region5" class="region">Islands</span></p>
+            <div class="headertemplate" id="headertemplate" data-win-control="WinJS.Binding.Template">
+                <div class="item-overlay">
+                    <h4 class="item-title" data-win-bind="textContent: title"></h4>
+                </div>
+            </div>
+            <div class="itemtemplate" id="itemtemplate" data-win-control="WinJS.Binding.Template">
+                <div class="item-overlay">
+                    <h4 class="item-title" data-win-bind="textContent: title"></h4>
+                    <h6 class="item-subtitle win-type-ellipsis" data-win-bind="textContent: date"></h6>
+                </div>
+            </div>
             <div id="listView"
                 data-win-control="WinJS.UI.ListView"
                 data-win-options="{ 
                     itemDataSource: Data.myGroupedList.dataSource, 
-                    itemTemplate: MyJSItemTemplate, 
+                    itemTemplate: select('#itemtemplate'), 
                     groupDataSource: Data.myGroupedList.groups.dataSource,
-                    groupHeaderTemplate: headerTemplate, 
+                    groupHeaderTemplate: select('#headertemplate'), 
                     selectionMode: 'none', 
-                    tapBehavior: 'none', 
+                    tapBehavior: 'invokeOnly', 
                     swipeBehavior: 'none',
                     oniteminvoked :itemInvokedHandler
                 }">

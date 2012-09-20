@@ -5,6 +5,7 @@
     "_greeting.comment"      : "zh",
     "homeFavadded"           : "added!(zh)",
     "homeFavlist"            : "Favlist(zh)",
-    "articleFavlist"         : "add to Favlist(zh)",
+    "addFav"         : "add to Favlist(zh)",
+    "delFav"         : "del from Favlist(zh)",
     "favTitle"               : "favorite(zh)"
 }

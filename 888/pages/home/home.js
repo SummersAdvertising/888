@@ -6,7 +6,7 @@
             // TODO: 在此初始化頁面。
             WinJS.Binding.processAll(element, this._data);
 
-            Data.updateLanguage();
+            Data.initLanguage();
             Data.createDB();
 
             isAddMsg();
@@ -42,35 +42,9 @@
         }
     }
 
-
-    Data.favlist = new WinJS.Binding.List();
-
     function navigatetoFav() {
-        var txn = Data.db.transaction(["likes"], "readonly");
-        var statusStore = txn.objectStore("likes");
-        var request = statusStore.openCursor();
-        request.onsuccess = function (e) {
-            var like = e.target.result;
-            if (like) {
-                var txn = Data.db.transaction(["articles"], "readonly");
-                var store = txn.objectStore("articles");
-                var request = store.get(parseInt(like.value["articleid"]));
-                var likeid = like.value.id;
-                request.onsuccess = function (e) {
-                    var article = e.target.result;
-                    if (article) {
-                        Data.favlist.push(article);
-                    }
-                }
-                like.continue();
-            }
-            else {
-                WinJS.Navigation.navigate('/pages/favorite/favorite.html');
-                document.getElementById('customLayoutAppBar').winControl.hide();
-            }
-        };
-
-
+        document.getElementById('customLayoutAppBar').winControl.hide();
+        WinJS.Navigation.navigate('/pages/favorite/favorite.html');
     }
 
 

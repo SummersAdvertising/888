@@ -8,10 +8,14 @@
         // 會將應用程式的資料填入頁面項目。
         ready: function (element, options) {
             // TODO: 在此初始化頁面。
-            Data.updateLanguage();
-            //Data.showData("favorite");
+            Data.initLanguage();
+
             var listView = element.querySelector("#listView").winControl;
             listView.addEventListener("iteminvoked", itemInvokedHandler);
+
+            checkFav();
+
+            Data.favlistLoad();
         }
     });
 
@@ -21,6 +25,19 @@
             Data.articleid = invokedItem.data.id;
             WinJS.Navigation.navigate("/pages/article/article.html");
         });
+    }
+
+    function checkFav() {
+        var txn = Data.db.transaction(["likes"], "readwrite");
+        var statusStore = txn.objectStore("likes");
+        var request = statusStore.openCursor();
+        request.onsuccess = function (e) {
+            var like = e.target.result;
+            if (like)
+                $("#noEntries").remove();
+        };
+
+
     }
 
 })();

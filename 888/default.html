@@ -19,15 +19,6 @@
     <script src="/js/loadData.js"></script>
 </head>
 <body>
-    <!-- BEGINTEMPLATE: Template code for AppBar -->
-    <div id="customLayoutAppBar" data-win-control="WinJS.UI.AppBar" aria-label="Navigation Bar"
-        data-win-options="{layout:'custom',placement:'top'}">
-        <header aria-label="Navigation bar" role="banner">
-            <!--nav bar: 首頁/我的最愛 靠左-->
-            <h3 class="win-type-xx-large" tabindex="0" style="background-color: aquamarine;"><span onclick="console.log(WinJS.Navigation.history);WinJS.Navigation.back(WinJS.Navigation.history.backStack.length); document.getElementById('customLayoutAppBar').winControl.hide();">top</span> | <span id="navtoFav" onclick="WinJS.Navigation.navigate('/pages/favorite/favorite.html'); document.getElementById('customLayoutAppBar').winControl.hide();">fav</span></h3>
-        </header>
-    </div>
-    <!-- ENDTEMPLATE -->
     <div id="contenthost" data-win-control="Application.PageControlNavigator" data-win-options="{home: '/pages/home/home.html'}"></div>
 </body>
 </html>

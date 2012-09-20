@@ -1,57 +1,4 @@
-﻿var MyJSItemTemplate = WinJS.Utilities.markSupportedForProcessing(function MyJSItemTemplate(itemPromise) {
-    return itemPromise.then(function (currentItem) {
-
-        // Build ListView Item Container div
-        var result = document.createElement("div");
-        result.className = "regularListIconTextItem";
-        result.style.overflow = "hidden";
-
-        // Build content body
-        var body = document.createElement("div");
-        body.className = "regularListIconTextItem-Detail";
-        //body.style.overflow = "hidden";
-
-        // Display title
-        var title = document.createElement("h4");
-        title.innerText = currentItem.data.title;
-        body.appendChild(title);
-
-        // Display text
-        var fulltext = document.createElement("h6");
-        fulltext.innerText = currentItem.data.date;
-        body.appendChild(fulltext);
-
-        //put the body into the ListView Item
-        result.appendChild(body);
-        return result;
-    });
-});
-var headerTemplate = WinJS.Utilities.markSupportedForProcessing(function MyJSItemTemplate(itemPromise) {
-    return itemPromise.then(function (currentItem) {
-
-        // Build ListView Item Container div
-        var result = document.createElement("div");
-        result.className = "regularListIconTextItem";
-        result.style.overflow = "hidden";
-
-        // Build content body
-        var body = document.createElement("div");
-        body.className = "regularListIconTextItem-Detail";
-        body.style.overflow = "hidden";
-
-        // Display title
-        var title = document.createElement("h4");
-        title.innerText = currentItem.data.title;
-        body.appendChild(title);
-
-        //put the body into the ListView Item
-        result.appendChild(body);
-
-        return result;
-    });
-});
-
-(function () {
+﻿(function () {
     "use strict";
 
     WinJS.UI.Pages.define("/pages/home/home.html", {
@@ -63,57 +10,29 @@ var headerTemplate = WinJS.Utilities.markSupportedForProcessing(function MyJSIte
             Data.createDB();
 
             isAddMsg();
-            $("#fav").click(function () {
-                WinJS.Navigation.navigate("/pages/favorite/favorite.html");
-            });
 
             var listView = element.querySelector("#listView").winControl;
             listView.addEventListener("iteminvoked", itemInvokedHandler);
 
+            $(".region").bind("click", function () {
+                var region = this.id.slice(6, this.id.length);
 
+                $(this).siblings().removeClass("region_c");
+                $(this).addClass("region_c");
+
+                Data.regionChange(region);
+            });
+
+            $("#navtoFav").bind("click", function () { navigatetoFav(); });
         }
     });
 
-    function selectData(subject) {
-        $("#output").html("subject: " + subject);
-        $("#output").append("<p id='noEntry'>no articles in subject " + subject + "</p>");
-
-        if (subject == 0)
-            Data.showData("articles");
-        else {
-            var txn = Data.db.transaction(["articles"], "readonly");
-            var cursorRequest = txn.objectStore("articles").openCursor();
-            cursorRequest.onsuccess = function (e) {
-                var cursor = e.target.result;
-                if (cursor) {
-                    if (cursor.value["subjectid"] == subject) {
-                        var str = "";
-                        for (var i in cursor.value) {
-                            if (i != "content")
-                                str += i.toString() + ": " + cursor.value[i] + " / ";
-                        }
-                        $("#noEntry").remove();
-                        $("#output").append("<p>" + str + "<a class='article' id='article" + cursor.value["id"] + "' href='/pages/article/article.html'>show</a></p>");
-
-                        $(".article").unbind();
-                        $(".article").bind("click", function () { showArticle(this); return false; });
-                    }
-                    cursor.continue();
-                }
-            }
-        }
-    }
-
     //navigate to article page
-    function showArticle(article) {
-        Data.articleid = article.id.slice(7, article.id.length);
-        WinJS.Navigation.navigate(article.href);
-    }
-
     function itemInvokedHandler(eventObject) {
         
         eventObject.detail.itemPromise.done(function (invokedItem) {
-            var itemData = invokedItem.data;
+            Data.articleid = invokedItem.data.id;
+            WinJS.Navigation.navigate("/pages/article/article.html");
         });
     }
 
@@ -124,8 +43,36 @@ var headerTemplate = WinJS.Utilities.markSupportedForProcessing(function MyJSIte
         }
     }
 
-    WinJS.Namespace.define("Home", {
-        selectData: selectData,
-        showArticle: showArticle
-    });
+
+    Data.favlist = new WinJS.Binding.List();
+
+    function navigatetoFav() {
+        var txn = Data.db.transaction(["likes"], "readonly");
+        var statusStore = txn.objectStore("likes");
+        var request = statusStore.openCursor();
+        request.onsuccess = function (e) {
+            var like = e.target.result;
+            if (like) {
+                var txn = Data.db.transaction(["articles"], "readonly");
+                var store = txn.objectStore("articles");
+                var request = store.get(parseInt(like.value["articleid"]));
+                var likeid = like.value.id;
+                request.onsuccess = function (e) {
+                    var article = e.target.result;
+                    if (article) {
+                        Data.favlist.push(article);
+                    }
+                }
+                like.continue();
+            }
+            else {
+                WinJS.Navigation.navigate('/pages/favorite/favorite.html');
+                document.getElementById('customLayoutAppBar').winControl.hide();
+            }
+        };
+
+
+    }
+
+
 })();

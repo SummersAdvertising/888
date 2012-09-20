@@ -12,7 +12,6 @@
 
     <link href="favorite.css" rel="stylesheet" />
     <script src="favorite.js"></script>
-    <script src="/js/loadData.js"></script>
 </head>
 <body>
     <div class="favorite fragment">
@@ -22,8 +21,27 @@
                 <span id='favTitle' data-win-res='{textContent: "favTitle"}'></span>
             </h1>
         </header>
+        <div class="itemtemplate" id="itemtemplate" data-win-control="WinJS.Binding.Template">
+            <div class="item-overlay">
+                <h4 class="item-title" data-win-bind="textContent: title"></h4>
+                <h6 class="item-subtitle" data-win-bind="textContent: date"></h6>
+            </div>
+        </div>
         <section aria-label="Main content" role="main">
-            <div id="favList"></div>
+            <div id="favList">
+                <p id='noEntries'>no entries in the list</p>
+            </div>
+
+            <div id="listView"
+                data-win-control="WinJS.UI.ListView"
+                data-win-options="{ 
+                    itemDataSource: Data.favlist.dataSource, 
+                    itemTemplate: select('#itemtemplate'),
+                    selectionMode: 'none', 
+                    tapBehavior: 'invokeOnly', 
+                    swipeBehavior: 'none'
+                }">
+            </div>
         </section>
     </div>
 </body>

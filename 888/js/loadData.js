@@ -195,10 +195,10 @@
                 list.push(article.value);
                 article.continue();
             }
-            else
+            else {
                 listAdd();
+            }
 
-            updateView();
         };
     }
 
@@ -213,6 +213,9 @@
         articleArray.forEach(function (item) {
             articlelist.push(item);
         });
+
+
+        updateView();
     }
 
     //data for listview
@@ -376,8 +379,6 @@
                     }
                 }
                 like.continue();
-
-                updateView();
             }
         };
     }

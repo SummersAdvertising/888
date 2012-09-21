@@ -86,7 +86,7 @@ function updateView() {
 
             if (WinJS.Navigation.location == '/pages/article/article.html') {
                 Data.regionChange(Data.currentRegion);
-                WinJS.Navigation.navigate('/pages/home/home.html');
+                WinJS.Navigation.back();
                 return;
             }
 
@@ -106,6 +106,12 @@ function updateView() {
             }
 
             for (var i in items) {
+
+                if (this.last_id == items[i].data.id)
+                    continue;
+
+                this.last_id = items[i].data.id;
+
                 var itemBox = $('#snapItemTemplate').clone();
                 itemContent = itemBox.children('.articleArea');
                 itemContent.children('h4').children('.itemTitle').html(items[i].data.title);
@@ -117,6 +123,7 @@ function updateView() {
 
                     Windows.UI.ViewManagement.ApplicationView.tryUnsnap();
                 });
+
 
                 groups[items[i].groupKey]['container'].children('.itemsContainer').prepend(itemBox);
             }

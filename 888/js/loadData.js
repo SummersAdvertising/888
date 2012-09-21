@@ -15,7 +15,7 @@
             createDB();
         }
         else {
-            loadArray("0");
+            loadArray(Data.currentRegion);
         }
     }
     function dbVersionUpgrade(evt) {
@@ -98,7 +98,7 @@
                         txn.oncomplete = function () {
                             //update data in page
                             if (!isdone) {
-                                loadArray("0");
+                                loadArray(Data.currentRegion);
 
                                 switch (WinJS.Navigation.location) {
                                     case "/pages/article/article.html":
@@ -124,6 +124,10 @@
             list.pop();
         }
 
+        if (region == 'f') {
+            favlistLoad();
+        }
+
         var txn = Data.db.transaction(["articles"], "readonly");
         var store = txn.objectStore("articles");
         var request = store.openCursor();
@@ -137,6 +141,8 @@
             }
             else
                 listAdd();
+
+            updateView();
         };
     }
 
@@ -155,6 +161,7 @@
 
     //data for listview
     var myGroupedList = articlelist.createGrouped(getGroupKey, getGroupData, compareGroups);
+    var favlist = new WinJS.Binding.List();
 
     // Function used to sort the groups by first letter
     function compareGroups(left, right) {
@@ -206,48 +213,7 @@
                     }
                 }
 
-                break;
-            case "favorite":
-                $("#favList").html("<p id='noEntries'>no entries in the list</p>");
-
-                var txn = Data.db.transaction(["likes"], "readonly");
-                var statusStore = txn.objectStore("likes");
-                var request = statusStore.openCursor();
-                request.onsuccess = function (e) {
-                    var like = e.target.result;
-                    if (like) {
-                        var txn = Data.db.transaction(["articles"], "readonly");
-                        var store = txn.objectStore("articles");
-                        var request = store.get(parseInt(like.value["articleid"]));
-                        var likeid = like.value.id;
-                        request.onsuccess = function (e) {
-                            var article = e.target.result;
-                            if (article) {
-                                $("#favList").append("<p>" + article["title"] + " | <a class='article' id='article" + article["id"] + "' href='/pages/article/article.html'>show</a> | <a class='delete' id='delete" + likeid + "' href='#'>delete</a></p>");
-                                $(".article").unbind();
-                                $(".article").bind("click", function () {
-                                    Data.articleid = parseInt(this.id.slice(7, this.id.length));
-                                    WinJS.Navigation.navigate("/pages/article/article.html");
-                                });
-
-                                $(".delete").unbind();
-                                $(".delete").bind("click", function () {
-                                    var record = this.id.slice(6, this.id.length);
-
-                                    var txn = Data.db.transaction(["likes"], "readwrite");
-                                    var statusStore = txn.objectStore("likes");
-                                    statusStore.delete(parseInt(record));
-
-                                    showData("favorite");
-                                });
-
-                                $("#noEntries").remove();
-                            }
-                        }
-                        like.continue();
-                    }
-                };
-                break;
+                break;            
         }
     }
 
@@ -307,7 +273,6 @@
                     function groupDataSelector(item) { return item.group; }
                 );
 
-    var favlist = new WinJS.Binding.List();
 
     function favlistLoad() {
         var length = Data.favlist.length;
@@ -325,19 +290,26 @@
                 var store = txn.objectStore("articles");
                 var request = store.get(parseInt(like.value["articleid"]));
                 var likeid = like.value.id;
+                articleArray = [];
+
                 request.onsuccess = function (e) {
                     var article = e.target.result;
                     if (article) {
                         Data.favlist.push(article);
+                        articleArray.push(article);
+                    } else {
+                        listAdd();
                     }
                 }
                 like.continue();
+
+                updateView();
             }
         };
     }
 
     var db, articleid, favAddMsg, language = null;
-
+    
     WinJS.Namespace.define("Data", {
         items: groupedItems,
         groups: groupedItems.groups,
@@ -352,6 +324,7 @@
         db: db,
         articleid: articleid,
         favAddMsg: favAddMsg,
+        currentRegion: "0",
         language: language,
 
         myGroupedList: myGroupedList,

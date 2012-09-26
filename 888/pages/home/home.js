@@ -260,7 +260,7 @@ function updateView() {
             $('.snap-list-title').hide();
             $('#snapped-favinfo').hide();
             switch (Data.currentRegion) {
-                case "6":
+                case "b":
                     $('#snap-best-title').show();
                     break;
                 case "f":
@@ -285,7 +285,11 @@ function updateView() {
 
             if (this.lastState != undefined && this.lastState == viewStates.snapped) {
                 this.lastState = myViewState;
-                WinJS.Navigation.navigate('/pages/home/home.html');
+                setTimeout(function () {
+                    if (WinJS.Navigation.location == '/pages/home/home.html') {
+                        WinJS.Navigation.navigate('/pages/home/home.html');
+                    }
+                }, 300);
             }
 
             if (Data.db != undefined) {

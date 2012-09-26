@@ -20,6 +20,7 @@
                         "about": { title: "關於 青春食玩誌", href: "/pages/about/about.html" }
                     };
                     WinJS.UI.SettingsFlyout.populateSettings(e);
+
                 };
             } else {
                 // TODO: 這個應用程式已經從擱置重新啟用。
@@ -54,3 +55,5 @@
 
 
 })();
+
+var animated = false;

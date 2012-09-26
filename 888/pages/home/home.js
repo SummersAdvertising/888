@@ -2,6 +2,7 @@
     "use strict";
 
     var listView;
+    //var data_load_flag = false;
 
     WinJS.UI.Pages.define("/pages/home/home.html", {
         ready: function (element, options) {
@@ -17,12 +18,14 @@
             listView = element.querySelector("#listView").winControl;
             listView.addEventListener("iteminvoked", itemInvokedHandler);
 
+            $(".region").unbind("click");
             $(".region").bind("click", function () {
                 regionChange(this.id);
                 updateView();
             });
 
             $("#navtoFav").bind("click", function () { navigatetoFav(); });
+            $('.go-full').click(function () { Windows.UI.ViewManagement.ApplicationView.tryUnsnap(); });
 
             $('.region-option').click(function () {
                 $('.region-selected').removeClass('region-selected');
@@ -31,6 +34,19 @@
 
             window.addEventListener("resize", onResize);
             updateView();
+
+            
+            if (!animated) {
+                // 頁首動畫
+                $('#mainImg').css('height', $(window).height());
+                setTimeout(function () {
+                    animated = true;
+                    $('.main-all').animate({ left: 0 }, 2000);
+                }, 1000);
+            } else {
+                $('#mainImg').hide();
+                $('.main-all').css('left', 0 );
+            }
         }
     });
 
@@ -144,7 +160,6 @@ function snapRegionList() {
 
 function snapFavList() {
 
-
     var txn = Data.db.transaction(["likes"], "readonly");
     var statusStore = txn.objectStore("likes");
     var request = statusStore.openCursor();
@@ -160,6 +175,14 @@ function snapFavList() {
 
         buildUpGroupContainer(groupKey);
 
+    }
+
+    // 檢查是否為空
+    $('#snapped-favinfo').hide();
+    statusStore.count().onsuccess = function (e) {
+        if (e.target.result == 0) {
+            $('#snapped-favinfo').show();
+        }
     }
 
     request.onsuccess = function (e) {
@@ -208,9 +231,23 @@ function updateView() {
     switch (myViewState) {
         case viewStates.snapped:            
 
-            if (WinJS.Navigation.location == '/pages/article/article.html') {
+            if (WinJS.Navigation.location == '/pages/article/article.html' || WinJS.Navigation.location == '/pages/search/searchResults.html') {
                 WinJS.Navigation.back();
                 return;
+            }
+
+            // 個別處理的標籤
+            $('.snap-list-title').hide();
+            $('#snapped-favinfo').hide();
+            switch (Data.currentRegion) {
+                case "6":
+                    $('#snap-best-title').show();
+                    break;
+                case "f":
+                    $('#snap-fav-title').show();
+                    break;
+                default:
+                    break;
             }
 
             if (Data.currentRegion != 'f') {

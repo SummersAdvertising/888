@@ -201,7 +201,10 @@ function loadData(evt) {
 
 //data for listview
 var myGroupedList = articlelist.createGrouped(getGroupKey, getGroupData, compareGroups);
+
 var favlist = new WinJS.Binding.List();
+var groupedFavList = favlist.createGrouped(getGroupKey, getGroupData, compareGroups);
+
 
 // Function used to sort the groups by first letter
 function compareGroups(left, right) {
@@ -332,7 +335,7 @@ var groupedItems = list.createGrouped(
             );
 
 
-function favlistLoad() {
+function favlistLoad(region) {
     var length = Data.favlist.length;
     for (var i = 0; i < length; i++) {
         Data.favlist.pop();
@@ -352,11 +355,16 @@ function favlistLoad() {
 
             request.onsuccess = function (e) {
                 var article = e.target.result;
+
                 if (article) {
-                    Data.favlist.push(article);
-                    articleArray.push(article);
-                } else {
-                    listAdd();
+                    if (region == "0") {
+                        Data.favlist.push(article);
+                    }
+                    else {
+                        if(article.region==region)
+                            Data.favlist.push(article);
+                    }
+                    
                 }
             }
             like.continue();
@@ -466,5 +474,6 @@ WinJS.Namespace.define("Data", {
     myGroupedList: myGroupedList,
 
     favlistLoad: favlistLoad,
+    groupedFavList: groupedFavList,
     favlist: favlist
 });

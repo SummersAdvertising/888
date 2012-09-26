@@ -6,7 +6,7 @@
     <homeIndex>Home</homeIndex>
     <addFav>add to Favlist(en)</addFav>
     <delFav>del from Favlist(en)</delFav>
-    <favTitle>favorite(en)</favTitle>
+    <favTitle>我的最愛(en)</favTitle>
     <navHome>Top</navHome>
     <navFav>Love</navFav>
   </en-US>
@@ -16,7 +16,7 @@
     <homeIndex>Home(ja)</homeIndex>
     <addFav>add to Favlist(ja)</addFav>
     <delFav>del from Favlist(ja)</delFav>
-    <favTitle>favorite(ja)</favTitle>
+    <favTitle>我的最愛(ja)</favTitle>
     <navHome>日文的首頁</navHome>
     <navFav>日文的我的最愛</navFav>
   </ja>
@@ -26,7 +26,7 @@
     <homeIndex>首頁</homeIndex>
     <addFav>add to Favlist(zh)</addFav>
     <delFav>del from Favlist(zh)</delFav>
-    <favTitle>favorite(zh)</favTitle>
+    <favTitle>我的最愛</favTitle>
     <navHome>首頁</navHome>
     <navFav>我的最愛</navFav>
   </zh-Hant-TW>

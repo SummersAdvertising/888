@@ -15,11 +15,8 @@
             Data.changeRegionLan();
             Data.updateUI(Data.regionChange);
 
-            Data.rebuildHomeView = function () {
-                var listView = element.querySelector("#listView").winControl;
-                listView.addEventListener("iteminvoked", itemInvokedHandler);
-                Data.homeList = listView;
-            }
+            var listView = element.querySelector("#listView").winControl;
+            listView.addEventListener("iteminvoked", itemInvokedHandler);
 
 
             // 地區控制
@@ -275,8 +272,6 @@ function updateView() {
                 this.lastState = myViewState;
                 WinJS.Navigation.navigate('/pages/home/home.html');
             }
-
-            Data.rebuildHomeView();
 
             if (Data.db != undefined) {
                 Data.regionChange();

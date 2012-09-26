@@ -14,7 +14,7 @@ function dbSuccess(evt) {
         createDB();
     }
     else {
-        loadArray(Data.currentRegion);
+        updateView();
         loadListforSearch();
     }
 }
@@ -335,11 +335,7 @@ var groupedItems = list.createGrouped(
             );
 
 
-function favlistLoad(region) {
-    var length = Data.favlist.length;
-    for (var i = 0; i < length; i++) {
-        Data.favlist.pop();
-    }
+function favlistLoad() {
 
     var txn = Data.db.transaction(["likes"], "readonly");
     var statusStore = txn.objectStore("likes");
@@ -354,26 +350,14 @@ function favlistLoad(region) {
             articleArray = [];
 
             request.onsuccess = function (e) {
-                var article = e.target.result;
-
-                if (article) {
-                    if (region == "0") {
-                        Data.favlist.push(article);
-                    }
-                    else {
-                        if(article.region==region)
-                            Data.favlist.push(article);
-                    }
-                    
-                }
+                    var article = e.target.result;                
+                    articlelist.push(article);   
             }
             like.continue();
-
-            updateView();
         }
-    };
-
+    }
 }
+
 var resourceArray = new Array();
 
 function changeRegionLan() {
@@ -410,6 +394,7 @@ function loadArray(region) {
 
     if (region == 'f') {
         favlistLoad();
+        return;
     }
 
     var txn = Data.db.transaction(["articles"], "readonly");

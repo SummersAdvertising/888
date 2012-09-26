@@ -15,8 +15,12 @@
             Data.changeRegionLan();
             Data.updateUI(Data.regionChange);
 
-             var listView = element.querySelector("#listView").winControl;
-            listView.addEventListener("iteminvoked", itemInvokedHandler);
+            Data.rebuildHomeView = function () {
+                var listView = element.querySelector("#listView").winControl;
+                listView.addEventListener("iteminvoked", itemInvokedHandler);
+                Data.homeList = listView;
+            }
+
 
             // 地區控制
             $(".region").unbind("click");
@@ -229,8 +233,8 @@ function snapFavList() {
 function updateView() {
     var myViewState = Windows.UI.ViewManagement.ApplicationView.value;
     var viewStates = Windows.UI.ViewManagement.ApplicationViewState;
-    var statusText;
     $('#listViewSnap').children().remove();
+
     
     switch (myViewState) {
         case viewStates.snapped:            
@@ -267,10 +271,19 @@ function updateView() {
             break;
         default:
 
+            if (this.lastState != undefined && this.lastState == viewStates.snapped) {
+                this.lastState = myViewState;
+                WinJS.Navigation.navigate('/pages/home/home.html');
+            }
+
+            Data.rebuildHomeView();
+
             if (Data.db != undefined) {
                 Data.regionChange();
             }
 
             break;
     }
+
+    this.lastState = myViewState;
 }

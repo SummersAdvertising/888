@@ -14,7 +14,8 @@
       <date>year/month/day</date>
       <content><![CDATA[content]]></content>
       <subjectid>4</subjectid>
-      <region>6</region>
+      <region>4</region>
+      <selected>1</selected>
       <address>address</address>
     </article>
     <article>
@@ -22,7 +23,8 @@
       <date>year/month/day</date>
       <content><![CDATA[content]]></content>
       <subjectid>2</subjectid>
-      <region>6</region>
+      <region>4</region>
+      <selected>1</selected>
       <address>address</address>
     </article>
     <article>

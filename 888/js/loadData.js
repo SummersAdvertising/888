@@ -410,7 +410,7 @@ function loadArray(region) {
     request.onsuccess = function (e) {
         var article = e.target.result;
         if (article) {
-            if (article.value["region"] == region) {
+            if (article.value["region"] == region || (region == "b" && article.value["selected"])) {
                 var addtolist = true;
                 for (var item in articleArray) {
                     if (article.value.id == articleArray[item]) {
@@ -460,7 +460,7 @@ WinJS.Namespace.define("Data", {
     db: db,
     articleid: articleid,
     favAddMsg: favAddMsg,
-    currentRegion: "6",
+    currentRegion: "b",
     language: language,
 
     myGroupedList: myGroupedList,

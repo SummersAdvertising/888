@@ -127,7 +127,7 @@ function snapRegionList() {
         if (e.target.result) {
             var article = e.target.result.value;
 
-            if (Data.currentRegion == article.region) {
+            if (article.region == Data.currentRegion || (Data.currentRegion == "b" && article.selected)) {
                 var itemBox = $('#snapItemTemplate').clone();
                 itemContent = itemBox.children('.articleArea');
                 itemContent.children('h4').children('.itemTitle').html(article.title);

@@ -24,9 +24,9 @@
     <div class="main-all">
         
         <!-- nav bar -->
-        <div class="main-navigation" id="customLayoutAppBar" data-win-control="WinJS.UI.AppBar" data-win-options="{layout:'custom',placement:'top'}">
+        <div class="main-navigation" id="homeNavBar" data-win-control="WinJS.UI.AppBar" data-win-options="{layout:'custom',placement:'top'}">
             <!--nav bar: 首頁/我的最愛 靠左-->
-            <div id="region6" class="main-Narea region" onclick="WinJS.Navigation.back(WinJS.Navigation.history.backStack.length); document.getElementById('customLayoutAppBar').winControl.hide();">
+            <div id="region6" class="main-Narea region" onclick="WinJS.Navigation.back(WinJS.Navigation.history.backStack.length); document.getElementById('homeNavBar').winControl.hide();">
                 <a href="#" id="bestlink">
                     <div class="main-Nhome">
                         <div class="main-Nword" id="navHome" data-win-res="{textContent:'navHome'}">首頁</div>
@@ -56,7 +56,7 @@
 
             <!-- map -->
             <div class="main-map" _height="auto">
-                <img src="../../images/main-map.png" width="440" height="600" usemap="#Map" border="0" id="Img1" />
+                <img src="../../images/map-6.png" width="440" height="600" usemap="#Map" border="0" id="taiwanMap" />
                 <map name="Map" id="Map1">
                     <!--North-->
                     <area class="region" shape="poly" coords="225,113,283,171,378,197,395,182,395,162,407,151,411,133,403,125,403,115,400,106,404,90,415,79,421,71,436,67,432,63,423,63,418,53,415,47,400,46,376,37,362,21,343,19,328,34,309,44,300,39,308,31,297,23,285,26,267,46,269,57,253,67,236,94,225,113" href="#" id="region1" />
@@ -152,7 +152,10 @@
                     oniteminvoked :itemInvokedHandler
                 }">
                 </div>
-
+                
+                <div id="homeAppBar" data-win-control="WinJS.UI.AppBar">
+                    <button onclick="toFullscreen();" data-win-control="WinJS.UI.AppBarCommand" data-win-options="{id:'backToIndex',label:'homeIndex',icon:'home'}"></button>
+                </div>
             </div>
         </div>
     </div>

@@ -58,3 +58,6 @@
 })();
 
 var animated = false;
+function toFullscreen() {
+    Windows.UI.ViewManagement.ApplicationView.tryUnsnap();
+}

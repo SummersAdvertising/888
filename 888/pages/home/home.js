@@ -18,12 +18,14 @@
              var listView = element.querySelector("#listView").winControl;
             listView.addEventListener("iteminvoked", itemInvokedHandler);
 
+            // 地區控制
             $(".region").unbind("click");
             $(".region").bind("click", function () {
                 regionChange(this.id);
                 updateView();
             });
 
+            // FAV LINK
             $("#navtoFav").bind("click", function () { navigatetoFav(); });
             $('.go-full').click(function () { Windows.UI.ViewManagement.ApplicationView.tryUnsnap(); });
 
@@ -65,13 +67,14 @@
     }
 
     function navigatetoFav() {
-        document.getElementById('customLayoutAppBar').winControl.hide();
+        document.getElementById('homeNavBar').winControl.hide();
         WinJS.Navigation.navigate('/pages/favorite/favorite.html');
     }
 
     function regionChange(id) {
         var region = id.slice(6, id.length);
 
+        $('#taiwanMap').attr('src', "../../images/map-" + region + ".png");
         Data.currentRegion = region;
         Data.regionChange(region);
         Data.changeRegionLan();
@@ -84,32 +87,36 @@
 })();
 
 
-function buildUpGroupContainer(groupKey) {
-    var groups = Data.groups._groupItems;
+function regroupList(group) {
 
-    var groupBox = $('#snapGroupTemplate').clone();
-    groupBox.children('.groupTitle').html(groups[groupKey].data.name);
-    groupBox.hide();
-    $('#listViewSnap').prepend(groupBox);
-    groups[groupKey]['container'] = groupBox;
+    if (Data.snapGroups == undefined) {
+        Data.snapGroups = [];
+    }
+    
+    // 判斷 group 是否建立
+    if (Data.snapGroups[group.key] == undefined) {
+        // 若無建立，則於local建立static group
+        Data.snapGroups[group.key] = group;
+    }
+    
+    if (Data.snapGroups[group.key]['container'] == undefined) {
+        var groupBox = $('#snapGroupTemplate').clone();
+        groupBox.children('.groupTitle').html(group.name);
+        groupBox.hide();
+        $('#listViewSnap').prepend(groupBox);
+        Data.snapGroups[group.key]['container'] = groupBox;
+    } else {
+        $('#listViewSnap').prepend(Data.snapGroups[group.key]['container']);
+    }
 }
 
 function snapRegionList() {
-    var groups = Data.groups._groupItems;
     
-    for (var groupKey in groups) {
+    for (var groupKey in Data.snapGroups) {
 
-        if (groups[groupKey]['container'] != undefined) {
-            groups[groupKey]['container'].children('.itemsContainer').children().remove();
-            groups[groupKey]['container'].remove();
+        if (Data.snapGroups[groupKey]['container'] != undefined && Data.snapGroups[groupKey]['container'].children('.itemsContainer').children().length > 0) {
+            Data.snapGroups[groupKey]['container'].children('.itemsContainer').children().remove();
         }
-
-        var groupBox = $('#snapGroupTemplate').clone();
-        groupBox.children('.groupTitle').html(groups[groupKey].data.name);
-        
-        groupBox.hide();
-        groups[groupKey]['container'] = groupBox;
-        $('#listViewSnap').prepend(groups[groupKey]['container']);
     }
 
     var txn = Data.db.transaction(["articles"], "readonly");
@@ -133,12 +140,10 @@ function snapRegionList() {
                     Windows.UI.ViewManagement.ApplicationView.tryUnsnap();
                 });
 
-                if (groups[article.group.key]['container'] == undefined) {
-                    buildUpGroupContainer(article.group.key);
-                }
+                regroupList(article.group);
 
-                groups[article.group.key]['container'].children('.itemsContainer').prepend(itemBox);
-                groups[article.group.key]['container'].show();
+                Data.snapGroups[article.group.key]['container'].children('.itemsContainer').prepend(itemBox);
+                Data.snapGroups[article.group.key]['container'].show();
             }
 
             e.target.result.continue();
@@ -149,12 +154,12 @@ function snapRegionList() {
    
     // 地區篩選完畢，重新掃瞄有item的group
 
-    for (var groupKey in groups) {
+    for (var groupKey in Data.snapGroups) {
 
-        if (groups[groupKey]['container'].children('.itemsContainer').children().length <= 0) {
+        if (Data.snapGroups[groupKey]['container'].children('.itemsContainer').children().length <= 0) {
             continue;
         }
-        $('#listViewSnap').prepend(groups[groupKey]['container']);
+        $('#listViewSnap').prepend(Data.snapGroups[groupKey]['container']);
     }
 }
 
@@ -163,18 +168,11 @@ function snapFavList() {
     var txn = Data.db.transaction(["likes"], "readonly");
     var statusStore = txn.objectStore("likes");
     var request = statusStore.openCursor();
-
-    var groups = Data.groups._groupItems;
-
-    for (var groupKey in groups) {
-
-        if (groups[groupKey]['container'] != undefined) {
-            groups[groupKey]['container'].children('.itemsContainer').children().remove();
-            groups[groupKey]['container'].remove();
+    
+    for (var groupKey in Data.snapGroups) {
+        if (Data.snapGroups[groupKey]['container'] != undefined) {
+            Data.snapGroups[groupKey]['container'].children('.itemsContainer').children().remove();
         }
-
-        buildUpGroupContainer(groupKey);
-
     }
 
     // 檢查是否為空
@@ -193,7 +191,6 @@ function snapFavList() {
             var request = store.get(parseInt(like.value["articleid"]));
             var likeid = like.value.id;
 
-
             request.onsuccess = function (e) {
                 var article = e.target.result;
 
@@ -209,12 +206,10 @@ function snapFavList() {
                     Windows.UI.ViewManagement.ApplicationView.tryUnsnap();
                 });
 
-                if (groups[article.group.key]['container'] == undefined) {
-                    buildUpGroupContainer(article.group.key);
-                }
+                regroupList(article.group.key);
 
-                groups[article.group.key]['container'].children('.itemsContainer').prepend(itemBox);
-                groups[article.group.key]['container'].show();
+                Data.snapGroups[article.group.key]['container'].children('.itemsContainer').prepend(itemBox);
+                Data.snapGroups[article.group.key]['container'].show();
             }
 
             like.continue();

@@ -11,7 +11,7 @@
             Data.initLanguage();
             Data.showData("article");
             Data.updateUI();
-            document.getElementById('addfav').winControl.label="test";
+            // document.getElementById('addfav').winControl.label="test";
 
             checkLike("del");
             
@@ -124,7 +124,7 @@
         var request = e.request;
 
         // Title is required
-        var dataPackageTitle = $("#articletitle").html();
+        var dataPackageTitle = $("#articleTitle").html();
         if ((typeof dataPackageTitle === "string") && (dataPackageTitle !== "")) {
             var dataPackageLink = $("#articlecontentnotag").html();
             if ((typeof dataPackageLink === "string") && (dataPackageLink !== "")) {

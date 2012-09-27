@@ -76,42 +76,42 @@
         });
     }
 
-    function navigatetoFav() {
-        document.getElementById('homeNavBar').winControl.hide();
-        regionChange('regionf');
-        checkFav();
-    }
-
-    function checkFav() {
-        var txn = Data.db.transaction(["likes"], "readwrite");
-        var statusStore = txn.objectStore("likes");
-        var request = statusStore.openCursor();
-        request.onsuccess = function (e) {
-            var like = e.target.result;
-            if (like)
-                $("#favinfo").hide();
-            else
-                $("#favinfo").show();
-        };
-    }
-
-    function regionChange(id, snap) {
-        var region = id.slice(6, id.length);
-
-        $('#taiwanMap').attr('src', "../../images/map-" + region + ".png");
-        Data.currentRegion = region;
-        Data.changeRegionLan();
-        if (!snap) {
-            Data.regionChange(region);
-        }
-    }
-
     WinJS.Namespace.define("Home",{
         regionChange: regionChange,
         isFav: false
     });
 
 })();
+
+function navigatetoFav() {
+    document.getElementById('homeNavBar').winControl.hide();
+    regionChange('regionf');
+    checkFav();
+}
+
+function checkFav() {
+    var txn = Data.db.transaction(["likes"], "readwrite");
+    var statusStore = txn.objectStore("likes");
+    var request = statusStore.openCursor();
+    request.onsuccess = function (e) {
+        var like = e.target.result;
+        if (like)
+            $("#favinfo").hide();
+        else
+            $("#favinfo").show();
+    };
+}
+
+function regionChange(id, snap) {
+    var region = id.slice(6, id.length);
+
+    $('#taiwanMap').attr('src', "../../images/map-" + region + ".png");
+    Data.currentRegion = region;
+    Data.changeRegionLan();
+    if (!snap) {
+        Data.regionChange(region);
+    }
+}
 
 
 function regroupList(group) {
@@ -247,6 +247,7 @@ function snapFavList() {
     };
 }
 
+
 function updateView() {
     var myViewState = Windows.UI.ViewManagement.ApplicationView.value;
     var viewStates = Windows.UI.ViewManagement.ApplicationViewState;
@@ -298,6 +299,10 @@ function updateView() {
                         WinJS.Navigation.navigate('/pages/home/home.html');
                     }
                 }, 300);
+            }
+
+            if (Data.currentRegion == 'f') {
+                navigatetoFav();
             }
 
             if (Data.db != undefined) {

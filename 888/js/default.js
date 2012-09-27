@@ -14,11 +14,13 @@
             if (args.detail.previousExecutionState !== activation.ApplicationExecutionState.terminated) {
                 // TODO: 這個應用程式剛啟動。請在這裡初始化
                 // 您的應用程式。
+
+
                 WinJS.Application.onsettings = function (e) {
                     e.detail.applicationcommands = {
                         "language": { title: "語言", href: "/pages/language/language.html" },
                         "about": { title: "關於 青春台灣食玩誌", href: "/pages/about/about.html" },
-                        //"": { title: "隱私權聲明", href: "http://www.microsoft.com/privacystatement/zh-tw/core/default.aspx" }
+                        "authorization": { title: "隱私權聲明", href: "/pages/authorization/authorization.html" }
                     };
                     WinJS.UI.SettingsFlyout.populateSettings(e);
 

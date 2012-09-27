@@ -58,7 +58,7 @@
                     <span id="articleId" style="display: none;"></span>
 
                     <h6>達人：PEPE</h6>
-                    <h2 id="articletitle">秘密基地的迷人咖啡香</h2>
+                    <h2 id="articleTitle">秘密基地的迷人咖啡香</h2>
                     <h3>這裡的咖啡可以品嚐到義式、手沖或虹吸式 價錢約為100元上下，
                     想要自己嚐試煮咖啡當然也是可以</h3>
                     <img src="../../images/article/economy/01/economy_bigpic.jpg" width="630" />
@@ -98,22 +98,9 @@
         </div>
     </div>
 
-    
-    <div id="createAppBar" data-win-control="WinJS.UI.AppBar">
-        <button onclick="toFullscreen();" data-win-control="WinJS.UI.AppBarCommand" data-win-options="{id:'backToIndex',label:'homeIndex',icon:'url(images/buttons/favaddbutton2.png)'}"></button>
-        <button data-win-control="WinJS.UI.AppBarCommand" data-win-options="{id:'addFav',label:'addFav',icon:'url(images/buttons/favaddbutton2.png)'}"></button>
-    </div>
-   <div class="content-function" id="createAppBar" data-win-control="WinJS.UI.AppBar" data-win-options="{layout:'custom'}">
-        <!--<button class="content-BaddFav" data-win-control="WinJS.UI.AppBarCommand" data-win-options="{id:'addFav',label:'articleFavlist'}"></button>
-        <button class="content-BremoveFav" data-win-control="WinJS.UI.AppBarCommand" data-win-options="{id:'delFav',label:'delete from fav'}"></button>-->
-       <div class="content-Barea" id:'delFav' onclick="">
-            <div class="content-BremoveFav"></div>
-            <div class="content-Bword" data-win-res="{textContent:'delFav'}">移出我的最愛</div>
-        </div>
-        <div class="content-Barea" id:'addFav'>
-            <!--div class="content-BaddFav"></!--div-->
-            <button class="content-Bword" data-win-res="{textContent:'addFav'}" data-win-options="{id:'addFav',label:'addFav',icon:'home'}">加入我的最愛</button>
-        </div>
+     <div class="content-function" id="createAppBar" data-win-control="WinJS.UI.AppBar">
+        <button data-win-control="WinJS.UI.AppBarCommand" data-win-options="{id:'addfav',label:'加入我的最愛',icon:'url(/images/buttons/fav-add-button.png)'}"></button>
+        <button data-win-control="WinJS.UI.AppBarCommand" data-win-options="{id:'delfav',label:'移出我的最愛',icon:'url(/images/buttons/fav-add-button.png)'}"></button>
     </div>
 
 </body>

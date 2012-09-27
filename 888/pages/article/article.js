@@ -11,12 +11,12 @@
             Data.initLanguage();
             Data.showData("article");
             Data.updateUI();
+            document.getElementById('addfav').winControl.label="test";
 
             checkLike("del");
-
-            $("#addFav").bind("click", function () { checkLike("add"); });
-            $("#delFav").bind("click", function () { delFav(); });
-
+            
+            $("#addfav").bind("click", function () { checkLike("add"); });
+            $("#delfav").bind("click", function () { delFav(); });
             $("#navtoFav").bind("click", function () { navigatetoFav(); });
 
             //share
@@ -58,7 +58,6 @@
                         if (check) {
                             $("#articlemsg").prepend("<p>article is already in the list</p>");
                             $("#addFav").unbind();
-                            document.getElementById('createAppBar').winControl.hide();
                         }
                         else {
                             var txn = Data.db.transaction(["likes"], "readwrite");
@@ -66,24 +65,32 @@
                             var like = { articleid: Data.articleid };
                             statusStore.add(like);
                             txn.oncomplete = function () {
-                                $("#articlemsg").html($("#articleTitle").html() + " added");
-                                //WinJS.Navigation.back(0);
+                               // $("#articlemsg").html($("#articleTitle").html() + " added");
+                                var msg = new Windows.UI.Popups.MessageDialog($("#articleTitle").html() + " 已經加到我的最愛");
+
+                                // Show the message dialog
+                                msg.showAsync().done(function () { });
+
+                                checkLike("del");
                             };
                         }
                         break;
+
                     case "del":
                         if (check) {
-                            $("#delFav").show();
-                            $("#addFav").hide();
+                            $("#delfav").show();
+                            $("#addfav").hide();
                         }
                         else {
-                            $("#delFav").hide();
-                            $("#addFav").show();
+                            $("#delfav").hide();
+                            $("#addfav").show();
                         }
                         break;
                 }
             }
-        }
+        };
+        document.getElementById('homeNavBar').winControl.hide();
+        document.getElementById('createAppBar').winControl.hide();
     }
 
     function delFav() {
@@ -96,14 +103,19 @@
             var like = e.target.result;
             if (like) {
                 if (like.value.articleid == record) {
-                    statusStore.delete(parseInt(like.value.id));
+                    var deleteRequest = statusStore.delete(parseInt(like.value.id));
+                    var msg = new Windows.UI.Popups.MessageDialog($("#articleTitle").html() + " 已經從我的最愛中移除");
+                    deleteRequest.onsuccess = function (e) {
+                        // Show the message dialog
+                        msg.showAsync().done(function () { });
+                    }
                     checkLike("del");
                 }
                 like.continue();
             }
         };
 
-        $("#articlemsg").html("article is deleted from the list");
+        // $("#articlemsg").html("article is deleted from the list");
         checkLike("del");
     }
 

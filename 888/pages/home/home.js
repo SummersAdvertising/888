@@ -18,7 +18,6 @@
             var listView = element.querySelector("#listView").winControl;
             listView.addEventListener("iteminvoked", itemInvokedHandler);
 
-
             // 地區控制
             $(".region").unbind("click");
             $(".region-option").unbind("click");
@@ -54,6 +53,7 @@
                 $('#mainImg').hide();
                 $('.main-all').css('left', 0 );
             }
+            
         }
     });
 

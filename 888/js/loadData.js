@@ -121,8 +121,9 @@ function addObjectStore(storeName, nodes) {
             break;
 
         case "articles":
-            var addToList = false;
+
             for (var i = 0; i < nodes.length; i++) {
+                var addToList = false;
                 objarticle = new Object();
                 objAddProperty("id", i + 1);
                 for (var j = 0; j < nodes[i].childNodes.length; j++) {
@@ -139,8 +140,8 @@ function addObjectStore(storeName, nodes) {
                             var content = nodes[i].childNodes[j].innerText.replace(/<\s*\w.*?>/g, "").replace(/<\s*\/\s*\w\s*.*?>|<\s*br\s*>/g, "");
                             objAddProperty("contentnotag", content);
                         }
-                        if (nodes[i].childNodes[j].nodeName == "region") {
-                            addToList = nodes[i].childNodes[j].innerText == Data.currentRegion ? true : false;
+                        if (nodes[i].childNodes[j].nodeName == "selected") {
+                            addToList = true;
                         }
                         objAddProperty(nodes[i].childNodes[j].nodeName, nodes[i].childNodes[j].innerText);
                     }
@@ -405,8 +406,6 @@ function loadArray(region) {
         favlistLoad();
         return;
     }
-
-    // Data.homeList.itemDataSource = articlelist.dataSource;
 
     var txn = Data.db.transaction(["articles"], "readonly");
     var store = txn.objectStore("articles");

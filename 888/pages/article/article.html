@@ -98,7 +98,11 @@
         </div>
     </div>
 
-
+    
+    <div id="createAppBar" data-win-control="WinJS.UI.AppBar">
+        <button onclick="toFullscreen();" data-win-control="WinJS.UI.AppBarCommand" data-win-options="{id:'backToIndex',label:'homeIndex',icon:'url(images/buttons/favaddbutton2.png)'}"></button>
+        <button data-win-control="WinJS.UI.AppBarCommand" data-win-options="{id:'addFav',label:'addFav',icon:'url(images/buttons/favaddbutton2.png)'}"></button>
+    </div>
    <div class="content-function" id="createAppBar" data-win-control="WinJS.UI.AppBar" data-win-options="{layout:'custom'}">
         <!--<button class="content-BaddFav" data-win-control="WinJS.UI.AppBarCommand" data-win-options="{id:'addFav',label:'articleFavlist'}"></button>
         <button class="content-BremoveFav" data-win-control="WinJS.UI.AppBarCommand" data-win-options="{id:'delFav',label:'delete from fav'}"></button>-->
@@ -107,8 +111,8 @@
             <div class="content-Bword" data-win-res="{textContent:'delFav'}">移出我的最愛</div>
         </div>
         <div class="content-Barea" id:'addFav'>
-            <div class="content-BaddFav"></div>
-            <div class="content-Bword" data-win-res="{textContent:'addFav'}">加入我的最愛</div>
+            <!--div class="content-BaddFav"></!--div-->
+            <button class="content-Bword" data-win-res="{textContent:'addFav'}" data-win-options="{id:'addFav',label:'addFav',icon:'home'}">加入我的最愛</button>
         </div>
     </div>
 

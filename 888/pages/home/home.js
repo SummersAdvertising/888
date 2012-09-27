@@ -54,6 +54,7 @@
                 $('.main-all').css('left', 0 );
             }
             
+
         }
     });
 
@@ -121,14 +122,13 @@ function regroupList(group) {
     }
     
     if (Data.snapGroups[group.key]['container'] == undefined) {
-        var groupBox = $('#snapGroupTemplate').clone();
+        var groupBox = $('#snapGroupTemplate').clone().attr('id', 'groupTemplate_' + Data.snapGroups[group.key]);
         groupBox.children('.groupTitle').html(group.name);
         groupBox.hide();
-        $('#listViewSnap').prepend(groupBox);
         Data.snapGroups[group.key]['container'] = groupBox;
-    } else {
-        $('#listViewSnap').prepend(Data.snapGroups[group.key]['container']);
     }
+
+    $('#listViewSnap').prepend(Data.snapGroups[group.key]['container']);
 }
 
 function snapRegionList() {
@@ -252,7 +252,10 @@ function updateView() {
         case viewStates.snapped:            
 
             if (WinJS.Navigation.location == '/pages/article/article.html' || WinJS.Navigation.location == '/pages/search/searchResults.html') {
-                WinJS.Navigation.back();
+                WinJS.Navigation.back().done(function (e) {
+                    var offset = { top: "12px", left: "0px", rtlflip: true };
+                    // WinJS.UI.Animation.enterPage(document.getElementsByTagName('body'), offset);
+                });
                 return;
             }
 

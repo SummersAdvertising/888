@@ -4,6 +4,7 @@
 }
 #listViewSnap,#snapBody {
     display: none;
+    z-index: 50;
 }
 
 
@@ -28,7 +29,7 @@ li {
         top: 0;
     }
 
-    #listView,#mainList,#homeNavBar {
+    #listView,#mainList,#homeNavBar,.main-right {
         display:none;
     }
 

@@ -102,6 +102,7 @@ li {
 	    width:230px;
 	    height:55px;
 	    overflow:hidden;
+        padding: 5px 10px !important;
     }
     .articleArea img{
 	    border:1px solid rgba(225,225,225,1);

@@ -779,15 +779,7 @@
         position: static;
         margin: 40px 40px 40px 0px;
     }
-
-    .articleArea {
-        width: auto;
-        padding: 40px;
-        font-size: 11pt;
-        line-height: 18pt;
-        float: left;
-    }
-
+    
     .content-title h2 {
         margin: 40px 0px 0px 40px;
         color: rgba(255,255,255,1);

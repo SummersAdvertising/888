@@ -175,20 +175,21 @@
                         </div>
                     </div>
                 </div>
-
-                <div class="main-best" id="listView"
-                    data-win-control="WinJS.UI.ListView"
-                    data-win-options="{ 
-                    itemDataSource: Data.myGroupedList.dataSource, 
-                    itemTemplate: select('#itemtemplate'), 
-                    groupDataSource: Data.myGroupedList.groups.dataSource,
-                    groupHeaderTemplate: select('#headertemplate'), 
-                    selectionMode: 'none', 
-                    tapBehavior: 'invokeOnly', 
-                    swipeBehavior: 'none',
-                    oniteminvoked :itemInvokedHandler,
-                    layout: {type: WinJS.UI.GridLayout, maxRows: 2}                    
-                }">
+                <div id="listViewScrollContainer">                    
+                    <div class="main-best" id="listView"
+                        data-win-control="WinJS.UI.ListView"
+                        data-win-options="{ 
+                        itemDataSource: Data.myGroupedList.dataSource, 
+                        itemTemplate: select('#itemtemplate'), 
+                        groupDataSource: Data.myGroupedList.groups.dataSource,
+                        groupHeaderTemplate: select('#headertemplate'), 
+                        selectionMode: 'none', 
+                        tapBehavior: 'invokeOnly', 
+                        swipeBehavior: 'none',
+                        oniteminvoked :itemInvokedHandler,
+                        layout: {type: WinJS.UI.GridLayout, maxRows: 2}                    
+                    }">
+                    </div>
                 </div>
             </div>
         </div>

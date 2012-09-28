@@ -4,9 +4,7 @@
 }
 
 #listView {
-    overflow-x: scroll;
-    overflow-y: hidden;
-    width: 800px;
+    width: 100%;
     height: 600px;
 }
 

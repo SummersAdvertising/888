@@ -61,5 +61,6 @@
 
 var animated = false;
 function toFullscreen() {
+    Data.currentRegion = 'b';
     Windows.UI.ViewManagement.ApplicationView.tryUnsnap();
 }

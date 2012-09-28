@@ -6,6 +6,14 @@
 
 function dbSuccess(evt) {
     Data.db = evt.target.result;
+
+    var clearDB = ["articles", "subjects", "regions", "resource"];
+    for (var item in clearDB) {
+        var txn = Data.db.transaction([clearDB[item]], "readwrite");
+        var store = txn.objectStore(clearDB[item]);
+        store.clear();
+    }
+
     loadData(evt);
 
     if (Data.db.objectStoreNames.length === 0) {
@@ -377,8 +385,10 @@ function favlistLoad() {
                         }
                     }
                     articleArray.push(article.id);
-                    if (addtolist)
+                    if (addtolist) {
+                        article.cover = article.folder + "cover.png";
                         articlelist.push(article);
+                    }
                 }
             }
             like.continue();
@@ -450,6 +460,9 @@ function loadArray(region) {
                 }
                 articleArray.push(article.value.id);
                 if (addtolist) {
+
+                    article.value['cover'] = article.value.folder + "cover.png";
+
                     articlelist.push(article.value);
                 }
             }

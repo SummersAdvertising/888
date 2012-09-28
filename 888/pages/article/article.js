@@ -126,8 +126,6 @@
         // Title is required
         var dataPackageTitle = $("#articleTitle").html();
         if ((typeof dataPackageTitle === "string") && (dataPackageTitle !== "")) {
-            var dataPackageLink = $("#articlecontentnotag").html();
-            if ((typeof dataPackageLink === "string") && (dataPackageLink !== "")) {
                 request.data.properties.title = dataPackageTitle;
 
                 try {
@@ -138,7 +136,6 @@
             } else {
                 request.failWithDisplayText("Enter the text you would like to share and try again.");
             }
-        }
     }
 
     WinJS.Namespace.define("Article", {

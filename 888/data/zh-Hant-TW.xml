@@ -264,7 +264,7 @@
       <selected>1</selected>
     </article>
     <article>
-      <folder>/images/article/reminiscent/selected/</folder>
+      <folder>/images/article/romantic/selected/</folder>
       <title>義大世界的耍浪漫小旅行</title>
       <subtitle>義大世界真的很適合情侶安排一趟約會小旅行，即使沒有假期出國也沒關係，來到義大就有出國的 fu 喔。</subtitle>
       <date>year/month/day</date>
@@ -315,13 +315,13 @@
             </div>
             <div class="placeBox">&nbsp;</div>]]>
       </content>
-      <subjectid>5</subjectid>
+      <subjectid>6</subjectid>
       <region>4</region>
       <selected>1</selected>
     </article>
     <article>
-      <folder>/images/article/romantic/selected/</folder>
-      <title>南庄&amp;桂花巷探索，這裡真的是時光的廊道呀！</title>
+      <folder>/images/article/reminiscent/selected/</folder>
+      <title>南庄＆桂花巷探索，這裡真的是時光的廊道呀！</title>
       <subtitle>復古的老戲院、充滿兒時玩味的小柑仔店……</subtitle>
       <date>year/month/day</date>
       <author>達人：Aiko</author>
@@ -376,8 +376,8 @@
             </div>
             <div class="placeBox">&nbsp;</div>]]>
       </content>
-      <subjectid>6</subjectid>
-      <region>1</region>
+      <subjectid>5</subjectid>
+      <region>3</region>
       <selected>1</selected>
     </article>
 

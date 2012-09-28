@@ -168,7 +168,6 @@
                 <div class="main-gloup" id="itemtemplate" data-win-control="WinJS.Binding.Template">
                     <div class="area-list"><img src="#" class="regularListIconTextItem-Image" data-win-bind="src: cover" /></div>
 
-                        
                         <div class="area-listbar">
                             <div class="area-title">
                                 <p class="item-title" data-win-bind="textContent: title"></p>
@@ -191,11 +190,10 @@
                     layout: {type: WinJS.UI.GridLayout, maxRows: 2}                    
                 }">
                 </div>
-
-                <div id="homeAppBar" data-win-control="WinJS.UI.AppBar">
-                    <button onclick="toFullscreen();" data-win-control="WinJS.UI.AppBarCommand" data-win-options="{id:'backToIndex',label:'homeIndex',icon:'home'}"></button>
-                </div>
             </div>
+        </div>
+        <div id="homeAppBar" data-win-control="WinJS.UI.AppBar">
+            <button onclick="toFullscreen();" data-win-control="WinJS.UI.AppBarCommand" data-win-options="{id:'backToIndex',label:'homeIndex',icon:'home'}"></button>
         </div>
     </div>
 </body>

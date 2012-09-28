@@ -68,6 +68,12 @@
                                // $("#articlemsg").html($("#articleTitle").html() + " added");
                                 var msg = new Windows.UI.Popups.MessageDialog($("#articleTitle").html() + " 已經加到我的最愛");
 
+                                // Add commands and set their command handlers
+                                msg.commands.append(new Windows.UI.Popups.UICommand("確定", function (command) {                                }));
+
+                                // Set the command that will be invoked by default
+                                msg.defaultCommandIndex = 1;
+
                                 // Show the message dialog
                                 msg.showAsync().done(function () { });
 
@@ -105,6 +111,7 @@
                 if (like.value.articleid == record) {
                     var deleteRequest = statusStore.delete(parseInt(like.value.id));
                     var msg = new Windows.UI.Popups.MessageDialog($("#articleTitle").html() + " 已經從我的最愛中移除");
+                    msg.commands.append(new Windows.UI.Popups.UICommand("確定", function (command) { }));
                     deleteRequest.onsuccess = function (e) {
                         // Show the message dialog
                         msg.showAsync().done(function () { });
@@ -129,7 +136,7 @@
                 request.data.properties.title = dataPackageTitle;
 
                 try {
-                    request.data.setUri(new Windows.Foundation.Uri("http://msdn.microsoft.com/en-us/library/windows/apps/br211837.aspx"));
+                    request.data.setUri(new Windows.Foundation.Uri("http://win888.events.pixnet.net/"));
                 } catch (ex) {
                     //show error message
                 }

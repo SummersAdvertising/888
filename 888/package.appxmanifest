@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Package xmlns="http://schemas.microsoft.com/appx/2010/manifest">
-  <Identity Name="64b74713-a806-4306-9bb8-e98e52cfc1e2" Version="1.0.0.11" Publisher="CN=Yuzhe" />
+  <Identity Name="64b74713-a806-4306-9bb8-e98e52cfc1e2" Version="1.0.0.12" Publisher="CN=Yuzhe" />
   <Properties>
     <DisplayName>青春台灣食玩誌</DisplayName>
     <PublisherDisplayName>台灣微軟</PublisherDisplayName>

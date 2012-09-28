@@ -481,6 +481,7 @@ function loadListforSearch() {
     request.onsuccess = function (e) {
         var article = e.target.result;
         if (article) {
+            article.value.search = article.value.folder + 'search.png';
             list.push(article.value);
             article.continue();
         }

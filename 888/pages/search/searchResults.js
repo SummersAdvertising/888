@@ -111,7 +111,7 @@
             if (viewState === appViewState.snapped) {
                 listView.layout = new ui.ListLayout();
                 document.querySelector(".titlearea .pagetitle").textContent = '“' + this._lastSearch + '”';
-                document.querySelector(".titlearea .pagesubtitle").textContent = "";
+               
             } else {
                 listView.layout = new ui.GridLayout();
 

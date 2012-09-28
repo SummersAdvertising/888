@@ -777,7 +777,7 @@
         width: auto;
         font-size: 9pt;
         position: static;
-        margin: 0px 40px 40px 40px;
+        margin: 40px 40px 40px 0px;
     }
 
     .articleArea {

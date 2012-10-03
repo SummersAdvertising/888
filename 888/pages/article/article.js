@@ -11,10 +11,9 @@
             Data.initLanguage();
             Data.showData("article");
             Data.updateUI();
-            // document.getElementById('addfav').winControl.label="test";
 
             checkLike("del");
-            
+
             $("#addFav").bind("click", function () { checkLike("add"); });
             $("#delFav").bind("click", function () { delFav(); });
             $("#navtoFav").bind("click", function () { navigatetoFav(); });
@@ -30,6 +29,8 @@
             //$('[class^="content-photo"]').css('height', $(window).height());
             $('.content-body').css('height', $(window).height());
 
+            //copy content
+            document.getElementById("sampleText").addEventListener("contextmenu", textHandler, false);
         }
     });
 
@@ -65,11 +66,11 @@
                             var like = { articleid: Data.articleid };
                             statusStore.add(like);
                             txn.oncomplete = function () {
-                               // $("#articlemsg").html($("#articleTitle").html() + " added");
+                                // $("#articlemsg").html($("#articleTitle").html() + " added");
                                 var msg = new Windows.UI.Popups.MessageDialog($("#articleTitle").html() + " 已經加到我的最愛");
 
                                 // Add commands and set their command handlers
-                                msg.commands.append(new Windows.UI.Popups.UICommand("確定", function (command) {                                }));
+                                msg.commands.append(new Windows.UI.Popups.UICommand("確定", function (command) { }));
 
                                 // Set the command that will be invoked by default
                                 msg.defaultCommandIndex = 1;
@@ -133,17 +134,82 @@
         // Title is required
         var dataPackageTitle = $("#articleTitle").html();
         if ((typeof dataPackageTitle === "string") && (dataPackageTitle !== "")) {
-                request.data.properties.title = dataPackageTitle;
+            request.data.properties.title = dataPackageTitle;
 
-                try {
-                    request.data.setUri(new Windows.Foundation.Uri($("#articleLink").html()));
-                } catch (ex) {
-                    //show error message
-                }
-            } else {
-                request.failWithDisplayText("Enter the text you would like to share and try again.");
+            try {
+                request.data.setUri(new Windows.Foundation.Uri($("#articleLink").html()));
+            } catch (ex) {
+                //show error message
             }
+        } else {
+            request.failWithDisplayText("Enter the text you would like to share and try again.");
+        }
     }
+
+
+    //copy content
+    // Converts from client to WinRT coordinates, which take scale factor into consideration.
+    function clientToWinRTRect(rect) {
+        var zoomFactor = document.documentElement.msContentZoomFactor;
+        return {
+            x: (rect.left + document.documentElement.scrollLeft - window.pageXOffset) * zoomFactor,
+            y: (rect.top + document.documentElement.scrollTop - window.pageYOffset) * zoomFactor,
+            width: rect.width * zoomFactor,
+            height: rect.height * zoomFactor
+        };
+    }
+
+    function textHandler(e) {
+        e.preventDefault(); // Prevent the default context menu.
+
+        // Only show a context menu if text is selected
+        if (isTextSelected()) {
+            // Creating a menu with each command specifying a unique command callaback.
+            // Seach the command callbacks are unique, there is no need to specify command IDs.
+            var menu = new Windows.UI.Popups.PopupMenu();
+            switch (Data.language) {
+                case "zh-Hant-TW":
+                    menu.commands.append(new Windows.UI.Popups.UICommand("複製", null, 1));
+                    break;
+                case "ja":
+                    menu.commands.append(new Windows.UI.Popups.UICommand("コピー", null, 1));
+                    break;
+                case "en-US":
+                    menu.commands.append(new Windows.UI.Popups.UICommand("Copy", null, 1));
+                    break;
+                default:
+                    menu.commands.append(new Windows.UI.Popups.UICommand("複製", null, 1));
+                    break;
+            }
+
+
+            // We don't want to obscure content, so pass in the position representing the selection area.
+            menu.showForSelectionAsync(clientToWinRTRect(document.selection.createRange().getBoundingClientRect())).then(function (invokedCommand) {
+                if (invokedCommand !== null) {
+                    switch (invokedCommand.id) {
+                        case 1: // Copy
+                            var selectedText = window.getSelection();
+                            copyTextToClipboard(selectedText);
+                            break;
+
+                        default:
+                            break;
+                    }
+                }
+            });
+        }
+    };
+
+    function isTextSelected() {
+        return (document.getSelection().toString().length > 0);
+    };
+
+    function copyTextToClipboard(textToCopy) {
+        var dataPackage = new Windows.ApplicationModel.DataTransfer.DataPackage();
+        dataPackage.setText(textToCopy);
+        Windows.ApplicationModel.DataTransfer.Clipboard.setContent(dataPackage);
+    };
+
 
     WinJS.Namespace.define("Article", {
         checkLike: checkLike

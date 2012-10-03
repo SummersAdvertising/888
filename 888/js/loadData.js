@@ -187,7 +187,7 @@ function addObjectStore(storeName, nodes) {
 }
 
 function cleanList(source) {
-    //clear articlelist
+    //clear list
     var length = source.length;
     for (var i = 0; i < length; i++) {
         source.pop();
@@ -198,7 +198,7 @@ function loadData(evt) {
     Data.db = evt.target.result;
 
     cleanList(articlelist);
-    cleanList(list);ㄋ
+    cleanList(list);
 
     var resourceNodes = getNodeData("resource.xml", Data.language, "resource");
 
@@ -266,7 +266,8 @@ function showData(show) {
                     else if (element == "group") {
                         $("#contentPhoto").addClass("content-photo-" + article[element].key);
                         $("#articleSubjectName").html(article[element].name);
-                        var descript = article[element].descript.replace(/br/gi, "<br />");
+                        var descript = article[element].descript;
+                        //var descript = article[element].descript.replace(/br/gi, "<br />");
                         $("#articleSubjectDescrip").html(descript);
                     }
                     else if (element == "link")

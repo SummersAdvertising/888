@@ -149,13 +149,13 @@
 
     //copy content
     // Converts from client to WinRT coordinates, which take scale factor into consideration.
-    function clientToWinRTRect(rect) {
+    function clientToWinRTRect(e) {
         var zoomFactor = document.documentElement.msContentZoomFactor;
         return {
-            x: (rect.left + document.documentElement.scrollLeft - window.pageXOffset) * zoomFactor,
-            y: (rect.top + document.documentElement.scrollTop - window.pageYOffset) * zoomFactor,
-            width: rect.width * zoomFactor,
-            height: rect.height * zoomFactor
+            x: e.pageX,
+            y: e.pageY,
+            width: 80 ,
+            height: 80
         };
     }
 
@@ -184,7 +184,8 @@
 
 
             // We don't want to obscure content, so pass in the position representing the selection area.
-            menu.showForSelectionAsync(clientToWinRTRect(document.selection.createRange().getBoundingClientRect())).then(function (invokedCommand) {
+            //rectangle : document.selection.createRange().getBoundingClientRect()
+            menu.showForSelectionAsync(clientToWinRTRect(e)).then(function (invokedCommand) {
                 if (invokedCommand !== null) {
                     switch (invokedCommand.id) {
                         case 1: // Copy

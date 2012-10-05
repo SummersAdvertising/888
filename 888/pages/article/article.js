@@ -198,6 +198,11 @@
                 }
             });
         }
+            //no text selected, show nav bar
+        else {
+            document.getElementById('homeNavBar').winControl.show();
+            document.getElementById('createAppBar').winControl.show();
+        }
     };
 
     function isTextSelected() {

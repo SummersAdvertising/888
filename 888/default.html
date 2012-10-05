@@ -19,6 +19,25 @@
     <script src="/js/loadData.js"></script>
 </head>
 <body>
+    <!-- nav bar -->
+    <div class="main-navigation" id="homeNavBar" data-win-control="WinJS.UI.AppBar" data-win-options="{layout:'custom',placement:'top'}">
+        <!--nav bar: 首頁/我的最愛 靠左-->
+        <div id="regionb" class="main-Narea region" onclick="Home.regionChange(this.id); WinJS.Navigation.back(WinJS.Navigation.history.backStack.length); document.getElementById('homeNavBar').winControl.hide();">
+            <a href="#" id="bestlink">
+                <div class="main-Nhome">
+                    <div class="main-Nword" id="navHome" data-win-res="{textContent:'navHome'}">首頁</div>
+                </div>
+            </a>
+        </div>
+        <div class="main-Narea">
+            <a href="#" id="favinfolink">
+                <div class="main-Nfavorite" id="navtoFav">
+                    <div class="main-Nword" id="navFav" data-win-res="{textContent:'navFav'}">我的最愛</div>
+                </div>
+            </a>
+        </div>
+    </div>
+
     <div id="contenthost" data-win-control="Application.PageControlNavigator" data-win-options="{home: '/pages/home/home.html'}"></div>
 </body>
 </html>

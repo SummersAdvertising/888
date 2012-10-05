@@ -15,6 +15,8 @@
                 // TODO: 這個應用程式剛啟動。請在這裡初始化
                 // 您的應用程式。
 
+                //bind navtoFav
+                $("#navtoFav").bind("click", function () { navigatetoFav(); });
 
                 WinJS.Application.onsettings = function (e) {
                     e.detail.applicationcommands = {
@@ -55,7 +57,10 @@
 
     app.start();
 
-
+    function navigatetoFav() {
+        Home.isFav = true;
+        WinJS.Navigation.back(WinJS.Navigation.history.backStack.length);
+    }
 
 })();
 

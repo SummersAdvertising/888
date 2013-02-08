@@ -1,5 +1,4 @@
-﻿
-.homepage section[role=main] {
+﻿.homepage section[role=main] {
     margin-left: 120px;
 }
 
@@ -23,6 +22,9 @@ li {
     overflow-y: hidden;
 }
 
+#taiwanMap {
+    cursor: pointer;
+}
 
 @media screen and (-ms-view-state: snapped) {
     #listViewSnap,#snapBody,#homeAppBar {
@@ -56,12 +58,11 @@ li {
     }
 
     .snapped-title{
-	    position:absolute;
 	    background-color: rgba(0,114,198,1);
 	    border-bottom:5px solid rgba(150,210,255,1);
 	    width:100%;
-	    height:90px;
-	    z-index:3;
+	    min-height:90px;
+	    padding-bottom:20px;
     }
     .snapped-title h1{ 
 	    color: rgba(255,255,255,1);
@@ -69,7 +70,7 @@ li {
 	    font-size:20pt;
     }
     .snapped-body{
-	    padding:95px 0px 0px 10px;
+	    padding:0px 0px 0px 10px;
 	    margin-left:80px;
 	    height:100%;
 	    background-color: rgba(255,255,255,1);
@@ -104,6 +105,10 @@ li {
 	    color: rgba(0,114,198,1);
     }
 
+    .articleArea * {
+        cursor: pointer;
+    }
+
     .articleArea{ 
 	    margin-top:10px; 
 	    display:block;
@@ -132,19 +137,21 @@ li {
 	    float:left;
     }
     .snapped-select{
-	    margin-top:95px; 
+	    
     }
     .snapped-select span{
-	    position:absolute;
+	    padding-top:55px;
 	    width:80px;
 	    text-align:center;
-	    bottom:10px;
-	    font-size:9pt; 
+	    font-size:9pt;
+        display:block;
+	    padding-bottom:5px; 
+ 
     }
     #regionb div{
 	    position:relative; 
 	    width: 80px;
-	    height: 80px;
+	    min-height: 80px;
 	    cursor:pointer;
 	    background-image:url(/images/buttons/snapped-home.png);
 	    background-repeat:no-repeat;
@@ -160,7 +167,7 @@ li {
     .snap-list div{
 	    position:relative; 
 	    width: 80px;
-	    height: 80px;
+	    min-height: 80px;
 	    cursor:pointer;
 	    background-image:url(/images/buttons/snapped-area.png);
 	    background-repeat:no-repeat;
@@ -176,7 +183,7 @@ li {
     .snap-favorite div{
 	    position:relative; 
 	    width: 80px;
-	    height: 80px;
+	    min-height: 80px;
 	    cursor:pointer;
 	    background-image:url(/images/buttons/snapped-favorite.png);
 	    background-repeat:no-repeat;
@@ -189,18 +196,19 @@ li {
 	    color: rgba(0,188,242,1);
     }
     .go-full ul, ul a:link{
-	    margin:auto auto; 
-	    font-size:11pt; 
+	    margin:auto auto;
+	    font-size:11pt;
+        line-height:16pt;  
 	    width:170px;
 	    text-align:center;
 	    text-decoration:none;
     }
     .go-full li{
-	    line-height:30pt; 
 	    display:block; 
 	    cursor:pointer;
 	    color: rgba(255,255,255,1);
 	    background-color: rgba(0,188,242,1);
+        padding:5px 0px 5px 0px;;
     }
     .go-full li:active{ filter:alpha(opacity=65); opacity:0.65;}
 

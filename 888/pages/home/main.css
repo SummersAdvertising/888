@@ -97,7 +97,7 @@ a {
 }
 
     .main-title h1 {
-        font-size: 42pt;
+        font-size: 36pt;
         font-weight: normal;
         color: rgba(0,0,0,1);
     }
@@ -202,8 +202,8 @@ a {
 }
 
     .main-gloup h2 {
-        font-size: 20pt;
-        margin: 40px 0px 40px 0px;
+        font-size: 18pt;
+        padding: 40px 0px 40px 0px;
         color: rgba(0,24,143,1);
         font-weight: normal;
     }
@@ -244,8 +244,10 @@ a {
     font-size: 13pt;
     padding: 7px 10px 5px 10px;
     line-height: 16pt;
-    display: table-cell;
+    display: block;
     vertical-align: top;
+    height: 40px;
+    overflow: hidden;
 }
 
     .area-title a:link, a:active, a:visited {
@@ -265,12 +267,15 @@ a {
     .infobox p {
         font-size: 14pt;
         line-height: 22pt;
-        height: 60px;
+        min-height: 60px;
         color: rgba(0,114,198,1);
     }
 
     .infobox img {
         margin-top: 20px;
     }
+.win-groupheader {
+    width: 300px !important;
+}
 
 

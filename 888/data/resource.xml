@@ -1,22 +1,22 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?> 
 <resource>
   <en-US>
-    <homeTitle>Young Taiwan</homeTitle>
+    <homeTitle>The Food and Fun Diary of Taiwan Youth</homeTitle>
     <homeIndex>Home</homeIndex>
-    <addFav>add to Favlist</addFav>
-    <delFav>del from Favlist</delFav>
-    <favTitle>我的最愛(en)</favTitle>
-    <navHome>Top</navHome>
-    <navFav>Love</navFav>
+    <addFav>Add to Favorites</addFav>
+    <delFav>del from Favorites</delFav>
+    <favTitle>Favorites</favTitle>
+    <navHome>Home</navHome>
+    <navFav>Favorites</navFav>
   </en-US>
   <ja>
-    <homeTitle>日文的青春台灣食玩誌</homeTitle>
-    <homeIndex>Home(ja)</homeIndex>
-    <addFav>add to Favlist(ja)</addFav>
-    <delFav>del from Favlist(ja)</delFav>
-    <favTitle>我的最愛(ja)</favTitle>
-    <navHome>日文的首頁</navHome>
-    <navFav>日文的我的最愛</navFav>
+    <homeTitle>青春台湾食遊記</homeTitle>
+    <homeIndex>トップページ</homeIndex>
+    <addFav>お気に入りに追加</addFav>
+    <delFav>お気に入りに削除</delFav>
+    <favTitle>お気に入り</favTitle>
+    <navHome>トップページ</navHome>
+    <navFav>お気に入り</navFav>
   </ja>
   <zh-Hant-TW>
     <homeTitle>青春台灣食玩誌</homeTitle>

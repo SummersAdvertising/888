@@ -8,7 +8,7 @@
         // 會將應用程式的資料填入頁面項目。
         ready: function (element, options) {
             // TODO: 在此初始化頁面。
-            Data.initLanguage();
+            //Data.initLanguage();
             Data.showData("article");
             Data.updateUI();
 
@@ -66,11 +66,33 @@
                             var like = { articleid: Data.articleid };
                             statusStore.add(like);
                             txn.oncomplete = function () {
-                                // $("#articlemsg").html($("#articleTitle").html() + " added");
-                                var msg = new Windows.UI.Popups.MessageDialog($("#articleTitle").html() + " 已經加到我的最愛");
+                                var stringAddAlready;
+                                var stringConfirm;
+
+                                switch (Data.language) {
+                                    case "zh-Hant-TW":
+                                        stringAddAlready = "已經加到我的最愛";
+                                        stringConfirm = "確定";
+                                        break;
+                                    case "en-US":
+                                        stringAddAlready = "has been added to your favorite list.";
+                                        stringConfirm = "Confirm";
+                                        break;
+                                    case "ja":
+                                        stringAddAlready = "お気に入りに追加しました。";
+                                        stringConfirm = "確認";
+                                        break;
+                                    default:
+                                        stringAddAlready = "已經加到我的最愛";
+                                        stringConfirm = "確定";
+                                        break;
+                                }
+
+
+                                var msg = new Windows.UI.Popups.MessageDialog($("#articleTitle").html() + stringAddAlready);
 
                                 // Add commands and set their command handlers
-                                msg.commands.append(new Windows.UI.Popups.UICommand("確定", function (command) { }));
+                                msg.commands.append(new Windows.UI.Popups.UICommand(stringConfirm, function (command) { }));
 
                                 // Set the command that will be invoked by default
                                 msg.defaultCommandIndex = 1;
@@ -111,8 +133,32 @@
             if (like) {
                 if (like.value.articleid == record) {
                     var deleteRequest = statusStore.delete(parseInt(like.value.id));
-                    var msg = new Windows.UI.Popups.MessageDialog($("#articleTitle").html() + " 已經從我的最愛中移除");
-                    msg.commands.append(new Windows.UI.Popups.UICommand("確定", function (command) { }));
+
+                    var stringDelAlready;
+                    var stringConfirm;
+
+                    switch (Data.language) {
+                        case "zh-Hant-TW":
+                            stringDelAlready = "已經從我的最愛中移除";
+                            stringConfirm = "確定";
+                            break;
+                        case "en-US":
+                            stringDelAlready = "has been deleted from your favorite list.";
+                            stringConfirm = "Confirm";
+                            break;
+                        case "ja":
+                            stringDelAlready = "お気に入りに削除しました。";
+                            stringConfirm = "確認";
+                            break;
+                        default:
+                            stringDelAlready = "已經從我的最愛中移除";
+                            stringConfirm = "確定";
+                            break;
+                    }
+
+
+                    var msg = new Windows.UI.Popups.MessageDialog($("#articleTitle").html() + stringDelAlready);
+                    msg.commands.append(new Windows.UI.Popups.UICommand(stringConfirm, function (command) { }));
                     deleteRequest.onsuccess = function (e) {
                         // Show the message dialog
                         msg.showAsync().done(function () { });
@@ -154,7 +200,7 @@
         return {
             x: e.pageX,
             y: e.pageY,
-            width: 80 ,
+            width: 80,
             height: 80
         };
     }

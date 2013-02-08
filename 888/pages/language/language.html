@@ -7,19 +7,19 @@
     <link href="language.css" rel="stylesheet" />
 </head>
 <body>
-    <div data-win-control="WinJS.UI.SettingsFlyout" data-win-options="{settingsCommandId:'language',width:'wide'}">
+    <div id="languageFlyout" data-win-control="WinJS.UI.SettingsFlyout" data-win-options="{settingsCommandId:'language',width:'wide'}">
         <div class="setting-all">
             <div class="setting-title">
                 <h2>
                     <div class="setting-Bback" onclick="WinJS.UI.SettingsFlyout.show()"></div>
-                    語言
+                    <span id="languagePageTitle"></span>
                 </h2>
             </div>
             <div class="setting-body">
                 <select id="languageList" aria-label="State select control" class="select-area">
                     <option value="zh-Hant-TW">繁體中文</option>
-                    <option value="en-US">英文</option>
-                    <option value="ja">日文</option>
+                    <option value="en-US">English</option>
+                    <option value="ja">日本語</option>
                 </select>
             </div>
         </div>

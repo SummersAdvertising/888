@@ -6,14 +6,14 @@
 function dbSuccess(evt) {
     Data.db = evt.target.result;
 
-    var clearDB = ["articles", "subjects", "regions", "resource"];
+    var clearDB = ["articles", "subjects", "regions"];
     for (var item in clearDB) {
         var txn = Data.db.transaction([clearDB[item]], "readwrite");
         var store = txn.objectStore(clearDB[item]);
         store.clear();
     }
 
-    loadData(evt);
+    initLanguage(evt);
 
     if (Data.db.objectStoreNames.length === 0) {
         Data.db.close();
@@ -36,7 +36,7 @@ function dbVersionUpgrade(evt) {
 
     var resourceStore = Data.db.createObjectStore("resource", { keyPath: "id", autoIncrement: false });
 
-    
+
 }
 
 //declare WinJS.Binding.List(for search)
@@ -126,7 +126,6 @@ function addObjectStore(storeName, nodes) {
             break;
 
         case "articles":
-
             for (var i = 0; i < nodes.length; i++) {
                 var addToList = false;
                 objarticle = new Object();
@@ -145,7 +144,7 @@ function addObjectStore(storeName, nodes) {
                             var content = nodes[i].childNodes[j].innerText.replace(/<\s*\w.*?>/g, "").replace(/<\s*\/\s*\w\s*.*?>|<\s*br\s*>/g, "");
                             objAddProperty("contentnotag", content);
                         }
-                        if (nodes[i].childNodes[j].nodeName == "selected" && Data.currentRegion!="f") {
+                        if (nodes[i].childNodes[j].nodeName == "selected" && Data.currentRegion != "f") {
                             addToList = true;
                         }
                         objAddProperty(nodes[i].childNodes[j].nodeName, nodes[i].childNodes[j].innerText);
@@ -154,16 +153,17 @@ function addObjectStore(storeName, nodes) {
                 var txn = Data.db.transaction(["articles"], "readwrite");
                 var articlesStore = txn.objectStore("articles");
                 articlesStore.add(objarticle);
-                if (addToList)
+                if (addToList) {
+                    objarticle.cover = objarticle.folder + "cover.png";
                     articlelist.push(objarticle);
-
+                }
                 var isdone = false;
 
                 txn.oncomplete = function () {
                     if (!isdone) {
-                        
-                            updateView();
-                        
+
+                        //updateView();
+
                         updateUI();
 
                         loadListforSearch();
@@ -171,11 +171,9 @@ function addObjectStore(storeName, nodes) {
                             case "/pages/article/article.html":
                                 showData("article");
                                 break;
-                            case "/pages/favorite/favorite.html":
-                                //showData("favorite");
-                                break;
                             case "/pages/home/home.html":
                                 Data.changeRegionLan();
+                                if (Data.currentRegion == "f") { favlistLoad(); }
                                 break;
                         }
                     }
@@ -200,13 +198,11 @@ function loadData(evt) {
     cleanList(articlelist);
     cleanList(list);
 
+    var regionNodes = getNodeData(Data.language + ".xml", "a_region", "regions");
     var resourceNodes = getNodeData("resource.xml", Data.language, "resource");
 
     //when subject stored, call function to store article data
     var subjectNodes = getNodeData(Data.language + ".xml", "subject", "subjects");
-
-    var regionNodes = getNodeData(Data.language + ".xml", "a_region", "regions");
-
 }
 
 //data for listview
@@ -279,6 +275,14 @@ function showData(show) {
                 //adjust div height
                 $('[class^="content-photo"]').css('height', $(window).height());
 
+                //disable all the links
+                $("a").bind("click", function () {
+                    return false;
+                });
+
+                //remove imgs' alt and title attributes
+                $("img").removeAttr("title").removeAttr("alt");
+
                 if (!article) {
                     $("#article").append("can't find this article.");
                 }
@@ -288,23 +292,83 @@ function showData(show) {
     }
 }
 
-function initLanguage() {
-    //get current language
-    var applicationLanguages = Windows.Globalization.ApplicationLanguages.languages;
-    if (!Data.language) {
-        Data.language = "zh-Hant-TW";
-        ////no language config, check user's setting
-        //if (applicationLanguages[0])
-        //    Data.language = applicationLanguages[0].indexOf("zh") == 0 ? "zh-Hant-TW" : applicationLanguages[0];
-        //    //can't support user's setting, set default language
-        //else
-        //    Data.language = "en-US";
-    }
+function initLanguage(evt) {
 
+    var dbRequest = window.indexedDB.open("ArticleDB", 1);
+    dbRequest.onsuccess = function (evt) {
+        var txn = Data.db.transaction(["resource"], "readonly");
+        var store = txn.objectStore("resource");
+        var request = store.openCursor();
+        request.onsuccess = function (e) {
+            var resource = e.target.result;
+            if (resource) {
+                Data.language = Data.language == undefined ? resource.value.language : Data.language;
+            }
+            else {
+                var applicationLanguages = Windows.System.UserProfile.GlobalizationPreferences.languages;
+                if (!Data.language) {
+                    //no language config, check user's setting
+                    if (applicationLanguages[0]) {
+                        for (var item in applicationLanguages) {
+
+                            switch (applicationLanguages[item].indexOf("zh")) {
+                                case 0:
+                                    Data.language = "zh-Hant-TW";
+                                    break;
+                                default:
+                                    switch (applicationLanguages[item].indexOf("en")) {
+                                        case 0:
+                                            Data.language = "en-US";
+                                            break;
+                                        default:
+                                            switch (applicationLanguages[item].indexOf("ja")) {
+                                                case 0:
+                                                    Data.language = "ja";
+                                                    break;
+                                            }
+                                            break;
+                                    }
+                                    break;
+                            }
+                            if (Data.language) {
+                                break;
+                            }
+
+                        }
+                    }
+                }
+                    //can't support user's setting, set default language
+                else {
+                    Data.language = "en-US";
+                }
+            }
+
+            Data.language;
+            loadData(evt);
+
+            // 預選台灣地圖
+            switch (Data.language) {
+                case "zh-Hant-TW":
+                    $('#taiwanMap').attr('src', "/images/map/map-" + Data.currentRegion + ".png");
+                    break;
+                case "en-US":
+                    $('#taiwanMap').attr('src', "/images/map/map-" + Data.currentRegion + "-en.png");
+                    break;
+                case "ja":
+                    $('#taiwanMap').attr('src', "/images/map/map-" + Data.currentRegion + "-jp.png");
+                    break;
+                default:
+                    $('#taiwanMap').attr('src', "/images/map/map-" + Data.currentRegion + ".png");
+                    break;
+            }
+        };
+    }
 }
+
 var resourceArray = new Array();
 function updateUI(callBack) {
-    resourceArray = new Array();
+    var UIhash = new Object();
+
     var dbRequest = window.indexedDB.open("ArticleDB", 1);
     dbRequest.onsuccess = function (evt) {
         var txn = Data.db.transaction(["resource"], "readonly");
@@ -314,27 +378,132 @@ function updateUI(callBack) {
             var resource = e.target.result;
             if (resource) {
                 for (var item in resource.value) {
-                    resourceArray.push(resource.value[item]);
+
+                    UIhash[item] = resource.value[item];
+
                 }
             }
 
-            var changeContentArray = ["homeTitle", "homeIndex", "addFav", "delFav", "favTitle", "navHome", "navFav"];
-            var item = 2;
+            var changeContentArray = ["homeTitle", "homeIndex", "addFav", "delFav", "favTitle", "navHome", "navFav", "snappedTitle"];
             for (var i in changeContentArray) {
                 var element = changeContentArray[i];
                 if (document.getElementById(element)) {
                     if (element == "addFav" || element == "delFav") {
-                        document.getElementById(element).winControl.label = resourceArray[item];
+                        document.getElementById(element).winControl.label = UIhash[element];
                         Article.checkLike("del");
                     }
-                    else
-                        document.getElementById(element).textContent = resourceArray[item];
+                    else {
+                        if (element == "snappedTitle") { document.getElementById(element).textContent = UIhash["homeTitle"]; }
+                        else { document.getElementById(element).textContent = UIhash[element]; }
+                    }
                 }
-                item++;
             }
+
+            switch (Data.language) {
+                case "zh-Hant-TW":
+                    $("#snapRegion1").html("北台灣");
+                    $("#snapRegion2").html("東台灣");
+                    $("#snapRegion3").html("中台灣");
+                    $("#snapRegion4").html("南台灣");
+                    $("#snapRegion5").html("離島");
+                    $("#snapRegionf").html("我的最愛");
+                    $("#favTitle").html("您尚未建立我的最愛，請參考圖示步驟");
+                    $("#favStep1").html("1. 在文章頁以觸控由下往上滑出應用程式列或<br />滑鼠按右鍵叫出應用程式列");
+                    $("#favStep2").html("2. 點選『加入我的最愛』");
+                    break;
+                case "en-US":
+                    $("#snapRegion1").html("Northern Taiwan");
+                    $("#snapRegion2").html("Eastern Taiwan");
+                    $("#snapRegion3").html("Central Taiwan");
+                    $("#snapRegion4").html("Southern Taiwan");
+                    $("#snapRegion5").html("Outlying Islands");
+                    $("#snapRegionf").html("Favorites");
+                    $("#favTitle").html("Your favorite list is empty. <br />Please follow the guide to add articles as favorites.");
+                    $("#favStep1").html("1. Touch screen from bottom to top in the <br />article page, or click on the right button <br />of mouse to show up the AppBar.");
+                    $("#favStep2").html('2. Click "Add to Favorites".<br /><br /><br />');
+                    break;
+                case "ja":
+                    $("#snapRegion1").html("台湾北部");
+                    $("#snapRegion2").html("台湾東部");
+                    $("#snapRegion3").html("台湾中部");
+                    $("#snapRegion4").html("台湾南部");
+                    $("#snapRegion5").html("離島");
+                    $("#snapRegionf").html("お気に入り");
+                    $("#favTitle").html("お気に入りの文章はまだありません。次の説明を参考してください。");
+                    $("#favStep1").html("1. 文章画面の下端から上端へスワイプすると、<br />アプリバーが表示されます。パソコンを使って<br />いる場合は、右クリックしてください。");
+                    $("#favStep2").html("2. 「お気に入りに追加」をクリックして<br />お気に入りが利用できます。<br /><br />");
+                    break;
+                default:
+                    $("#snapRegion1").html("北台灣");
+                    $("#snapRegion2").html("東台灣");
+                    $("#snapRegion3").html("中台灣");
+                    $("#snapRegion4").html("南台灣");
+                    $("#snapRegion5").html("離島");
+                    $("#snapRegionf").html("我的最愛");
+                    $("#favTitle").html("您尚未建立我的最愛，請參考圖示步驟");
+                    $("#favStep1").html("1. 在文章頁以觸控由下往上滑出應用程式列或<br />滑鼠按右鍵叫出應用程式列");
+                    $("#favStep2").html("2. 點選『加入我的最愛』");
+                    break;
+            }
+
+            //change snapped view region name
+            if (Windows.UI.ViewManagement.ApplicationView.value == Windows.UI.ViewManagement.ApplicationViewState.snapped) {
+                var dbRequest = window.indexedDB.open("ArticleDB", 1);
+                dbRequest.onsuccess = function (evt) {
+                    Data.db = evt.target.result;
+                    var txn = Data.db.transaction(["regions"], "readwrite");
+                    var regionStore = txn.objectStore("regions");
+
+                    for (var regionNum = 1; regionNum <= 7; regionNum++) {
+                        var request = regionStore.get(regionNum);
+
+                        request.onsuccess = function (e) {
+                            var region = e.target.result;
+                            if (region) {
+                                var targetID;
+                                if (region.id == 6) { targetID = "#snapRegionb" }
+                                else if (region.id == 7) { targetID = "#snapRegionf"; }
+                                else { targetID = "#snapRegion" + region.id }
+                                $(targetID).html(region.a_region);
+                            }
+                        };
+                    }
+                };
+
+                switch (Data.language) {
+                    case "zh-Hant-TW":
+                        $("#snap-fav-title").html("我的最愛");
+                        $("#snap-best-title").html("精選文章");
+                        $("#snap-favnotbuild").html("您尚未建立我的最愛");
+                        $("#snap-buildfav").html("建立我的最愛");
+                        break;
+                    case "en-US":
+                        $("#snap-fav-title").html("Favorites");
+                        $("#snap-best-title").html("Featured Articles");
+                        $("#snap-favnotbuild").html("Your favorite list is empty.");
+                        $("#snap-buildfav").html("Add articles as favorites.");
+                        break;
+                    case "ja":
+                        $("#snap-fav-title").html("お気に入り");
+                        $("#snap-best-title").html("注目の文章");
+                        $("#snap-favnotbuild").html("お気に入りの文章はまだありません。");
+                        $("#snap-buildfav").html("お気に入りに追加");
+                        break;
+                    default:
+                        $("#snap-fav-title").html("我的最愛");
+                        $("#snap-best-title").html("精選文章");
+                        $("#snap-favnotbuild").html("您尚未建立我的最愛");
+                        $("#snap-buildfav").html("建立我的最愛");
+                        break;
+                }
+
+            }
+
+
         };
     };
 }
+
 function updateLanguage() {
     initLanguage();
 
@@ -354,8 +523,6 @@ function updateLanguage() {
         //data for listview(home.html)
         var myGroupedList = articlelist.createGrouped(getGroupKey, getGroupData, compareGroups);
         var favlist = new WinJS.Binding.List();
-
-        loadData(evt);
     };
 }
 
@@ -408,21 +575,32 @@ function changeRegionLan() {
         Data.db = evt.target.result;
         var txn = Data.db.transaction(["regions"], "readwrite");
         var regionStore = txn.objectStore("regions");
+        var regionID;
+        switch (Data.currentRegion) {
+            case "1":
+                regionID = 1;
+                break;
+            case "2":
+                regionID = 2;
+                break;
+            case "3":
+                regionID = 3;
+                break;
+            case "4":
+                regionID = 4;
+                break;
+            case "5":
+                regionID = 5;
+                break;
+            case "b":
+                regionID = 6;
+                break;
+            case "f":
+                regionID = 7;
+                break;
+        }
 
-        if (!parseInt(Data.currentRegion)) {
-            switch (Data.currentRegion) {
-                case 'f':
-                    region = 7;
-                    break;
-                case 'b':
-                    region = 6;
-                    break;
-            }
-        }
-        else {
-            var region = parseInt(Data.currentRegion);
-        }
-        var request = regionStore.get(region);
+        var request = regionStore.get(regionID);
         request.onsuccess = function (e) {
             var region = e.target.result;
             if (region)
@@ -440,12 +618,21 @@ function loadArray(region) {
         region = Data.currentRegion;
     }
 
-    var db, articleid, favAddMsg, language = null;
+    /* 用來偵錯
+        if (this.counter != undefined) {
+            console.log(++this.counter);
+        } else {
+            this.counter = 0;
+        }
+    */
 
+    var db, articleid, favAddMsg, language = null;
 
     if (region == 'f') {
         favlistLoad();
         return;
+    } else {
+        $("#favinfo").hide();
     }
 
     var txn = Data.db.transaction(["articles"], "readonly");
@@ -455,20 +642,10 @@ function loadArray(region) {
         var article = e.target.result;
         if (article) {
             if (article.value["region"] == region || (region == "b" && article.value["selected"])) {
-                var addtolist = true;
-                for (var item in articleArray) {
-                    if (article.value.id == articleArray[item]) {
-                        addtolist = false;
-                        break;
-                    }
-                }
                 articleArray.push(article.value.id);
-                if (addtolist) {
+                article.value['cover'] = article.value.folder + "cover.png";
 
-                    article.value['cover'] = article.value.folder + "cover.png";
-
-                    articlelist.push(article.value);
-                }
+                articlelist.push(article.value);
             }
             article.continue();
         }

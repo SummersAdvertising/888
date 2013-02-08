@@ -6,6 +6,9 @@
     height: auto;
     -ms-user-select: element;
 }
+.win-label {
+    max-width: 200px !important;
+}
 
 @media screen and (-ms-view-state: fullscreen-landscape) {
     .content-navigation {
@@ -74,21 +77,24 @@
     }
 
     .content-title {
-        position: absolute;
-        z-index: 1;
+        position:absolute; width:24%;
+	    min-width:270px; 
+	    z-index:1;
     }
 
         .content-title h2 {
             margin: 40px 0px 0px 40px;
             color: rgba(255,255,255,1);
             font-weight: normal;
+            font-size:26px;
         }
 
         .content-title p {
-            color: rgba(255,255,255,1);
-            margin: 15px 0px 0px 92px;
-            font-size: 11pt;
-            line-height: 15pt;
+        color: rgba(255,255,255,1);
+	    margin:15px 15px 0px 92px;
+	    font-size:11pt;
+	    line-height:15pt;
+	    position:absolute;
         }
 
     .content-all {
@@ -244,7 +250,7 @@
         }
 
     .placeBox {
-        height: 40px;
+        height: 5px; display:none;
     }
 
     .position-name {
@@ -260,7 +266,7 @@
         cursor: pointer;
         margin: auto auto;
         float: left;
-        margin: 3px 15px 0px 0px;
+        margin: 0px 15px 0px 0px;
     }
 
         .content-Bback:active {
@@ -269,7 +275,7 @@
         }
 
     .content-function {
-        height: 85px;
+        height: 100px;
         background-color: rgba(109,194,233,1);
     }
 
@@ -353,7 +359,7 @@
 .articleArea a:visited{ color: rgba(0,0,0,1);}
 .articleArea a:active{ color: rgba(0,0,0,1);}
 .articleArea h1{
-	font-size:20pt; 
+	font-size:19pt; 
 	color: rgba(12,113,224,1);
 	font-weight:normal;
 	line-height:25pt;
@@ -790,6 +796,7 @@
         margin: 40px 0px 0px 40px;
         color: rgba(255,255,255,1);
         font-weight: normal;
+        font-size:22px;
     }
 
     .content-title p {

@@ -8,38 +8,33 @@
         // 會將應用程式的資料填入頁面項目。
         ready: function (element, options) {
             // TODO: 在此初始化頁面。
-            //Data.initLanguage();
-            getInitLan();
-
+            languageSelect(Data.language);
+            changePageTitle();
             document.getElementById("languageList").addEventListener("change", function () {
                 languageSelect(this.value);
-                
-                //Data.createDB();
+
+                //navigate to home when language changed
+                WinJS.Navigation.back(WinJS.Navigation.history.backStack.length);
+                document.getElementById('languageFlyout').winControl.hide();
             });
         }
     });
-    function getInitLan() {
-        var dbRequest = window.indexedDB.open("ArticleDB", 1);
-        dbRequest.onsuccess = function (evt) {
-            Data.db = evt.target.result;
-            var txn = Data.db.transaction(["resource"], "readonly");
-            var store = txn.objectStore("resource");
-            var request = store.openCursor();
-            request.onsuccess = function (e) {
-                var resource = e.target.result;
-                if (resource) {
-                    if (resource.value.language) {
-                        languageSelect(resource.value.language);
-                    }
-                    else
-                        languageSelect(Data.language);
-                }
-                else
-                    languageSelect(Data.language);
-            }
-        };
+    function changePageTitle() {
+        switch (Data.language) {
+            case "zh-Hant-TW":
+                $("#languagePageTitle").html("語言");
+                break;
+            case "en-US":
+                $("#languagePageTitle").html("language");
+                break;
+            case "ja":
+                $("#languagePageTitle").html("言語");
+                break;
+            default:
+                $("#languagePageTitle").html("語言");
+                break;
+        }
     }
-
     function languageSelect(language) {
         if (language) {
             var languageChild;
@@ -64,9 +59,13 @@
             if (Data.language != language) {
                 Data.language = language;
 
+                changePageTitle();
+
                 //load new language data
                 Data.updateLanguage();
             }
         }
+
+        
     }
 })();

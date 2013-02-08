@@ -9,9 +9,6 @@
             // TODO: 在此初始化頁面。
             WinJS.Binding.processAll(element, this._data);
 
-            Data.initLanguage();
-            Data.createDB();
-
             Data.changeRegionLan();
             Data.updateUI(Data.regionChange);
 
@@ -22,7 +19,6 @@
             $(".region").unbind("click");
             $(".region-option").unbind("click");
             $(".region").bind("click", function () {
-                $("#favinfo").hide();
                 regionChange(this.id);
             });
             $(".region-option").bind("click", function () {
@@ -31,7 +27,6 @@
             });
 
             // FAV LINK
-            $("#navtoFav").bind("click", function () { navigatetoFav(); });
             $('.go-full').click(function () { Windows.UI.ViewManagement.ApplicationView.tryUnsnap(); });
 
             $('.region-option').click(function () {
@@ -42,9 +37,22 @@
             window.addEventListener("resize", onResize);
 
             $('#listView').css({ 'width': $(window).width() - $('#taiwanMap').width() - 80, 'height': $(window).height() * 0.85 - $('.main-title').height() });
-            
-            // 預選台灣地圖
-            $('#taiwanMap').attr('src', "../../images/map-" + Data.currentRegion + ".png");
+
+            //home.html:taiwan map
+            switch (Data.language) {
+                case "zh-Hant-TW":
+                    $('#taiwanMap').attr('src', "/images/map/map-" + Data.currentRegion + ".png");
+                    break;
+                case "en-US":
+                    $('#taiwanMap').attr('src', "/images/map/map-" + Data.currentRegion + "-en.png");
+                    break;
+                case "ja":
+                    $('#taiwanMap').attr('src', "/images/map/map-" + Data.currentRegion + "-jp.png");
+                    break;
+                default:
+                    $('#taiwanMap').attr('src', "/images/map/map-" + Data.currentRegion + ".png");
+                    break;
+            }
 
             if (!animated) {
                 // 頁首動畫
@@ -55,13 +63,10 @@
                 }, 1000);
             } else {
                 $('#mainImg').hide();
-                $('.main-all').css('left', 0 );
+                $('.main-all').css('left', 0);
             }
-            
-            if (Home.isFav) {
-                navigatetoFav();
-                Home.isFav = false;
-            }
+
+
         }
     });
 
@@ -80,7 +85,7 @@
         });
     }
 
-    WinJS.Namespace.define("Home",{
+    WinJS.Namespace.define("Home", {
         regionChange: regionChange,
         isFav: false
     });
@@ -101,15 +106,33 @@ function checkFav() {
         var like = e.target.result;
         if (like)
             $("#favinfo").hide();
-        else
-            $("#favinfo").show().width($(window).width() - $('#taiwanMap').width() - 100).height($(window).height()-200);
+        else {
+            setTimeout(function () {
+                $("#favinfo").show();
+                $(this).width($(window).width() - $('#taiwanMap').width() - 100).height($(window).height() - 200);
+            }, 300);
+
+        }
     };
 }
 
 function regionChange(id, snap) {
     var region = id.slice(6, id.length);
-
-    $('#taiwanMap').attr('src', "../../images/map-" + region + ".png");
+    // 台灣地圖
+    switch (Data.language) {
+        case "zh-Hant-TW":
+            $('#taiwanMap').attr('src', "/images/map/map-" + region + ".png");
+            break;
+        case "en-US":
+            $('#taiwanMap').attr('src', "/images/map/map-" + region + "-en.png");
+            break;
+        case "ja":
+            $('#taiwanMap').attr('src', "/images/map/map-" + region + "-jp.png");
+            break;
+        default:
+            $('#taiwanMap').attr('src', "/images/map/map-" + region + ".png");
+            break;
+    }
     Data.currentRegion = region;
     Data.changeRegionLan();
     if (!snap) {
@@ -123,13 +146,9 @@ function regroupList(group) {
     if (Data.snapGroups == undefined) {
         Data.snapGroups = [];
     }
-    
-    // 判斷 group 是否建立
-    if (Data.snapGroups[group.key] == undefined) {
-        // 若無建立，則於local建立static group
+
         Data.snapGroups[group.key] = group;
-    }
-    
+
     if (Data.snapGroups[group.key]['container'] == undefined) {
         var groupBox = $('#snapGroupTemplate').clone().attr('id', 'groupTemplate_' + Data.snapGroups[group.key]);
         groupBox.children('.groupTitle').html(group.name);
@@ -137,11 +156,11 @@ function regroupList(group) {
         Data.snapGroups[group.key]['container'] = groupBox;
     }
 
-    $('#listViewSnap').prepend(Data.snapGroups[group.key]['container']);
+    $('#listViewSnap').append(Data.snapGroups[group.key]['container']);
 }
 
 function snapRegionList() {
-    
+
     for (var groupKey in Data.snapGroups) {
 
         if (Data.snapGroups[groupKey]['container'] != undefined && Data.snapGroups[groupKey]['container'].children('.itemsContainer').children().length > 0) {
@@ -153,7 +172,7 @@ function snapRegionList() {
     var store = txn.objectStore("articles");
     var request = store.openCursor();
     request.onsuccess = function (e) {
-        
+
         if (e.target.result) {
             var article = e.target.result.value;
 
@@ -173,7 +192,7 @@ function snapRegionList() {
 
                 regroupList(article.group);
 
-                Data.snapGroups[article.group.key]['container'].children('.itemsContainer').prepend(itemBox);
+                Data.snapGroups[article.group.key]['container'].children('.itemsContainer').append(itemBox);
                 Data.snapGroups[article.group.key]['container'].show();
             }
 
@@ -182,7 +201,7 @@ function snapRegionList() {
 
     };
 
-   
+
     // 地區篩選完畢，重新掃瞄有item的group
 
     for (var groupKey in Data.snapGroups) {
@@ -232,6 +251,7 @@ function snapFavList() {
                 var itemBox = $('#snapItemTemplate').clone();
                 itemContent = itemBox.children('.articleArea');
                 itemContent.children('h4').children('.itemTitle').html(article.title);
+                itemContent.children('img').attr('src', article.folder + 'search.png');
                 itemBox.data('article-id', article.id);
                 itemBox.click(function () {
 
@@ -258,15 +278,17 @@ function updateView() {
     var viewStates = Windows.UI.ViewManagement.ApplicationViewState;
     $('#listViewSnap').children().remove();
 
+    $('#listViewSnap').height($(window).height() - 150);
     $('#listViewScrollContainer').height($(window).height() - 150);
 
-    
-    switch (myViewState) {
-        case viewStates.snapped:            
 
+    switch (myViewState) {
+        case viewStates.snapped:
+            Data.updateUI();
             if (WinJS.Navigation.location == '/pages/article/article.html' || WinJS.Navigation.location == '/pages/search/searchResults.html') {
                 WinJS.Navigation.navigate('/pages/home/home.html').done(function (e) {
                     var offset = { top: "12px", left: "0px", rtlflip: true };
+                    updateView();
                     // WinJS.UI.Animation.enterPage(document.getElementsByTagName('body'), offset);
                 });
                 return;
@@ -299,20 +321,20 @@ function updateView() {
             break;
         default:
 
+            $('#listView').css({ 'width': $(window).width() - $('#taiwanMap').width() - 80, 'height': $(window).height() * 0.85 - $('.main-title').height() });
+
             if (this.lastState != undefined && this.lastState == viewStates.snapped) {
                 this.lastState = myViewState;
-                setTimeout(function () {
-                    if (WinJS.Navigation.location == '/pages/home/home.html') {
-                        WinJS.Navigation.navigate('/pages/home/home.html');
-                    }
-                }, 300);
+
+                if (WinJS.Navigation.location == '/pages/home/home.html') {
+                    WinJS.Navigation.navigate('/pages/home/home.html');
+                }
+
             }
 
             if (Data.currentRegion == 'f') {
                 navigatetoFav();
-            }
-
-            if (Data.db != undefined) {
+            } else if (Data.db != undefined) {
                 Data.regionChange();
             }
 

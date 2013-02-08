@@ -15,14 +15,40 @@
                 // TODO: 這個應用程式剛啟動。請在這裡初始化
                 // 您的應用程式。
 
+                //Data.initLanguage();
+                Data.createDB();
+
                 //bind navtoFav
                 $("#navtoFav").bind("click", function () { navigatetoFav(); });
 
                 WinJS.Application.onsettings = function (e) {
+                    var titleLan, titleAbout, titleAuthor;
+                    switch (Data.language) {
+                        case "zh-Hant-TW":
+                            titleLan = "語言";
+                            titleAbout = "關於 青春台灣食玩誌";
+                            titleAuthor = "隱私權聲明";
+                            break;
+                        case "en-US":
+                            titleLan = "Language";
+                            titleAbout = "About the Food and Fun Diary of Taiwan Youth";
+                            titleAuthor = "Privacy Statement";
+                            break;
+                        case "ja":
+                            titleLan = "言語";
+                            titleAbout = "青春台湾食遊記について";
+                            titleAuthor = "プライバシーに関する声明";
+                            break;
+                        default:
+                            titleLan = "語言";
+                            titleAbout = "關於 青春台灣食玩誌";
+                            titleAuthor = "隱私權聲明";
+                            break;
+                    }
                     e.detail.applicationcommands = {
-                        //"language": { title: "語言", href: "/pages/language/language.html" },
-                        "about": { title: "關於 青春台灣食玩誌", href: "/pages/about/about.html" },
-                        "authorization": { title: "隱私權聲明", href: "/pages/authorization/authorization.html" }
+                        "language": { title: titleLan, href: "/pages/language/language.html" },
+                        "about": { title: titleAbout, href: "/pages/about/about.html" },
+                        "authorization": { title: titleAuthor, href: "/pages/authorization/authorization.html" }
                     };
                     WinJS.UI.SettingsFlyout.populateSettings(e);
 
@@ -57,10 +83,6 @@
 
     app.start();
 
-    function navigatetoFav() {
-        Home.isFav = true;
-        WinJS.Navigation.back(WinJS.Navigation.history.backStack.length);
-    }
 
 })();
 
@@ -68,4 +90,9 @@ var animated = false;
 function toFullscreen() {
     Data.currentRegion = 'b';
     Windows.UI.ViewManagement.ApplicationView.tryUnsnap();
+}
+
+function navigatetoFav() {
+    Data.currentRegion = 'f';
+    WinJS.Navigation.back(WinJS.Navigation.history.backStack.length);
 }

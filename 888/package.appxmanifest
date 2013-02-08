@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Package xmlns="http://schemas.microsoft.com/appx/2010/manifest">
-  <Identity Name="64b74713-a806-4306-9bb8-e98e52cfc1e2" Version="1.0.0.14" Publisher="CN=Yuzhe" />
+  <Identity Name="64b74713-a806-4306-9bb8-e98e52cfc1e2" Version="1.0.0.27" Publisher="CN=Hana" />
   <Properties>
     <DisplayName>青春台灣食玩誌</DisplayName>
     <PublisherDisplayName>台灣微軟</PublisherDisplayName>
@@ -16,7 +16,7 @@
   <Applications>
     <Application Id="App" StartPage="default.html">
       <VisualElements DisplayName="青春台灣食玩誌" Logo="images\logo.png" SmallLogo="images\30x30.png" Description="旅行是青春的軌跡，美食是青春的樂趣。『青春台灣食玩誌』是台灣第一支網友集體創作APP，透過台灣微軟主辦的「青春888公里」徵文活動，我們募集了網友心中超值、浪漫、懷舊等六個主題的台灣，由微軟提供之資金、人力、程式與技術，將網友所提供之文章翻譯成英/日文，製作在全球發行Windows 8 APP，與世界分享我們共同熱愛的這座青春島嶼。" ForegroundText="light" BackgroundColor="#0072c6">
-        <DefaultTile ShowName="allLogos" ShortName="青春台灣食玩誌" />
+        <DefaultTile ShowName="allLogos" ShortName="青春台灣食玩誌" WideLogo="images\logo-big.png" />
         <SplashScreen Image="images\splashscreen.png" BackgroundColor="#0072c6" />
         <InitialRotationPreference>
           <Rotation Preference="landscape" />

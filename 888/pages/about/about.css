@@ -26,6 +26,9 @@ body{
 	font-size:11pt;
 	line-height:15pt;
 }
+    .about-title span {
+        display:block;
+    }
 .about-Bback{
 	background-image:url(../../images/buttons/back.png);
 	background-repeat:no-repeat;
@@ -34,7 +37,7 @@ body{
 	cursor:pointer;
 	margin:auto auto;
 	float:left;
-	margin:3px 15px 0px 0px;
+	margin:3px 15px 100px 0px;
 }
 .about-Bback:active{
 	filter:alpha(opacity=65); opacity:0.65;

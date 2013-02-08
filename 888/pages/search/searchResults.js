@@ -111,12 +111,27 @@
             if (viewState === appViewState.snapped) {
                 listView.layout = new ui.ListLayout();
                 document.querySelector(".titlearea .pagetitle").textContent = '“' + this._lastSearch + '”';
-               
+
             } else {
                 listView.layout = new ui.GridLayout();
 
                 // TODO: 將 "App Name" 變更為您的應用程式名稱。
-                document.querySelector(".titlearea .pagetitle").textContent = "搜尋 “" + this._lastSearch + '”';
+                var searchResult;
+                switch (Data.language) {
+                    case "zh-Hant-TW":
+                        searchResult = "搜尋 “";
+                        break;
+                    case "en-US":
+                        searchResult = "Search for“";
+                        break;
+                    case "ja":
+                        searchResult = "検索結果 “";
+                        break;
+                    default:
+                        searchResult = "搜尋 “";
+                        break;
+                }
+                document.querySelector(".titlearea .pagetitle").textContent = searchResult + this._lastSearch + '”';
             }
         },
 
